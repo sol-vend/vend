@@ -45,10 +45,11 @@ const WalletConnector = () => {
 
   return (
     <div>
+      <div className="container">
       <button className="button" onClick={connectWallet}>
         {walletAddress ? 'Connected: ' + walletAddress : 'Connect?'}
       </button>
-
+      </div>
       {tokens.length > 0 && (
         <div className="token-list">
           <h3>Your Tokens:</h3>
