@@ -1,0 +1,1 @@
+export const API_URL = "https://sol-vend-server-git-main-yellow-james-projects.vercel.app";
