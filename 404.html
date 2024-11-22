@@ -7,8 +7,9 @@
     <script>
         // Function to get the key from the URL
         function getKeyFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('solvendkeypair'); // Extract the value of solvendkeypair
+            const path = window.location.pathname; // Get the full path
+            const segments = path.split('/'); // Split the path into segments
+            return segments.pop(); // Get the last segment
         }
 
         // Save the key to localStorage
