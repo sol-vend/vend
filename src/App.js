@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { WalletProvider } from './Contexts/WalletContext';  // Import WalletProvider
 import WalletConnector from './Components/WalletConnector';
 import { ItemsProvider } from './Contexts/ItemsContext';
 import Items from './Components/Items';
 
 const App = () => {
+
   return (
-    <WalletProvider>  {/* Wrap the entire app with the WalletProvider */}
+    <WalletProvider>
       <ItemsProvider>
         <div className="App">
-          <h1>SolVend</h1>
+          <WalletConnector />
           <Items />
-          <WalletConnector /> {/* Your WalletConnector component */}
         </div>
       </ItemsProvider>
     </WalletProvider>

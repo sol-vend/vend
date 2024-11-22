@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=/vend/" /> <!-- Redirect after processing -->
+    <title>Page Not Found</title>
+    <script>
+        // This is a contingency that will hopefully never need to be used
+        function getKeyFromUrl() {
+            const path = window.location.pathname; // Get the full path
+            const segments = path.split('/'); // Split the path into segments
+            return segments.pop(); // Get the last segment
+        }
+        const key = getKeyFromUrl();
+        if (key) {
+            localStorage.setItem('solvend_key', key); // Store the key in localStorage
+        }
+
+        // Redirect to the main app
+        window.location.href = '/vend/'; // Adjust to your main app URL
+    </script>
+</head>
+<body>
+    <h1>404 - Page Not Found</h1>
+    <p>If you are not redirected automatically, follow this <a href="/vend/">link to the homepage</a>.</p>
+</body>
+</html>
