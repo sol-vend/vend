@@ -5,17 +5,15 @@
     <meta http-equiv="refresh" content="0; url=/vend/" /> <!-- Redirect after processing -->
     <title>Page Not Found</title>
     <script>
-        // Function to get the key from the URL
+        // This is a contingency that will hopefully never need to be used
         function getKeyFromUrl() {
             const path = window.location.pathname; // Get the full path
             const segments = path.split('/'); // Split the path into segments
             return segments.pop(); // Get the last segment
         }
-
-        // Save the key to localStorage
         const key = getKeyFromUrl();
         if (key) {
-            localStorage.setItem('encrypted_key', key); // Store the key in localStorage
+            localStorage.setItem('solvend_key', key); // Store the key in localStorage
         }
 
         // Redirect to the main app
