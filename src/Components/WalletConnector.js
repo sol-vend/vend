@@ -150,7 +150,7 @@ const WalletConnector = () => {
   const abbr = (address) => {
     if (address){
     const visibleChars = 4
-    return `${address.substring(0, visibleChars)}...${address.substring(address.length - (visibleChars + 1), address.length - 1)}`
+    return `${address.substring(0, visibleChars)}...${address.substring(address.length - visibleChars, address.length)}`
     }
     else{
       return ""

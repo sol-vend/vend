@@ -5,7 +5,6 @@ import { useWallet } from '@solana/wallet-adapter-react'; // Using the wallet ad
 import { SOL_MINT_ADDRESS } from './Shared';
 
 const SwapButton = ({ wallet, inputMint, inputAmount, slippageInBps, buttonDialog }) => {
-    console.log([inputMint, inputAmount])
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [txLink, setTxLink] = useState(null);
@@ -16,62 +15,80 @@ const SwapButton = ({ wallet, inputMint, inputAmount, slippageInBps, buttonDialo
   }
 
   const connection = new Connection('https://api.mainnet-beta.solana.com');
-  const { publicKey, signTransaction } = useWallet(); 
+  const { userWallet, signTransaction } = useWallet();
   const tokenFactor = getTokenFactor(inputMint);
-  console.log(publicKey, signTransaction)
+  console.log(userWallet, signTransaction)
   useEffect(() => {
-    if (!publicKey) {
+    if (!userWallet) {
       console.log('Please connect your wallet!');
     }
-  }, [publicKey]);
+  }, [userWallet]);
 
   const handleSwap = async () => {
-    if (!publicKey) {
+    if (!userWallet) {
       setError('Wallet not connected!');
       return;
     }
-  
+
     setLoading(true);
     setError(null);
     setTxLink(null);
-  
+
     try {
       const quoteResponse = await (
         await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=${inputMint.mint}&outputMint=${SOL_MINT_ADDRESS}&amount=${Math.round(inputAmount * tokenFactor)}&slippageBps=${slippageInBps}`)
       ).json();
-  
+
       const { swapTransaction } = await (
         await fetch('https://quote-api.jup.ag/v6/swap', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             quoteResponse,
-            userPublicKey: publicKey.toString(),
+            userPublicKey: wallet.publicKey.toString(),
             wrapAndUnwrapSol: true,
           }),
         })
       ).json();
-  
+
+      // Deserialize the swap transaction
       const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
       const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
-      const signedTransaction = await signTransaction(transaction);
-  
+
+      // Sign the transaction using wallet.signTransaction
+      const signedTransaction = await userWallet.signTransaction(transaction);
+
+      // Get the latest blockhash
+      //const latestBlockHash = await connection.getRecentBlockhash();
+      //console.log('Recent Blockhash:', latestBlockHash);
+
+      // Serialize and send the transaction
       const rawTransaction = signedTransaction.serialize();
-      const txid = await connection.sendRawTransaction(rawTransaction, { skipPreflight: true, maxRetries: 2 });
-      await connection.confirmTransaction(txid);
-  
-      setTxLink(`https://solscan.io/tx/${txid}`);
+      const txid = await connection.sendRawTransaction(rawTransaction, {
+        skipPreflight: true,
+        maxRetries: 2,
+      });
+
+      // Confirm the transaction
+      /*
+      await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: txid,
+      });
+      console.log(`https://solscan.io/tx/${txid}`);
+      */
     } catch (err) {
       setError('An error occurred during the transaction');
       console.error(err);
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   return (
     <div>
-      <button className={"button connect-button"} onClick={handleSwap} disabled={loading} style={{maxWidth: "fit-content" }}>
+      <button className={"button connect-button"} onClick={handleSwap} disabled={loading} style={{ maxWidth: "fit-content" }}>
         {loading ? 'Processing...' : buttonDialog}
       </button>
 
