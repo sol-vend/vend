@@ -148,8 +148,13 @@ const WalletConnector = () => {
   }, [selectedItem, selectedToken]);
 
   const abbr = (address) => {
+    if (address){
     const visibleChars = 4
     return `${address.substring(0, visibleChars)}...${address.substring(address.length - (visibleChars + 1), address.length - 1)}`
+    }
+    else{
+      return ""
+    }
   }
 
   return (
