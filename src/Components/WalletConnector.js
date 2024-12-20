@@ -7,7 +7,6 @@ import { useItems } from '../Contexts/ItemsContext';
 
 const WalletConnector = () => {
   const { publicKey, connected, connect, disconnect, wallet } = useWallet();
-  const { connection } = useConnection();  // Connection hook
   const { selectedItem } = useItems();
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -201,10 +200,9 @@ const WalletConnector = () => {
           :
           <div className="swap-info">
             <SwapButton
-              wallet={{ publicKey, connected }}
               inputMint={selectedToken}
               inputAmount={swapMinimum}
-              slippageInBps={50}
+              slippageInBps={200}
               buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
             />
           </div>

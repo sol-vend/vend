@@ -1,31 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Connection, Transaction, VersionedTransaction } from '@solana/web3.js';
+import { Connection, VersionedTransaction } from '@solana/web3.js';
 import fetch from 'cross-fetch';
 import { useWallet } from '@solana/wallet-adapter-react'; // Using the wallet adapter hook
 import { SOL_MINT_ADDRESS } from './Shared';
 
-const SwapButton = ({ wallet, inputMint, inputAmount, slippageInBps, buttonDialog }) => {
+const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [txLink, setTxLink] = useState(null);
 
-  const getTokenFactor = (token) => {
-    const tokenFactor = token.amount / token.uiAmount;
-    return tokenFactor;
-  }
+  const connection = new Connection('https://light-attentive-lake.solana-mainnet.quiknode.pro/a9c005983fbb55c01832be27cda7d931f5558721');
+  const { publicKey, signTransaction } = useWallet();  // Using useWallet hook to get publicKey and signTransaction
+  const tokenFactor = inputMint.amount / inputMint.uiAmount;
 
-  const connection = new Connection('https://api.mainnet-beta.solana.com');
-  const { userWallet, signTransaction } = useWallet();
-  const tokenFactor = getTokenFactor(inputMint);
-  console.log(userWallet, signTransaction)
   useEffect(() => {
-    if (!userWallet) {
+    if (!publicKey) {
       console.log('Please connect your wallet!');
     }
-  }, [userWallet]);
+  }, [publicKey]);
 
   const handleSwap = async () => {
-    if (!userWallet) {
+    if (!publicKey) {
       setError('Wallet not connected!');
       return;
     }
@@ -35,6 +30,7 @@ const SwapButton = ({ wallet, inputMint, inputAmount, slippageInBps, buttonDialo
     setTxLink(null);
 
     try {
+      // Fetch the quote from Jupiter API
       const quoteResponse = await (
         await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=${inputMint.mint}&outputMint=${SOL_MINT_ADDRESS}&amount=${Math.round(inputAmount * tokenFactor)}&slippageBps=${slippageInBps}`)
       ).json();
@@ -45,8 +41,18 @@ const SwapButton = ({ wallet, inputMint, inputAmount, slippageInBps, buttonDialo
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             quoteResponse,
-            userPublicKey: wallet.publicKey.toString(),
+            userPublicKey: publicKey.toString(),
             wrapAndUnwrapSol: true,
+            dynamicComputeUnitLimit: true, // Set this to true to get the best optimized CU usage.
+            dynamicSlippage: { // This will set an optimized slippage to ensure high success rate
+              maxBps: 300 // Make sure to set a reasonable cap here to prevent MEV
+            },
+              prioritizationFeeLamports: {
+              priorityLevelWithMaxLamports: {
+                maxLamports: 1000000,
+                priorityLevel: "veryHigh" // If you want to land transaction fast, set this to use `veryHigh`. You will pay on average higher priority fee.
+              }
+            }
           }),
         })
       ).json();
@@ -55,29 +61,32 @@ const SwapButton = ({ wallet, inputMint, inputAmount, slippageInBps, buttonDialo
       const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
       const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
 
-      // Sign the transaction using wallet.signTransaction
-      const signedTransaction = await userWallet.signTransaction(transaction);
+      // Sign the transaction using the wallet
+      const signedTransaction = await signTransaction(transaction);
 
       // Get the latest blockhash
-      //const latestBlockHash = await connection.getRecentBlockhash();
-      //console.log('Recent Blockhash:', latestBlockHash);
+     const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
 
-      // Serialize and send the transaction
+      //Serialize the transaction and send it
       const rawTransaction = signedTransaction.serialize();
       const txid = await connection.sendRawTransaction(rawTransaction, {
         skipPreflight: true,
         maxRetries: 2,
       });
-
+      console.log(txid)
       // Confirm the transaction
-      /*
+    
       await connection.confirmTransaction({
-        blockhash: latestBlockHash.blockhash,
-        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        blockhash,
+        lastValidBlockHeight,
         signature: txid,
       });
-      console.log(`https://solscan.io/tx/${txid}`);
-      */
+
+      // Generate the transaction link for Solscan
+      
+      setTxLink(`https://solscan.io/tx/${txid}`);
+      console.log(`Transaction successful: ${txLink}`);
+
     } catch (err) {
       setError('An error occurred during the transaction');
       console.error(err);
@@ -88,7 +97,7 @@ const SwapButton = ({ wallet, inputMint, inputAmount, slippageInBps, buttonDialo
 
   return (
     <div>
-      <button className={"button connect-button"} onClick={handleSwap} disabled={loading} style={{ maxWidth: "fit-content" }}>
+      <button className="button connect-button" onClick={handleSwap} disabled={loading} style={{ maxWidth: 'fit-content' }}>
         {loading ? 'Processing...' : buttonDialog}
       </button>
 
