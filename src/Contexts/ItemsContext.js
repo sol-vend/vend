@@ -11,7 +11,6 @@ export const ItemsProvider = ({ children }) => {
   // Function to set the selected item
   const selectItem = (item) => {
     setSelectedItem(item);
-    console.log(selectedItem);
   };
 
   return (

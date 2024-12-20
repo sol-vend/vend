@@ -1,94 +1,67 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useWallet, useConnection } from '@solana/wallet-adapter-react';  // Import hooks
+import React, { useContext, useEffect, useState, useRef, useMemo } from 'react';
+import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react';
+import { PhantomWalletAdapter, SolletWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { clusterApiUrl } from '@solana/web3.js';
 import { API_URL, JUP_SWAP_API_URL, JUP_PRICE_API_URL, PRICE_BUFFER_PREMIA, ROUNDING_ORDER_MAG, SOL_MINT_ADDRESS, SOL_IMG_URL } from './Shared';
-import SwapButton from './SwapButton';  // Swap button component
-import { BaseWalletConnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useItems } from '../Contexts/ItemsContext';
+import SwapButton from './SwapButton';
+
+// Setup wallet network and wallet adapters
+const network = 'mainnet-beta'; // You can change this to 'devnet' or 'testnet'
+const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
+const wallets = useMemo(() => [
+  new PhantomWalletAdapter(),
+  new SolletWalletAdapter({ network }),
+], [network]);
 
 const WalletConnector = () => {
-  const { publicKey, connected, connect, disconnect, wallet } = useWallet();
-  const { connection } = useConnection();  // Connection hook
-  const { selectedItem } = useItems();
+  const { publicKey, connect, disconnect, connected } = useWallet(); // Access wallet connection
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedToken, setSelectedToken] = useState(null);
   const [swapMinimum, setSwapMinimum] = useState(null);
-  const [walletAddress, setWalletAddress] = useState(null);
-  const [hasMoreTokens, setHasMoreTokens] = useState(true);
+  const { selectedItem } = useItems();
   const [tokenImages, setTokenImages] = useState({});
-  const lastTokenElementRef = useRef();
-  // Log the wallet connection status
-  useEffect(() => {
-    console.log('Wallet connected:', connected);
-    console.log('PublicKey:', publicKey);
-  }, [connected, publicKey]);
+  const [start, setStart] = useState(0); // For pagination
+  const [limit, setLimit] = useState(10);
+  const [hasMoreTokens, setHasMoreTokens] = useState(true);
+  const observer = useRef();
 
-  const handleTokenClick = (token) => {
-    setSelectedToken(token);
-  };
-
+  // Function to fetch tokens
   const fetchTokens = async () => {
-    if (!walletAddress || !hasMoreTokens) return;
+    if (!publicKey || !hasMoreTokens) return;
 
     setLoading(true);
-
     try {
-      const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}`);
-      if (!response.ok) throw new Error('Network response was not ok');
+      const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${publicKey.toString()}&start=${start}&limit=${limit}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
       const tokenAccounts = await response.json();
       setTokens(prevTokens => [...prevTokens, ...tokenAccounts]);
 
-      if (tokenAccounts.length < 10) {
-        setHasMoreTokens(false);
+      if (tokenAccounts.length < limit) {
+        setHasMoreTokens(false); // No more tokens to load
       }
     } catch (error) {
-      console.error('Error fetching token accounts:', error.message);
+      console.log('Error fetching token accounts:', error.message);
+      alert('Failed to fetch tokens. Please try again later.');
     } finally {
       setLoading(false);
-    }
-  };
-  const doConnectWallet = () => {
-    setTimeout(() => { document.getElementsByClassName('wallet-adapter-button-start-icon')[0].parentElement.click() }, 250);
-    setTimeout(connectWallet, 500);
-  }
-
-  const connectWallet = async () => {
-    if (!connected) {
-      console.log('Attempting to connect wallet...');
-      try {
-        await connect();  // Trigger the connection
-      } catch (error) {
-        console.error('Failed to connect wallet:', error);
-      }
-    } else {
-      console.log('Already connected!');
-    }
-  };
-
-  const disconnectWallet = async () => {
-    try {
-      await disconnect();  // Disconnect the wallet
-      setWalletAddress(null);
-      setTokens([]);
-      setSelectedToken(null);
-      setSwapMinimum(null);
-      window.location.reload()
-    } catch (error) {
-      console.error('Error disconnecting wallet:', error);
     }
   };
 
   useEffect(() => {
     if (publicKey) {
-      setWalletAddress(publicKey.toString());
-    }
-  }, [publicKey]);
-
-  useEffect(() => {
-    if (walletAddress) {
       fetchTokens();
     }
-  }, [walletAddress]); // Fetch tokens when walletAddress changes
+  }, [publicKey, start]); // Fetch tokens when publicKey or start changes
+
+  const handleTokenClick = (token) => {
+    setSelectedToken(token);
+  };
 
   useEffect(() => {
     const fetchTokenImages = async () => {
@@ -119,6 +92,34 @@ const WalletConnector = () => {
     }
   }, [tokens]);
 
+  const lastTokenElementRef = useRef();
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    };
+
+    const callback = (entries) => {
+      if (entries[0].isIntersecting && !loading && hasMoreTokens) {
+        setStart((prevStart) => prevStart + limit);
+      }
+    };
+
+    observer.current = new IntersectionObserver(callback, options);
+    if (lastTokenElementRef.current) {
+      observer.current.observe(lastTokenElementRef.current);
+    }
+
+    return () => {
+      if (lastTokenElementRef.current) {
+        observer.current.unobserve(lastTokenElementRef.current);
+      }
+    };
+  }, [loading, tokens, hasMoreTokens]);
+
+  // Fetch quote for swap based on selected token and selected item
   useEffect(() => {
     if (selectedItem && selectedToken) {
       const mintAddress = selectedToken.mint;
@@ -147,60 +148,30 @@ const WalletConnector = () => {
     }
   }, [selectedItem, selectedToken]);
 
-  const abbr = (address) => {
-    const visibleChars = 4
-    return `${address.substring(0, visibleChars)}...${address.substring(address.length - (visibleChars + 1), address.length - 1)}`
-  }
-
   return (
     <div>
-      {/* Wallet Connection Section */}
       <div className="banner">
-        {!connected ? (
-          <div>
-            <WalletMultiButton style={{
-              backgroundColor: "#DC1FFF", /* Purple Dino */
-              border: "none", /* Remove border */
-              padding: "10px 15px", /* Button padding */
-              color: "white", /* Button text color */
-              cursor: "pointer", /* Pointer cursor on hover */
-              borderRadius: "5px", /* Rounded corners */
-              maxWidth: "12em",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "inline-block",
-            }}>
-              <div onClick={doConnectWallet}>
-                Connect Wallet
-              </div>
-            </WalletMultiButton>
-          </div>
-        ) : (
-          <>
-            <button className="button connect-button" onClick={disconnectWallet}>
-              Disconnect Wallet
-            </button>
-            <p>Connected: {abbr(walletAddress)}</p>
-          </>
-        )}
+        <h1 className="site-title">Sol-Vend</h1>
+        <button className="button connect-button" onClick={connected ? disconnect : connect}>
+          {connected ? `Connected: ${publicKey.toString()}` : 'Connect Wallet'}
+        </button>
       </div>
 
       {loading && <div>Loading tokens...</div>}
 
       {selectedToken && (
-        swapMinimum == null ?
+        swapMinimum == null ? 
           <div className="swap-info">
             <h4>{selectedItem == null ? "Select Item" : "Quote Unavailable for token"}</h4>
           </div>
-          :
+        : 
           <div className="swap-info">
-            <SwapButton
-              wallet={{ publicKey, connected }}
-              inputMint={selectedToken}
-              inputAmount={swapMinimum}
-              slippageInBps={50}
-              buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
+            <SwapButton 
+              wallet={{ publicKey, connected }} 
+              inputMint={selectedToken} 
+              inputAmount={swapMinimum} 
+              slippageInBps={50} 
+              buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`} 
             />
           </div>
       )}
@@ -237,5 +208,4 @@ const WalletConnector = () => {
   );
 };
 
-export default WalletConnector;
 

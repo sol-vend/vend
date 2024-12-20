@@ -27,8 +27,11 @@ module.exports = function override(webpackConfig) {
     assert: require.resolve("assert"),
     fs: false,
     process: false,
-    path: false,
-    zlib: false,
+    path: require.resolve('path-browserify/'),
+    zlib: require.resolve("browserify-zlib"),
+    http: require.resolve("stream-http"), // Ensure `stream-http` polyfill is included
+    https: require.resolve("https-browserify"), // Ensure `https-browserify` polyfill is included
+    vm: false,
   };
 
   return webpackConfig;

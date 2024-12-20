@@ -1,16 +1,31 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState } from 'react';
 
-const WalletContext = createContext();
+// Create WalletContext
+export const WalletContext = createContext();
 
-export const useWalletContext = () => {
-  return useContext(WalletContext);
-};
-
+// WalletProvider component
 export const WalletProvider = ({ children }) => {
-  const [walletAddress, setWalletAddress] = useState(null);  // State to hold wallet address
+  const [wallet, setWallet] = useState(null);  // Store wallet data (null initially)
+
+  const connectWallet = async () => {
+    if (window.solana && window.solana.isPhantom) {
+      try {
+        const response = await window.solana.connect();
+        const newWallet = {
+          publicKey: response.publicKey.toString(),
+          connected: true,
+        };
+        setWallet(newWallet);
+      } catch (error) {
+        console.error("Failed to connect wallet:", error);
+      }
+    } else {
+      alert("Phantom wallet not found! Please install it.");
+    }
+  };
 
   return (
-    <WalletContext.Provider value={{ walletAddress, setWalletAddress }}>
+    <WalletContext.Provider value={{ wallet, connectWallet }}>
       {children}
     </WalletContext.Provider>
   );

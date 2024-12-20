@@ -179,3 +179,18 @@ body {
   background-color: #03E1FF; /* Ocean Blue on hover */
 }
 
+.wallet-adapter-dropdown-list{
+  display: none;
+}
+
+.wallet-adapter-modal-title{
+  display:none;
+}
+
+.wallet-adapter-modal-wrapper{
+  display:none;
+}
+
+.wallet-adapter-button-trigger{
+  display:none;
+}

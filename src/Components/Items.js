@@ -1,38 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useItems } from '../Contexts/ItemsContext';
+import { API_URL } from './Shared';
 
 const Items = () => {
   const { selectedItem, selectItem } = useItems(); // Access selectedItem and selectItem from context
+  const [hashValue, setHashValue] = useState('');
+  const [itemAddress, setItemAddress] = useState(null); // Initialize as null for better checking
+  let selectVendMessage = ""
 
-  const items = [
-    { name: 'T-Shirt', price: 19.99 },
-    { name: 'Hat', price: 9.99 },
-    { name: 'Chips', price: 2.49 },
-    { name: 'Cigars', price: 14.99 },
-    { name: 'Mug', price: 12.00 },
-  ];
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const hashWithoutHash = hash.substring(1);
+      setHashValue(hashWithoutHash);
+    } else {
+      selectVendMessage = "Select the item you want to purchase and try again..."
+    }
+  }, []);
 
-  // Handle item click to select the item
-  const handleClick = (item) => {
-    selectItem(item); // Set the clicked item as the selected item
-  };
+  useEffect(() => {
+    const fetchSelectionAddress = async () => {
+      if (hashValue) {
+        try {
+          const response = await fetch(`${API_URL}/api/get_selection_address`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ "encrypted-data": hashValue }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const selectionAddress = await response.json();
+          setItemAddress(selectionAddress);
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
+      }
+    };
+
+    fetchSelectionAddress();
+  }, [hashValue]); // Run effect when hashValue changes
+
+  useEffect(() => {
+    if (itemAddress) {
+      selectItem(itemAddress["selected-item-details"]);
+    }
+  }, [itemAddress, selectItem]); // Add selectItem to dependencies
 
   return (
-    <div className="items-container">
-      <h2>Items for Sale</h2>
-      <div className="items-list">
-        {items.map((item, index) => (
-          <div
-            key={index}
-            className={`item ${selectedItem?.name === item.name ? 'selected-item' : ''}`} // Add 'selected-item' class if it's the selected item
-            onClick={() => handleClick(item)}  // Handle item click
-          >
-            <h3>{item.name}</h3>
-            <p>Price: ${item.price.toFixed(2)}</p>
-          </div>
-        ))}
+    selectedItem == null ? (
+      <div>
+        <h2>{selectVendMessage}</h2>
       </div>
-    </div>
+    ) : (
+      <div className="items-container">
+        <h2>Selected Item</h2>
+        <div className="items-list">
+
+          <div
+            key={selectedItem}
+            className={`item selected-item`}
+          >
+            <h3>{selectedItem["Item Name"]}</h3>
+            <p>Price: ${selectedItem["Item Price"]}</p>
+          </div>
+
+        </div>
+      </div>
+    )
   );
 };
 
