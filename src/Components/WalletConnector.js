@@ -5,7 +5,7 @@ import SwapButton from './SwapButton';  // Swap button component
 import { BaseWalletConnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useItems } from '../Contexts/ItemsContext';
 
-const WalletConnector = () => {
+const WalletConnector = ({ hash }) => {
   const { publicKey, connected, connect, disconnect, wallet } = useWallet();
   const { selectedItem } = useItems();
   const [tokens, setTokens] = useState([]);
@@ -147,11 +147,11 @@ const WalletConnector = () => {
   }, [selectedItem, selectedToken]);
 
   const abbr = (address) => {
-    if (address){
-    const visibleChars = 4
-    return `${address.substring(0, visibleChars)}...${address.substring(address.length - visibleChars, address.length)}`
+    if (address) {
+      const visibleChars = 4
+      return `${address.substring(0, visibleChars)}...${address.substring(address.length - visibleChars, address.length)}`
     }
-    else{
+    else {
       return ""
     }
   }
@@ -204,6 +204,7 @@ const WalletConnector = () => {
               inputAmount={swapMinimum}
               slippageInBps={200}
               buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
+              hash={hash}
             />
           </div>
       )}

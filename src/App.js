@@ -11,17 +11,16 @@ import { WalletModalProvider, WalletConnectButton, WalletDisconnectButton } from
 const App = () => {
   const network = 'mainnet-beta';  // Or 'devnet', 'testnet' based on your needs
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
+  const hash = window.location.hash;
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <WalletConnectButton />
           <ItemsProvider>
             <div className="App">
-              <WalletConnector />
+              <WalletConnector hash={hash}/>
               <Items />
             </div>
           </ItemsProvider>
