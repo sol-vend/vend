@@ -9,6 +9,7 @@ body {
   /* Light background color */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(360deg, #292b2d, #292b2d, #292b2d, #292b2d, #292b2d, green);
 }
 
 /* Code Styling */
@@ -64,7 +65,7 @@ h1 {
 /* Token List Styling */
 .token-list {
   margin: 20px;
-  background-color: white;
+  background-color: rgb(0, 0, 0);
   /* White background for the token list */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -76,6 +77,12 @@ h1 {
   /* Divider between tokens */
   padding: 10px 0;
   text-align: center;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 25%;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .token-item:last-child {
@@ -91,13 +98,19 @@ h1 {
 /* Token Details */
 .token-item span {
   display: block;
-  color: #555;
+  color: #ffffff;
   /* Darker text color for token details */
   max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  width: 20%;
   /* Add ellipsis for overflow text */
+}
+
+.token-item img {
+  border-radius: 50%;
+  width: 20%;
 }
 
 /* Items Container */
@@ -152,6 +165,7 @@ h1 {
   border-color: #49494945;
   background: linear-gradient(to top, #00ffa3eb, #a100ffad, #4A90E2);
   box-shadow: black 5px 3px 10px 1px;
+  margin-top: 5%;
 }
 
 /* Banner Styling */
@@ -181,7 +195,7 @@ h1 {
 }
 
 .connect-button {
-  background-color: #DC1FFF;
+  background-color: #ab9ff2;
   /* Purple Dino */
   border: none;
   padding: 10px 15px;
@@ -207,6 +221,21 @@ h1 {
   /* Ocean Blue on hover */
 }
 
+.transaction-confirmed {
+  display: flex;
+  padding: 15px;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  margin: 2.5%;
+  margin-inline: 25%;
+  border: #a100ff;
+  border-style: solid;
+  border-radius: 15px;
+  text-align: center;
+  background: linear-gradient(45deg, #03e1ff, #00ffa3);
+}
+
 /* Wallet Adapter Hidden Styles */
 .wallet-adapter-dropdown-list,
 .wallet-adapter-modal-title,
@@ -217,8 +246,9 @@ h1 {
 
 /* Spinner (Loader) */
 .spinner {
+  margin-left: 45%;
   border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid #fff;
+  border-top: 4px solid #272727;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -321,4 +351,28 @@ th {
   max-width: 100px;
 }
 
-/*# sourceMappingURL=main.d609f34b.css.map*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent dark background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  /* Ensure it sits above other content */
+}
+
+/* Modal Style */
+.modal {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/*# sourceMappingURL=main.2336661d.css.map*/
