@@ -60,15 +60,15 @@ const Items = () => {
       <div className="items-container">
         <h2>Selected Item</h2>
         <div className="items-list">
-
-          <div
-            key={selectedItem}
-            className={`item selected-item`}
-          >
-            <h3>{selectedItem["Item Name"]}</h3>
-            <p>Price: ${selectedItem["Item Price"]}</p>
+          <div className='selected-item-wrapper'>
+            <div
+              key={selectedItem}
+              className={`item selected-item`}
+            >
+              <h3>{selectedItem["Item Name"]}</h3>
+              <p>Price: ${selectedItem["Item Price"]}</p>
+            </div>
           </div>
-
         </div>
       </div>
     )

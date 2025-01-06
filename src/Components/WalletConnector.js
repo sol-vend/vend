@@ -159,85 +159,109 @@ const WalletConnector = ({ hash }) => {
   return (
     <div>
       {/* Wallet Connection Section */}
-      <div className="banner">
-        {!connected ? (
-          <div>
-            <WalletMultiButton style={{
-              backgroundColor: "#DC1FFF", /* Purple Dino */
-              border: "none", /* Remove border */
-              padding: "10px 15px", /* Button padding */
-              color: "white", /* Button text color */
-              cursor: "pointer", /* Pointer cursor on hover */
-              borderRadius: "5px", /* Rounded corners */
-              maxWidth: "12em",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "inline-block",
-            }}>
-              <div onClick={doConnectWallet}>
-                Connect Wallet
+      <div className='banner-wrapper'>
+        <div className="banner">
+          {!connected ? (
+            <div>
+
+              <WalletMultiButton style={{
+                backgroundColor: "#DC1FFF", /* Purple Dino */
+                border: "none", /* Remove border */
+                padding: "10px 15px", /* Button padding */
+                color: "white", /* Button text color */
+                cursor: "pointer", /* Pointer cursor on hover */
+                borderRadius: "5px", /* Rounded corners */
+                maxWidth: "12em",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "inline-block",
+              }}>
+                <div onClick={doConnectWallet}>
+                  Connect Wallet
+                </div>
+              </WalletMultiButton>
+
+            </div>
+          ) : (
+            <>
+              <div className='connect-button-wrapper'>
+                <button className="button connect-button" onClick={disconnectWallet}>
+                  Disconnect Wallet
+                </button>
               </div>
-            </WalletMultiButton>
-          </div>
-        ) : (
-          <>
-            <button className="button connect-button" onClick={disconnectWallet}>
-              Disconnect Wallet
-            </button>
-            <p>Connected: {abbr(walletAddress)}</p>
-          </>
-        )}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '75%'
+              }}>
+                <p className='connection-status'>Connected: {abbr(walletAddress)}</p>
+
+              </div>
+            </>
+          )}
+          <div className='banner-end'></div>
+        </div>
       </div>
 
       {loading && <div>Loading tokens...</div>}
 
-      {selectedToken && (
-        swapMinimum == null ?
-          <div className="swap-info">
-            <h4>{selectedItem == null ? "Select Item" : "Quote Unavailable for token"}</h4>
-          </div>
-          :
-          <div className="swap-info">
-            <SwapButton
-              inputMint={selectedToken}
-              inputAmount={swapMinimum}
-              slippageInBps={200}
-              buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
-              hash={hash}
-            />
-          </div>
-      )}
-
-      {tokens.length > 0 ? (
-        <div className="token-list">
-          <h3>Select Payment Method:</h3>
-          {tokens.map((token, index) => (
-            <div
-              className="token-item"
-              key={index}
-              onClick={() => handleTokenClick(token)}
-              style={{
-                cursor: 'pointer',
-                border: selectedToken && selectedToken.mint === token.mint ? '2px solid green' : 'none',
-                padding: '10px',
-                margin: '5px',
-                backgroundColor: selectedToken && selectedToken.mint === token.mint ? '#e0f7e0' : '#f5f5f5',
-              }}
-            >
-              <span>Symbol: {Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
-              <span>Amount: {Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * token.uiAmount, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))}</span>
-              {tokenImages[token.mint] && (
-                <img src={tokenImages[token.mint]} style={{ maxWidth: '50px', height: 'auto', marginLeft: '10px' }} />
-              )}
+      {
+        selectedToken && (
+          swapMinimum == null ?
+            <div className="swap-info">
+              <h4>{selectedItem == null ? "Select Item" : "Quote Unavailable for token"}</h4>
             </div>
-          ))}
-          <div ref={lastTokenElementRef} />
-        </div>
-      ) : (
-        connected && !loading && <div>No tokens found.</div>
-      )}
-    </div>
+            :
+            <div className="swap-info">
+              <SwapButton
+                inputMint={selectedToken}
+                inputAmount={swapMinimum}
+                slippageInBps={200}
+                buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
+                hash={hash}
+              />
+            </div>
+        )
+      }
+
+      {
+        tokens.length > 0 ? (
+          <div className="token-list">
+            <h3
+              style={{
+                textAlign: 'center',
+                textShadow: "-6px -1px 11px #43434357",
+                fontStyle: "italic"
+              }}
+            >Select Payment Method:</h3>
+            {tokens.map((token, index) => (
+              <div
+                className="token-item"
+                key={index}
+                onClick={() => handleTokenClick(token)}
+                style={{
+                  cursor: 'pointer',
+                  border: selectedToken && selectedToken.mint === token.mint ? '2px solid green' : 'none',
+                  padding: '10px',
+                  margin: '5px',
+                  backgroundColor: selectedToken && selectedToken.mint === token.mint ? '#e0f7e0' : '#f5f5f5',
+                }}
+              >
+                <span>Symbol: {Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
+                <span>Amount: {Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * token.uiAmount, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))}</span>
+                {tokenImages[token.mint] && (
+                  <img src={tokenImages[token.mint]} style={{ maxWidth: '50px', height: 'auto', marginLeft: '10px' }} />
+                )}
+              </div>
+            ))}
+            <div ref={lastTokenElementRef} />
+          </div>
+        ) : (
+          connected && !loading && <div>No tokens found.</div>
+        )
+      }
+    </div >
   );
 };
 

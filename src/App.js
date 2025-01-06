@@ -20,8 +20,8 @@ const App = () => {
         <WalletModalProvider>
           <ItemsProvider>
             <div className="App">
-              <WalletConnector hash={hash}/>
               <Items />
+              <WalletConnector hash={hash}/>
             </div>
           </ItemsProvider>
         </WalletModalProvider>

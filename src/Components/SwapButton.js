@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Connection, VersionedTransaction, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import fetch from 'cross-fetch';
-import { useWallet } from '@solana/wallet-adapter-react'; 
+import { useWallet } from '@solana/wallet-adapter-react';
 import { SOL_MINT_ADDRESS, JITO_SOL_TOKEN_ACCT, JITO_SOL_ADDRESS, SETTLEMENT_PUBKEY, API_URL } from './Shared';
 import { useItems } from '../Contexts/ItemsContext';
 
@@ -48,7 +48,7 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
       const startBalance = await getStartingAccountBalance();
       console.log(startBalance);
       const quoteResponse = await (
-        await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=${inputMint.mint}&outputMint=${JITO_SOL_ADDRESS}&amount=${Math.round(inputAmount * tokenFactor)}&slippageBps=${slippageInBps}`) 
+        await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=${inputMint.mint}&outputMint=${JITO_SOL_ADDRESS}&amount=${Math.round(inputAmount * tokenFactor)}&slippageBps=${slippageInBps}`)
       ).json();
       console.log(quoteResponse);
 
@@ -62,9 +62,9 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
             wrapAndUnwrapSol: true,
             useSharedAccounts: true,
             destinationTokenAccount: JITO_SOL_TOKEN_ACCT,
-            dynamicComputeUnitLimit: true, 
-            dynamicSlippage: { 
-              maxBps: 300 
+            dynamicComputeUnitLimit: true,
+            dynamicSlippage: {
+              maxBps: 300
             },
             prioritizationFeeLamports: {
               priorityLevelWithMaxLamports: {
@@ -149,10 +149,15 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
 
   return (
     <div>
-      <button className="button connect-button" onClick={handleSwap} disabled={loading} style={{ maxWidth: 'fit-content' }}>
-        {loading ? 'Processing... Please wait' : buttonDialog}
-      </button>
-
+      <div style={{ display: 'flex',
+        justifyContent:'center'
+       }}>
+        <div className='connect-button-wrapper'>
+          <button className="button connect-button" onClick={handleSwap} disabled={loading} style={{ maxWidth: 'fit-content' }}>
+            {loading ? 'Processing... Please wait' : buttonDialog}
+          </button>
+        </div>
+      </div>
       {loading && (
         <div className="loading-dialog">
           <p>Transaction is being processed... This may take up to 60 seconds.</p>

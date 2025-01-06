@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = function override(webpackConfig) {
   // Disable resolving ESM paths as fully specified.
@@ -33,6 +34,26 @@ module.exports = function override(webpackConfig) {
     https: require.resolve("https-browserify"), // Ensure `https-browserify` polyfill is included
     vm: false,
   };
+
+  // Add TerserPlugin to minify JS files in production
+  if (webpackConfig.mode === 'production') {
+    webpackConfig.optimization = {
+      ...webpackConfig.optimization,
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: true, // Remove console logs in production
+            },
+            output: {
+              comments: false, // Remove comments from the output
+            },
+          },
+        }),
+      ],
+    };
+  }
 
   return webpackConfig;
 };
