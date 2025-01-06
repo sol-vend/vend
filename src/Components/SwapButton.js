@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Connection, VersionedTransaction, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { Connection, VersionedTransaction, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import fetch from 'cross-fetch';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { SOL_MINT_ADDRESS, JITO_SOL_TOKEN_ACCT, JITO_SOL_ADDRESS, SETTLEMENT_PUBKEY, API_URL } from './Shared';
-import { useItems } from '../Contexts/ItemsContext';
+import { JITO_SOL_TOKEN_ACCT, JITO_SOL_ADDRESS, SETTLEMENT_PUBKEY, API_URL, RPC_API_URL } from './Shared';
 
-const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash }) => {
+const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash, setSelectedToken, fetchTokens }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [txLink, setTxLink] = useState(null);
   const [passcode, setPasscode] = useState(null);
-
-  const connection = new Connection('https://light-attentive-lake.solana-mainnet.quiknode.pro/a9c005983fbb55c01832be27cda7d931f5558721');
+  console.log(fetchTokens);
+  const connection = new Connection(RPC_API_URL);
   const { publicKey, signTransaction } = useWallet();
   const tokenFactor = inputMint.amount / inputMint.uiAmount;
 
@@ -44,7 +43,6 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
     setTxLink(null);
 
     try {
-      // Fetch the quote from Jupiter API
       const startBalance = await getStartingAccountBalance();
       console.log(startBalance);
       const quoteResponse = await (
@@ -64,7 +62,7 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
             destinationTokenAccount: JITO_SOL_TOKEN_ACCT,
             dynamicComputeUnitLimit: true,
             dynamicSlippage: {
-              maxBps: 300
+              maxBps: 500
             },
             prioritizationFeeLamports: {
               priorityLevelWithMaxLamports: {
@@ -76,28 +74,20 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
         })
       ).json();
 
-      // Deserialize the swap transaction
       const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
       const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
 
-      // Sign the transaction using the wallet
       const signedTransaction = await signTransaction(transaction);
 
-      // Get the latest blockhash
-      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
-
-      // Serialize the transaction and send it
       const rawTransaction = signedTransaction.serialize();
       const txid = await connection.sendRawTransaction(rawTransaction, {
         skipPreflight: true,
         maxRetries: 2,
       });
-      console.log(txid);
 
-      // Poll for transaction confirmation
       let attempt = 0;
-      const maxAttempts = 60;  // Set maximum number of retries
-      const pollInterval = 2000; // 1 second
+      const maxAttempts = 60;
+      const pollInterval = 2000;
 
       const pollForConfirmation = async () => {
         try {
@@ -120,10 +110,11 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
           if (response.ok) {
             setPasscode(responseData);
             setLoading(false);
+           // setSelectedToken(null);
+           // fetchTokens();
             return;
           }
 
-          // Retry logic
           if (attempt < maxAttempts) {
             attempt++;
             setTimeout(pollForConfirmation, pollInterval);
@@ -138,7 +129,6 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
         }
       };
 
-      // Start the polling loop
       pollForConfirmation();
     } catch (err) {
       setError('An error occurred during the transaction');
@@ -149,25 +139,30 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
 
   return (
     <div>
-      <div style={{ display: 'flex',
-        justifyContent:'center'
-       }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center'
+      }}>
         <div className='connect-button-wrapper'>
           <button className="button connect-button" onClick={handleSwap} disabled={loading} style={{ maxWidth: 'fit-content' }}>
             {loading ? 'Processing... Please wait' : buttonDialog}
           </button>
         </div>
       </div>
+
       {loading && (
-        <div className="loading-dialog">
-          <p>Transaction is being processed... This may take up to 60 seconds.</p>
-          {/* You can also add a spinner here */}
-          <div className="spinner"></div>
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="loading-dialog">
+              <p>Transaction is being processed... This may take up to 60 seconds.</p>
+              <div className="spinner"></div>
+            </div>
+          </div>
         </div>
       )}
 
       {passcode && !loading && (
-        <div>
+        <div className='transaction-confirmed'>
           <h3>Transaction Confirmed!</h3>
           <p>Your passcode is:</p>
           <strong>{passcode['passcode']}</strong>
@@ -183,7 +178,7 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash 
         </div>
       )}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
     </div>
   );
 };

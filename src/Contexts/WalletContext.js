@@ -1,11 +1,9 @@
 import React, { createContext, useState } from 'react';
 
-// Create WalletContext
 export const WalletContext = createContext();
 
-// WalletProvider component
 export const WalletProvider = ({ children }) => {
-  const [wallet, setWallet] = useState(null);  // Store wallet data (null initially)
+  const [wallet, setWallet] = useState(null); 
 
   const connectWallet = async () => {
     if (window.solana && window.solana.isPhantom) {

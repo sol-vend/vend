@@ -3,9 +3,9 @@ import { useItems } from '../Contexts/ItemsContext';
 import { API_URL } from './Shared';
 
 const Items = () => {
-  const { selectedItem, selectItem } = useItems(); // Access selectedItem and selectItem from context
+  const { selectedItem, selectItem } = useItems();
   const [hashValue, setHashValue] = useState('');
-  const [itemAddress, setItemAddress] = useState(null); // Initialize as null for better checking
+  const [itemAddress, setItemAddress] = useState(null);
   let selectVendMessage = ""
 
   useEffect(() => {
@@ -43,13 +43,13 @@ const Items = () => {
     };
 
     fetchSelectionAddress();
-  }, [hashValue]); // Run effect when hashValue changes
+  }, [hashValue]);
 
   useEffect(() => {
     if (itemAddress) {
       selectItem(itemAddress["selected-item-details"]);
     }
-  }, [itemAddress, selectItem]); // Add selectItem to dependencies
+  }, [itemAddress, selectItem]);
 
   return (
     selectedItem == null ? (
@@ -58,7 +58,6 @@ const Items = () => {
       </div>
     ) : (
       <div className="items-container">
-        <h2>Selected Item</h2>
         <div className="items-list">
           <div className='selected-item-wrapper'>
             <div

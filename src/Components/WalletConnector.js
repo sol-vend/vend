@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useWallet, useConnection } from '@solana/wallet-adapter-react';  // Import hooks
-import { API_URL, JUP_SWAP_API_URL, JUP_PRICE_API_URL, PRICE_BUFFER_PREMIA, ROUNDING_ORDER_MAG, SOL_MINT_ADDRESS, SOL_IMG_URL } from './Shared';
+import { useWallet } from '@solana/wallet-adapter-react';  // Import hooks
+import { API_URL, JUP_PRICE_API_URL, PRICE_BUFFER_PREMIA, ROUNDING_ORDER_MAG, SOL_MINT_ADDRESS, SOL_IMG_URL } from './Shared';
 import SwapButton from './SwapButton';  // Swap button component
-import { BaseWalletConnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useItems } from '../Contexts/ItemsContext';
 
 const WalletConnector = ({ hash }) => {
-  const { publicKey, connected, connect, disconnect, wallet } = useWallet();
+  const { publicKey, connected, connect, disconnect } = useWallet();
   const { selectedItem } = useItems();
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ const WalletConnector = ({ hash }) => {
   const [hasMoreTokens, setHasMoreTokens] = useState(true);
   const [tokenImages, setTokenImages] = useState({});
   const lastTokenElementRef = useRef();
-  // Log the wallet connection status
+
   useEffect(() => {
     console.log('Wallet connected:', connected);
     console.log('PublicKey:', publicKey);
@@ -28,9 +28,7 @@ const WalletConnector = ({ hash }) => {
 
   const fetchTokens = async () => {
     if (!walletAddress || !hasMoreTokens) return;
-
     setLoading(true);
-
     try {
       const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}`);
       if (!response.ok) throw new Error('Network response was not ok');
@@ -46,6 +44,7 @@ const WalletConnector = ({ hash }) => {
       setLoading(false);
     }
   };
+
   const doConnectWallet = () => {
     setTimeout(() => { document.getElementsByClassName('wallet-adapter-button-start-icon')[0].parentElement.click() }, 250);
     setTimeout(connectWallet, 500);
@@ -55,7 +54,7 @@ const WalletConnector = ({ hash }) => {
     if (!connected) {
       console.log('Attempting to connect wallet...');
       try {
-        await connect();  // Trigger the connection
+        await connect(); 
       } catch (error) {
         console.error('Failed to connect wallet:', error);
       }
@@ -66,7 +65,7 @@ const WalletConnector = ({ hash }) => {
 
   const disconnectWallet = async () => {
     try {
-      await disconnect();  // Disconnect the wallet
+      await disconnect(); 
       setWalletAddress(null);
       setTokens([]);
       setSelectedToken(null);
@@ -87,7 +86,7 @@ const WalletConnector = ({ hash }) => {
     if (walletAddress) {
       fetchTokens();
     }
-  }, [walletAddress]); // Fetch tokens when walletAddress changes
+  }, [walletAddress]);
 
   useEffect(() => {
     const fetchTokenImages = async () => {
@@ -141,7 +140,6 @@ const WalletConnector = ({ hash }) => {
           setSwapMinimum(null);
         }
       };
-
       fetchQuote();
     }
   }, [selectedItem, selectedToken]);
@@ -158,19 +156,18 @@ const WalletConnector = ({ hash }) => {
 
   return (
     <div>
-      {/* Wallet Connection Section */}
       <div className='banner-wrapper'>
         <div className="banner">
           {!connected ? (
             <div>
 
               <WalletMultiButton style={{
-                backgroundColor: "#DC1FFF", /* Purple Dino */
-                border: "none", /* Remove border */
-                padding: "10px 15px", /* Button padding */
-                color: "white", /* Button text color */
-                cursor: "pointer", /* Pointer cursor on hover */
-                borderRadius: "5px", /* Rounded corners */
+                backgroundColor: "#DC1FFF", 
+                border: "none", 
+                padding: "10px 15px", 
+                color: "white", 
+                cursor: "pointer", 
+                borderRadius: "5px", 
                 maxWidth: "12em",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -196,7 +193,6 @@ const WalletConnector = ({ hash }) => {
                 width: '75%'
               }}>
                 <p className='connection-status'>Connected: {abbr(walletAddress)}</p>
-
               </div>
             </>
           )}
@@ -210,7 +206,7 @@ const WalletConnector = ({ hash }) => {
         selectedToken && (
           swapMinimum == null ?
             <div className="swap-info">
-              <h4>{selectedItem == null ? "Select Item" : "Quote Unavailable for token"}</h4>
+              <h4>{selectedItem == null ? "Select Item" : ""}</h4>
             </div>
             :
             <div className="swap-info">
@@ -220,6 +216,8 @@ const WalletConnector = ({ hash }) => {
                 slippageInBps={200}
                 buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
                 hash={hash}
+                setSelectedToken={setSelectedToken}
+                fetchTokens = {fetchTokens}
               />
             </div>
         )
@@ -231,8 +229,9 @@ const WalletConnector = ({ hash }) => {
             <h3
               style={{
                 textAlign: 'center',
-                textShadow: "-6px -1px 11px #43434357",
-                fontStyle: "italic"
+                textShadow: "-6px -1px 11pxrgba(227, 227, 227, 0.34)",
+                fontStyle: "italic",
+                color: "white"
               }}
             >Select Payment Method:</h3>
             {tokens.map((token, index) => (
@@ -245,7 +244,8 @@ const WalletConnector = ({ hash }) => {
                   border: selectedToken && selectedToken.mint === token.mint ? '2px solid green' : 'none',
                   padding: '10px',
                   margin: '5px',
-                  backgroundColor: selectedToken && selectedToken.mint === token.mint ? '#e0f7e0' : '#f5f5f5',
+                  background: selectedToken && selectedToken.mint === token.mint ? '#ab9ff2' : 'linear-gradient(360deg, rgb(71, 71, 71), #5f5f5f)',
+                  borderRadius: '10px',
                 }}
               >
                 <span>Symbol: {Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
