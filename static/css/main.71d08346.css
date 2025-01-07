@@ -76,6 +76,7 @@ h1 {
   border-bottom: 1px solid #ddd;
   /* Divider between tokens */
   padding: 10px 0;
+  min-height: 8vh;
 }
 
 .token-container {
@@ -88,6 +89,9 @@ h1 {
 
 .token-container div {
   width: 33%;
+}
+.token-container div:nth-child(1){
+  text-align: left;
 }
 
 .token-container div:nth-child(2) {
@@ -122,6 +126,7 @@ h1 {
 
 .token-item img {
   border-radius: 50%;
+  width: 120%;
 }
 
 /* Items Container */
@@ -386,4 +391,4 @@ th {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/*# sourceMappingURL=main.13f1721c.css.map*/
+/*# sourceMappingURL=main.71d08346.css.map*/
