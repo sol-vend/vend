@@ -101,7 +101,11 @@ const WalletConnector = ({ hash }) => {
             }
             const data = await response.json();
             if (data.image) {
-              images[token.mint] = data.image;
+              if (!Object.keys(tokenImages).includes(token.mint)){
+                if (!Object.keys(images).includes(token.mint)){
+                  images[token.mint] = data.image;
+                }
+              }
             }
           } catch (error) {
             console.error('Error fetching image:', error.message);
