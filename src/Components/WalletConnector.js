@@ -54,7 +54,7 @@ const WalletConnector = ({ hash }) => {
     if (!connected) {
       console.log('Attempting to connect wallet...');
       try {
-        await connect(); 
+        await connect();
       } catch (error) {
         console.error('Failed to connect wallet:', error);
       }
@@ -65,7 +65,7 @@ const WalletConnector = ({ hash }) => {
 
   const disconnectWallet = async () => {
     try {
-      await disconnect(); 
+      await disconnect();
       setWalletAddress(null);
       setTokens([]);
       setSelectedToken(null);
@@ -162,12 +162,12 @@ const WalletConnector = ({ hash }) => {
             <div>
 
               <WalletMultiButton style={{
-                backgroundColor: "#DC1FFF", 
-                border: "none", 
-                padding: "10px 15px", 
-                color: "white", 
-                cursor: "pointer", 
-                borderRadius: "5px", 
+                backgroundColor: "#DC1FFF",
+                border: "none",
+                padding: "10px 15px",
+                color: "white",
+                cursor: "pointer",
+                borderRadius: "5px",
                 maxWidth: "12em",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -217,7 +217,7 @@ const WalletConnector = ({ hash }) => {
                 buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
                 hash={hash}
                 setSelectedToken={setSelectedToken}
-                fetchTokens = {fetchTokens}
+                fetchTokens={fetchTokens}
               />
             </div>
         )
@@ -234,27 +234,41 @@ const WalletConnector = ({ hash }) => {
                 color: "white"
               }}
             >Select Payment Method:</h3>
-            {tokens.map((token, index) => (
-              <div
-                className="token-item"
-                key={index}
-                onClick={() => handleTokenClick(token)}
-                style={{
-                  cursor: 'pointer',
-                  border: selectedToken && selectedToken.mint === token.mint ? '2px solid green' : 'none',
-                  padding: '10px',
-                  margin: '5px',
-                  background: selectedToken && selectedToken.mint === token.mint ? '#ab9ff2' : 'linear-gradient(360deg, rgb(71, 71, 71), #5f5f5f)',
-                  borderRadius: '10px',
-                }}
-              >
-                <span>Symbol: {Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
-                <span>Amount: {Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * token.uiAmount, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))}</span>
-                {tokenImages[token.mint] && (
-                  <img src={tokenImages[token.mint]} style={{ maxWidth: '50px', height: 'auto', marginLeft: '10px' }} />
-                )}
-              </div>
-            ))}
+            {tokens
+              .filter(token => token.dollarQuote !== null && token.dollarQuote.outAmount !== undefined)
+              .sort((a, b) => (b.dollarQuote.outAmount || 0) - (a.dollarQuote.outAmount || 0))
+              .map((token, index) => (
+                <div
+                  className="token-item"
+                  key={index}
+                  onClick={() => handleTokenClick(token)}
+                  style={{
+                    cursor: 'pointer',
+                    border: selectedToken && selectedToken.mint === token.mint ? '2px solid green' : 'none',
+                    padding: '10px',
+                    margin: '5px',
+                    background: selectedToken && selectedToken.mint === token.mint ? '#ab9ff2' : 'linear-gradient(360deg, rgb(71, 71, 71), #5f5f5f)',
+                    borderRadius: '10px',
+                  }}
+                >
+                  <div className='token-container'>
+                    <div>
+                      {tokenImages[token.mint] && (
+                        <div className='token-image-wrapper'>
+                        <img src={tokenImages[token.mint]} />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <span>{Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
+                      <span>{Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * token.uiAmount, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))}</span>
+                    </div>
+                    <div>
+                      <span>${token.dollarQuote.outAmount / 1000000}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             <div ref={lastTokenElementRef} />
           </div>
         ) : (
