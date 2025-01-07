@@ -76,13 +76,26 @@ h1 {
   border-bottom: 1px solid #ddd;
   /* Divider between tokens */
   padding: 10px 0;
-  text-align: center;
+}
+
+.token-container {
   display: flex;
-  flex-direction: row-reverse;
-  gap: 25%;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-content: center;
   align-items: center;
-  justify-content: center;
+}
+
+.token-container div {
+  width: 33%;
+}
+
+.token-container div:nth-child(2) {
+  text-align: center;
+}
+
+.token-container div:nth-child(3){
+  text-align: end;
 }
 
 .token-item:last-child {
@@ -104,13 +117,11 @@ h1 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 20%;
   /* Add ellipsis for overflow text */
 }
 
 .token-item img {
   border-radius: 50%;
-  width: 20%;
 }
 
 /* Items Container */
@@ -375,4 +386,4 @@ th {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/*# sourceMappingURL=main.2336661d.css.map*/
+/*# sourceMappingURL=main.13f1721c.css.map*/
