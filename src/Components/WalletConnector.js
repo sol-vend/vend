@@ -24,6 +24,10 @@ const WalletConnector = ({ hash }) => {
     console.log('PublicKey:', publicKey);
   }, [connected, publicKey]);
 
+  useEffect(() => {
+    console.log(startIndex);
+  },[startIndex]);
+
   const handleTokenClick = (token) => {
     setSelectedToken(token);
   };
@@ -35,6 +39,7 @@ const WalletConnector = ({ hash }) => {
       const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}&start=${startIndex}&limit=${tokenFetchLimit}`);
       if (!response.ok) throw new Error('Network response was not ok');
       const responseJson = await response.json();
+      console.log(responseJson);
       const tokenAccounts = responseJson.tokenAccounts;
       const lastTokenAccountIndex = responseJson.lastIndexRead + 1;
       const remainingTokens = responseJson.isRemainingTokens;
@@ -95,7 +100,7 @@ const WalletConnector = ({ hash }) => {
   }, [walletAddress]);
 
   useEffect(() => {
-  const fetchTokenImages = async () => {
+    const fetchTokenImages = async () => {
       const images = {};
       await Promise.all(tokens.map(async (token) => {
         if (token.metadata && token.metadata.data) {
@@ -107,8 +112,8 @@ const WalletConnector = ({ hash }) => {
             }
             const data = await response.json();
             if (data.image) {
-              if (!Object.keys(tokenImages).includes(token.mint)){
-                if (!Object.keys(images).includes(token.mint)){
+              if (!Object.keys(tokenImages).includes(token.mint)) {
+                if (!Object.keys(images).includes(token.mint)) {
                   images[token.mint] = data.image;
                 }
               }
@@ -265,7 +270,14 @@ const WalletConnector = ({ hash }) => {
                     <div>
                       {tokenImages[token.mint] && (
                         <div className='token-image-wrapper'>
-                        <img src={tokenImages[token.mint]} onerror={UNKNOWN_SPL_TOKEN_IMG} />
+                          <img
+                            src={tokenImages[token.mint]}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = UNKNOWN_SPL_TOKEN_IMG;
+                            }}
+                            alt="Token"
+                          />
                         </div>
                       )}
                     </div>
