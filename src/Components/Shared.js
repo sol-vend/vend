@@ -10,3 +10,4 @@ export const SETTLEMENT_PUBKEY = "uT7ycytYVjvjhHp7yL726Zc8dasHQnpx2bCXvEyqiwe";
 export const JITO_SOL_TOKEN_ACCT = "98pf2L7TouhD1LkQm6Nc8hvNu1gJJMN9ZxQHVseoeixg"
 export const TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 export const RPC_API_URL = "https://light-attentive-lake.solana-mainnet.quiknode.pro/a9c005983fbb55c01832be27cda7d931f5558721";
+export const UNKNOWN_SPL_TOKEN_IMG = "/unknown-token.jpg";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';  // Import hooks
-import { API_URL, JUP_PRICE_API_URL, PRICE_BUFFER_PREMIA, ROUNDING_ORDER_MAG, SOL_MINT_ADDRESS, SOL_IMG_URL } from './Shared';
+import { API_URL, JUP_PRICE_API_URL, PRICE_BUFFER_PREMIA, ROUNDING_ORDER_MAG, SOL_MINT_ADDRESS, SOL_IMG_URL, UNKNOWN_SPL_TOKEN_IMG } from './Shared';
 import SwapButton from './SwapButton';  // Swap button component
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useItems } from '../Contexts/ItemsContext';
@@ -89,7 +89,7 @@ const WalletConnector = ({ hash }) => {
   }, [walletAddress]);
 
   useEffect(() => {
-    const fetchTokenImages = async () => {
+  const fetchTokenImages = async () => {
       const images = {};
       await Promise.all(tokens.map(async (token) => {
         if (token.metadata && token.metadata.data) {
@@ -259,7 +259,7 @@ const WalletConnector = ({ hash }) => {
                     <div>
                       {tokenImages[token.mint] && (
                         <div className='token-image-wrapper'>
-                        <img src={tokenImages[token.mint]} />
+                        <img src={tokenImages[token.mint]} onerror={UNKNOWN_SPL_TOKEN_IMG} />
                         </div>
                       )}
                     </div>
@@ -268,7 +268,7 @@ const WalletConnector = ({ hash }) => {
                       <span>{Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * token.uiAmount, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))}</span>
                     </div>
                     <div>
-                      <span>${token.dollarQuote.outAmount / 1000000}</span>
+                      <span>${Math.round(token.dollarQuote.outAmount / 1000) / 1000}</span>
                     </div>
                   </div>
                 </div>

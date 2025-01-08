@@ -23,6 +23,7 @@ const App = () => {
               <Items />
               <WalletConnector hash={hash}/>
             </div>
+            <div className='bottom-wrapper'></div>
           </ItemsProvider>
         </WalletModalProvider>
       </WalletProvider>
