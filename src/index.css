@@ -5,25 +5,21 @@ body {
   /* Primary and fallback fonts */
   margin: 0;
   padding: 0;
-  background-color: #f5f5f5;
-  /* Light background color */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(360deg, #292b2d, #292b2d, #292b2d, #292b2d, #292b2d, green);
+  height: 97vh;
 }
 
 /* Code Styling */
 code {
   font-family: 'Roboto Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
-  /* Monospaced font for code */
 }
 
 /* Header */
 h1 {
   font-family: 'Poppins', sans-serif;
-  /* Heading font */
   color: #000000;
-  /* Black */
   font-size: 2.5em;
   margin: 0.67em 0;
   text-align: center;
@@ -32,7 +28,6 @@ h1 {
 /* Button Styles */
 .button {
   background-color: #00FFA3;
-  /* Surge Green */
   color: white;
   border: none;
   border-radius: 5px;
@@ -212,7 +207,6 @@ h1 {
 
 .connect-button {
   background-color: #ab9ff2;
-  /* Purple Dino */
   border: none;
   padding: 10px 15px;
   color: white;
@@ -389,12 +383,4 @@ th {
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.bottom-wrapper{
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 5%;
-  background: #292b2d;
 }

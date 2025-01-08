@@ -15,6 +15,8 @@ const WalletConnector = ({ hash }) => {
   const [walletAddress, setWalletAddress] = useState(null);
   const [hasMoreTokens, setHasMoreTokens] = useState(true);
   const [tokenImages, setTokenImages] = useState({});
+  const [startIndex, setStartIndex] = useState(0);
+  const tokenFetchLimit = 5;
   const lastTokenElementRef = useRef();
 
   useEffect(() => {
@@ -30,12 +32,16 @@ const WalletConnector = ({ hash }) => {
     if (!walletAddress || !hasMoreTokens) return;
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}`);
+      const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}&start=${startIndex}&limit=${tokenFetchLimit}`);
       if (!response.ok) throw new Error('Network response was not ok');
-      const tokenAccounts = await response.json();
+      const responseJson = await response.json();
+      const tokenAccounts = responseJson.tokenAccounts;
+      const lastTokenAccountIndex = responseJson.lastIndexRead + 1;
+      const remainingTokens = responseJson.isRemainingTokens;
       setTokens(prevTokens => [...prevTokens, ...tokenAccounts]);
+      setStartIndex(lastTokenAccountIndex);
 
-      if (tokenAccounts.length < 10) {
+      if (!remainingTokens) {
         setHasMoreTokens(false);
       }
     } catch (error) {
