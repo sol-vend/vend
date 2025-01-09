@@ -8,7 +8,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(360deg, #292b2d, #292b2d, #292b2d, #292b2d, #292b2d, green);
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
 }
 
 /* Code Styling */
@@ -387,4 +388,4 @@ th {
 }
 
 
-/*# sourceMappingURL=main.ee199131.css.map*/
+/*# sourceMappingURL=main.51fda3cd.css.map*/
