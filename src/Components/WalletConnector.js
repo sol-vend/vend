@@ -16,17 +16,30 @@ const WalletConnector = ({ hash }) => {
   const [hasMoreTokens, setHasMoreTokens] = useState(true);
   const [tokenImages, setTokenImages] = useState({});
   const [startIndex, setStartIndex] = useState(0);
-  const tokenFetchLimit = 5;
+  const tokenFetchLimit = 3;
   const lastTokenElementRef = useRef();
 
   useEffect(() => {
-    console.log('Wallet connected:', connected);
-    console.log('PublicKey:', publicKey);
-  }, [connected, publicKey]);
+    if (hasMoreTokens) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            fetchTokens(); // Trigger token fetch when last token is visible
+          }
+        },
+        {
+          rootMargin: '100px',
+        }
+      );
 
-  useEffect(() => {
-    console.log(startIndex);
-  },[startIndex]);
+      if (lastTokenElementRef.current) {
+        observer.observe(lastTokenElementRef.current);
+      }
+
+      return () => observer.disconnect(); // Cleanup observer
+    }
+  }, [lastTokenElementRef, tokens]);
+
 
   const handleTokenClick = (token) => {
     setSelectedToken(token);
@@ -39,15 +52,14 @@ const WalletConnector = ({ hash }) => {
       const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}&start=${startIndex}&limit=${tokenFetchLimit}`);
       if (!response.ok) throw new Error('Network response was not ok');
       const responseJson = await response.json();
-      console.log(responseJson);
       const tokenAccounts = responseJson.tokenAccounts;
       const lastTokenAccountIndex = responseJson.lastIndexRead + 1;
       const remainingTokens = responseJson.isRemainingTokens;
       setTokens(prevTokens => [...prevTokens, ...tokenAccounts]);
-      setStartIndex(lastTokenAccountIndex);
-
       if (!remainingTokens) {
         setHasMoreTokens(false);
+      } else {
+        setStartIndex(lastTokenAccountIndex);
       }
     } catch (error) {
       console.error('Error fetching token accounts:', error.message);
@@ -124,7 +136,9 @@ const WalletConnector = ({ hash }) => {
         }
       }));
       images[SOL_MINT_ADDRESS] = SOL_IMG_URL;
-      setTokenImages(images);
+      setTokenImages(prevImages => {
+        return { ...prevImages, ...images }
+      });
     };
 
     if (tokens.length > 0) {
@@ -268,7 +282,7 @@ const WalletConnector = ({ hash }) => {
                 >
                   <div className='token-container'>
                     <div>
-                      {tokenImages[token.mint] && (
+                      {tokenImages[token.mint] ? (
                         <div className='token-image-wrapper'>
                           <img
                             src={tokenImages[token.mint]}
@@ -279,7 +293,17 @@ const WalletConnector = ({ hash }) => {
                             alt="Token"
                           />
                         </div>
-                      )}
+                      ) :
+                        <div className='token-image-wrapper'>
+                          <img
+                            src={"https://img.freepik.com/free-vector/glowing-neon-question-mark-symbol-background-web-help-support_1017-53244.jpg?t=st=1736431105~exp=1736434705~hmac=0fec172326637f1f39ba8475d9b3642b5a5776716de2be04eba4d7570c112f02&w=740"}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = UNKNOWN_SPL_TOKEN_IMG;
+                            }}
+                            alt="Token"
+                          />
+                        </div>}
                     </div>
                     <div>
                       <span>{Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
