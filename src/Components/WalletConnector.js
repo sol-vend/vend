@@ -24,7 +24,7 @@ const WalletConnector = ({ hash }) => {
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
-            fetchTokens(); // Trigger token fetch when last token is visible
+            fetchTokens(); 
           }
         },
         {
@@ -36,7 +36,7 @@ const WalletConnector = ({ hash }) => {
         observer.observe(lastTokenElementRef.current);
       }
 
-      return () => observer.disconnect(); // Cleanup observer
+      return () => observer.disconnect(); 
     }
   }, [lastTokenElementRef, tokens]);
 
@@ -44,6 +44,35 @@ const WalletConnector = ({ hash }) => {
   const handleTokenClick = (token) => {
     setSelectedToken(token);
   };
+
+  const updateTokenBalance = async (updateMintAddress) => {
+    console.log("Updating Token Balance...", updateMintAddress.mint);
+    try {
+      const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}&mint-address=${updateMintAddress.mint}`);
+      if (!response.ok) throw new Error('Network response was not ok');      
+      const responseJson = await response.json();
+      const tokenAccounts = responseJson.tokenAccounts; 
+      if (tokenAccounts && tokenAccounts.length > 1) {
+        const updatedToken = tokenAccounts[1];        
+        if (updatedToken && updatedToken.mint) {
+          const updatedTokens = tokens.map(token =>
+            token.mint === updatedToken.mint ? 
+            { ...token, ...updatedToken } : 
+            token.mint === SOL_MINT_ADDRESS ?
+            { ...token, ...tokenAccounts[0] } :
+            token
+          );          
+          if (!tokens.some(token => token.mint === updatedToken.mint)) {
+            updatedTokens.push(updatedToken);
+          }
+          setTokens(updatedTokens); 
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching token accounts:', error.message);
+    }
+  };
+  
 
   const fetchTokens = async () => {
     if (!walletAddress || !hasMoreTokens) return;
@@ -245,8 +274,7 @@ const WalletConnector = ({ hash }) => {
                 slippageInBps={200}
                 buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
                 hash={hash}
-                setSelectedToken={setSelectedToken}
-                fetchTokens={fetchTokens}
+                updateTokenBalance={updateTokenBalance}
               />
             </div>
         )

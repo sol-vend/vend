@@ -4,12 +4,11 @@ import fetch from 'cross-fetch';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { JITO_SOL_TOKEN_ACCT, JITO_SOL_ADDRESS, SETTLEMENT_PUBKEY, API_URL, RPC_API_URL } from './Shared';
 
-const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash, setSelectedToken, fetchTokens }) => {
+const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash, updateTokenBalance }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [txLink, setTxLink] = useState(null);
   const [passcode, setPasscode] = useState(null);
-  console.log(fetchTokens);
   const connection = new Connection(RPC_API_URL);
   const { publicKey, signTransaction } = useWallet();
   const tokenFactor = inputMint.amount / inputMint.uiAmount;
@@ -59,6 +58,7 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash,
             userPublicKey: publicKey.toString(),
             wrapAndUnwrapSol: true,
             useSharedAccounts: true,
+            restrictIntermediateTokens: true,
             destinationTokenAccount: JITO_SOL_TOKEN_ACCT,
             dynamicComputeUnitLimit: true,
             dynamicSlippage: {
@@ -110,8 +110,7 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash,
           if (response.ok) {
             setPasscode(responseData);
             setLoading(false);
-           // setSelectedToken(null);
-           // fetchTokens();
+            updateTokenBalance(inputMint);
             return;
           }
 
