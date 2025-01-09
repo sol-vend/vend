@@ -8,7 +8,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(360deg, #292b2d, #292b2d, #292b2d, #292b2d, #292b2d, green);
-  height: 97vh;
+  height: 100vh;
 }
 
 /* Code Styling */
@@ -122,6 +122,7 @@ h1 {
 .token-item img {
   border-radius: 50%;
   width: 120%;
+  height: 9vh;
 }
 
 /* Items Container */
@@ -386,4 +387,4 @@ th {
 }
 
 
-/*# sourceMappingURL=main.786b78c9.css.map*/
+/*# sourceMappingURL=main.ee199131.css.map*/
