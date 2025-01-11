@@ -62,10 +62,11 @@ h1 {
 .token-list {
   margin: 20px;
   background-color: rgb(0, 0, 0);
-  /* White background for the token list */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  max-height: 49vh;
+  overflow-y: scroll;
 }
 
 .token-item {
@@ -86,7 +87,8 @@ h1 {
 .token-container div {
   width: 33%;
 }
-.token-container div:nth-child(1){
+
+.token-container div:nth-child(1) {
   text-align: left;
 }
 
@@ -94,7 +96,7 @@ h1 {
   text-align: center;
 }
 
-.token-container div:nth-child(3){
+.token-container div:nth-child(3) {
   text-align: end;
 }
 
@@ -150,26 +152,90 @@ h1 {
   transition: background-color 0.3s, transform 0.3s ease-in-out;
 }
 
-.item:hover {
-  background-color: #e2e2e2;
-  transform: scale(1.05);
+.selected-item {
+  background-color: #ddd7d72b;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-family: 'Arial', sans-serif;
+  font-style: italic;
+  text-transform: uppercase;
 }
 
-.selected-item {
-  border: 2px solid #00FFA3;
-  /* Surge Green border */
-  background-color: #e8f5e9;
-  /* Light green background */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  /* Soft shadow */
-  transform: scale(1.05);
-  /* Slightly enlarge the selected item */
+@keyframes scaleAnimation {
+  0% {
+    transform: scale(1);
+    background: linear-gradient(0deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  10% {
+
+    background: linear-gradient(1deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  20% {
+
+    background: linear-gradient(2deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  30% {
+
+    background: linear-gradient(3deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  40% {
+
+    background: linear-gradient(4deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background: linear-gradient(5deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  60% {
+
+    background: linear-gradient(4deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  70% {
+
+    background: linear-gradient(3deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  80% {
+
+    background: linear-gradient(2deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  90% {
+
+    background: linear-gradient(1deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+
+  100% {
+    transform: scale(1);
+    background: linear-gradient(0deg, #00ffa3eb, #a100ffad, #4A90E2);
+  }
+}
+
+@keyframes textAnimation {
+  0% {
+    color: #beb7b7;
+  }
+
+  50% {
+    color: white;
+  }
+
+  100% {
+    color: #beb7b7;
+  }
 }
 
 .selected-item h3,
 .selected-item p {
-  color: #262928d6;
-  /* Surge Green text color */
+  color: #ffffff;
+  animation: textAnimation 5s infinite;
+  text-shadow: 2px 2px black;
 }
 
 .selected-item-wrapper {
@@ -178,7 +244,8 @@ h1 {
   border-color: #49494945;
   background: linear-gradient(to top, #00ffa3eb, #a100ffad, #4A90E2);
   box-shadow: black 5px 3px 10px 1px;
-  margin-top: 5%;
+  margin-top: 7cqmax;
+  animation: scaleAnimation 5s infinite;
 }
 
 /* Banner Styling */
@@ -189,7 +256,7 @@ h1 {
   padding: 10px 20px;
   background: linear-gradient(to top, #4A90E2, rgba(74, 144, 226, .75) 70%);
   color: white;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -385,4 +452,89 @@ th {
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.payment-method-wrapper {
+  background: linear-gradient(229deg, #270157, #270157, #270157, #181717, #000000, #181616, #ab9ff2, #ab9ff2);
+  padding: 15px 40px;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 20px auto;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Styling for the <h3> element */
+.payment-method-wrapper h3 {
+  font-family: 'Arial', sans-serif;
+  font-size: 24px;
+  color: white;
+  margin: 0;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for <h3> */
+.payment-method-wrapper:hover h3 {
+  color: #fff;
+  transform: scale(1.05);
+  /* Slight scale effect */
+}
+
+/* Additional styles for the div */
+.payment-method-wrapper::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 4px;
+  background-color: #fff;
+  margin: 10px auto;
+  border-radius: 2px;
+}
+
+.copy-btn {
+  background-color: #4caf4f00;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+  float: right;
+}
+
+.copy-btn:hover {
+  background-color: #000000;
+}
+
+/* SVG icon styling */
+.copy-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.copy-wrapper {
+  position: absolute;
+  top: 14vh;
+  right: 0;
+  max-width: 15%;
+}
+
+.copy-wrapper div{
+  color:white;
+  background: black;
+  box-shadow: #454545 2px 2px 2px;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.token-list-wrapper {
+  display: flex;
+  justify-content: space-evenly;
 }

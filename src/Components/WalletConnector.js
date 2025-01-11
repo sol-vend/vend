@@ -18,13 +18,14 @@ const WalletConnector = ({ hash }) => {
   const [startIndex, setStartIndex] = useState(0);
   const tokenFetchLimit = 3;
   const lastTokenElementRef = useRef();
+  const retrievedMintAddresses = [];
 
   useEffect(() => {
     if (hasMoreTokens) {
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
-            fetchTokens(); 
+            fetchTokens();
           }
         },
         {
@@ -36,7 +37,7 @@ const WalletConnector = ({ hash }) => {
         observer.observe(lastTokenElementRef.current);
       }
 
-      return () => observer.disconnect(); 
+      return () => observer.disconnect();
     }
   }, [lastTokenElementRef, tokens]);
 
@@ -49,30 +50,30 @@ const WalletConnector = ({ hash }) => {
     console.log("Updating Token Balance...", updateMintAddress.mint);
     try {
       const response = await fetch(`${API_URL}/api/get_wallet_contents?wallet-address=${walletAddress}&mint-address=${updateMintAddress.mint}`);
-      if (!response.ok) throw new Error('Network response was not ok');      
+      if (!response.ok) throw new Error('Network response was not ok');
       const responseJson = await response.json();
-      const tokenAccounts = responseJson.tokenAccounts; 
+      const tokenAccounts = responseJson.tokenAccounts;
       if (tokenAccounts && tokenAccounts.length > 1) {
-        const updatedToken = tokenAccounts[1];        
+        const updatedToken = tokenAccounts[1];
         if (updatedToken && updatedToken.mint) {
           const updatedTokens = tokens.map(token =>
-            token.mint === updatedToken.mint ? 
-            { ...token, ...updatedToken } : 
-            token.mint === SOL_MINT_ADDRESS ?
-            { ...token, ...tokenAccounts[0] } :
-            token
-          );          
+            token.mint === updatedToken.mint ?
+              { ...token, ...updatedToken } :
+              token.mint === SOL_MINT_ADDRESS ?
+                { ...token, ...tokenAccounts[0] } :
+                token
+          );
           if (!tokens.some(token => token.mint === updatedToken.mint)) {
             updatedTokens.push(updatedToken);
           }
-          setTokens(updatedTokens); 
+          setTokens(updatedTokens);
         }
       }
     } catch (error) {
       console.error('Error fetching token accounts:', error.message);
     }
   };
-  
+
 
   const fetchTokens = async () => {
     if (!walletAddress || !hasMoreTokens) return;
@@ -82,18 +83,27 @@ const WalletConnector = ({ hash }) => {
       if (!response.ok) throw new Error('Network response was not ok');
       const responseJson = await response.json();
       const tokenAccounts = responseJson.tokenAccounts;
+      let newTokenAccounts = []
+      tokenAccounts.map((token, index) => {
+        if (token.mint) {
+          if (!retrievedMintAddresses.includes(token.mint)) {
+            retrievedMintAddresses.push(token.mint);
+            newTokenAccounts.push(token);
+          }
+        }
+      })
       const lastTokenAccountIndex = responseJson.lastIndexRead + 1;
       const remainingTokens = responseJson.isRemainingTokens;
-      setTokens(prevTokens => [...prevTokens, ...tokenAccounts]);
+      setTokens(prevTokens => [...prevTokens, ...newTokenAccounts]);
       if (!remainingTokens) {
         setHasMoreTokens(false);
+        setLoading(false);
       } else {
         setStartIndex(lastTokenAccountIndex);
       }
     } catch (error) {
       console.error('Error fetching token accounts:', error.message);
-    } finally {
-      setLoading(false);
+      fetchTokens();
     }
   };
 
@@ -258,7 +268,7 @@ const WalletConnector = ({ hash }) => {
         </div>
       </div>
 
-      {loading && <div>Loading tokens...</div>}
+      {loading && <div className="spinner"></div>}
 
       {
         selectedToken && (
@@ -282,68 +292,71 @@ const WalletConnector = ({ hash }) => {
 
       {
         tokens.length > 0 ? (
-          <div className="token-list">
-            <h3
-              style={{
-                textAlign: 'center',
-                textShadow: "-6px -1px 11pxrgba(227, 227, 227, 0.34)",
-                fontStyle: "italic",
-                color: "white"
-              }}
-            >Select Payment Method:</h3>
-            {tokens
-              .filter(token => token.dollarQuote !== null && token.dollarQuote.outAmount !== undefined)
-              .sort((a, b) => (b.dollarQuote.outAmount || 0) - (a.dollarQuote.outAmount || 0))
-              .map((token, index) => (
-                <div
-                  className="token-item"
-                  key={index}
-                  onClick={() => handleTokenClick(token)}
+          <div className='token-list-wrapper'>
+            <div className="token-list">
+              <div className='payment-method-wrapper'>
+                <h3
                   style={{
-                    cursor: 'pointer',
-                    border: selectedToken && selectedToken.mint === token.mint ? '2px solid green' : 'none',
-                    padding: '10px',
-                    margin: '5px',
-                    background: selectedToken && selectedToken.mint === token.mint ? '#ab9ff2' : 'linear-gradient(360deg, rgb(71, 71, 71), #5f5f5f)',
-                    borderRadius: '10px',
+                    textAlign: 'center',
+                    textShadow: "-6px -1px 11pxrgba(227, 227, 227, 0.34)",
+                    fontStyle: "italic",
+                    color: "white"
                   }}
-                >
-                  <div className='token-container'>
-                    <div>
-                      {tokenImages[token.mint] ? (
-                        <div className='token-image-wrapper'>
-                          <img
-                            src={tokenImages[token.mint]}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = UNKNOWN_SPL_TOKEN_IMG;
-                            }}
-                            alt="Token"
-                          />
-                        </div>
-                      ) :
-                        <div className='token-image-wrapper'>
-                          <img
-                            src={"https://img.freepik.com/free-vector/glowing-neon-question-mark-symbol-background-web-help-support_1017-53244.jpg?t=st=1736431105~exp=1736434705~hmac=0fec172326637f1f39ba8475d9b3642b5a5776716de2be04eba4d7570c112f02&w=740"}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = UNKNOWN_SPL_TOKEN_IMG;
-                            }}
-                            alt="Token"
-                          />
-                        </div>}
-                    </div>
-                    <div>
-                      <span>{Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
-                      <span>{Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * token.uiAmount, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))}</span>
-                    </div>
-                    <div>
-                      <span>${Math.round(token.dollarQuote.outAmount / 1000) / 1000}</span>
+                >Payment Method</h3></div>
+              {tokens
+                .filter(token => token.dollarQuote !== null && token.dollarQuote.outAmount !== undefined)
+                .sort((a, b) => (b.dollarQuote.outAmount || 0) - (a.dollarQuote.outAmount || 0))
+                .map((token, index) => (
+                  <div
+                    className="token-item"
+                    key={index}
+                    onClick={() => handleTokenClick(token)}
+                    style={{
+                      cursor: 'pointer',
+                      border: selectedToken && selectedToken.mint === token.mint ? '2px solid green' : 'none',
+                      padding: '10px',
+                      margin: '5px',
+                      background: selectedToken && selectedToken.mint === token.mint ? '#ab9ff2' : 'linear-gradient(360deg, rgb(71, 71, 71), #5f5f5f)',
+                      borderRadius: '10px',
+                    }}
+                  >
+                    <div ref={lastTokenElementRef} />
+                    <div className='token-container'>
+                      <div>
+                        {tokenImages[token.mint] ? (
+                          <div className='token-image-wrapper'>
+                            <img
+                              src={tokenImages[token.mint]}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = UNKNOWN_SPL_TOKEN_IMG;
+                              }}
+                              alt="Token"
+                            />
+                          </div>
+                        ) :
+                          <div className='token-image-wrapper'>
+                            <img
+                              src={"https://img.freepik.com/free-vector/glowing-neon-question-mark-symbol-background-web-help-support_1017-53244.jpg?t=st=1736431105~exp=1736434705~hmac=0fec172326637f1f39ba8475d9b3642b5a5776716de2be04eba4d7570c112f02&w=740"}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = UNKNOWN_SPL_TOKEN_IMG;
+                              }}
+                              alt="Token"
+                            />
+                          </div>}
+                      </div>
+                      <div>
+                        <span>{Object.keys(token.metadata).includes('data') ? token.metadata.data.symbol : 'SOL'}</span>
+                        <span>{Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * token.uiAmount, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))}</span>
+                      </div>
+                      <div>
+                        <span>${Math.round(token.dollarQuote.outAmount / 1000) / 1000}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            <div ref={lastTokenElementRef} />
+                ))}
+            </div>
           </div>
         ) : (
           connected && !loading && <div>No tokens found.</div>
