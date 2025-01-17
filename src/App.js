@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { WalletProvider } from '@solana/wallet-adapter-react'; 
+import { WalletProvider } from '@solana/wallet-adapter-react';
 import WalletConnector from './Components/WalletConnector';
 import { ItemsProvider } from './Contexts/ItemsContext';
 import Items from './Components/Items';
@@ -13,21 +13,30 @@ const App = () => {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
   const hash = window.location.hash;
-
-  return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          <ItemsProvider>
-            <div className="App">
-              <Items />
-              <WalletConnector hash={hash}/>
-            </div>
-          </ItemsProvider>
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
-  );
+  if (window.location.pathname === "/vend/") {
+    return (
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <ItemsProvider>
+              <div className="App">
+                <Items />
+                <WalletConnector hash={hash} />
+              </div>
+            </ItemsProvider>
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
+    );
+  } else{
+    if(window.location.pathname === "/vend/vendor"){
+      return(
+        <div>
+          Vendor Signup
+        </div>
+      );
+    }
+  }
 };
 
 export default App;
