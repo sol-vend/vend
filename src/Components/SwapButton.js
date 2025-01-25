@@ -58,15 +58,15 @@ const SwapButton = ({ inputMint, inputAmount, slippageInBps, buttonDialog, hash,
             userPublicKey: publicKey.toString(),
             wrapAndUnwrapSol: true,
             useSharedAccounts: true,
-            restrictIntermediateTokens: true,
             destinationTokenAccount: JITO_SOL_TOKEN_ACCT,
+            correctLastValidBlockHeight: true,
+            asLegacyTransaction: false,
+            allowOptimizedWrappedSolTokenAccount:true,
             dynamicComputeUnitLimit: true,
-            dynamicSlippage: {
-              maxBps: 500
-            },
+            dynamicSlippage: true,
             prioritizationFeeLamports: {
               priorityLevelWithMaxLamports: {
-                maxLamports: 100000,
+                maxLamports: 10000000,
                 priorityLevel: "veryHigh"
               }
             }

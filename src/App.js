@@ -7,6 +7,7 @@ import { ConnectionProvider } from '@solana/wallet-adapter-react'; // Connection
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'; // Correct Phantom wallet adapter
 import { clusterApiUrl } from '@solana/web3.js';
 import { WalletModalProvider, WalletConnectButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
+import VendorApp from './Vendor Components/VendorApp'
 
 const App = () => {
   const network = 'mainnet-beta';  // Or 'devnet', 'testnet' based on your needs
@@ -28,12 +29,10 @@ const App = () => {
         </WalletProvider>
       </ConnectionProvider>
     );
-  } else{
-    if(window.location.pathname === "/vend/vendor"){
-      return(
-        <div>
-          Vendor Signup
-        </div>
+  } else {
+    if (window.location.pathname === "/vend/vendor") {
+      return (
+        <VendorApp />
       );
     }
   }

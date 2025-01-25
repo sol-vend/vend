@@ -1,0 +1,132 @@
+.custom-dropdown-input-styles {
+    padding: 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 27vw;
+    cursor: pointer;
+}
+
+.custom-dropdown-input-styles:hover {
+    background: linear-gradient(332deg, rgb(241 240 240), white);
+}
+
+.custom-dropdown-input-styles-wrapper {
+    width: 29vw;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.custom-dropdown-input-styles-wrapper::after {
+    content: '▼';
+    font-size: 18px;
+    color: #c9c8c8;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.custom-dropdown-input-styles::placeholder {
+    max-width: 24vw;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.custom-dropdown-dropdown-styles {
+    position: absolute;
+    margin-top: -10px;
+    top: 100%;
+    left: 0;
+    width: 29vw;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 4px;
+    z-index: 999;
+}
+
+.paypal-selected-div-input {
+    width: 27vw;
+    padding: 10px;
+    margin-top: 8px;
+    font-size: 16px;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.custom-dropdown-dropdown-option {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-dropdown-dropdown-option:hover {
+    background: linear-gradient(332deg, rgb(241 240 240), white);
+}
+
+.vendor-payment-change-text {
+    margin-block-start: 0em;
+    font-style: italic;
+    color: darkslategray;
+    font-size: 12px;
+}
+
+.vendor-wallet-address-paste-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid rgb(204 204 204 / 50%);
+    border-radius: 8px;
+    box-sizing: border-box;
+    gap: 10px;
+    padding: 8px;
+}
+
+.vendor-wallet-address-paste-button {
+    height: min-content;
+    background: linear-gradient(45deg, #4924ce33, transparent);
+    border: solid .5px #b9b9b9;
+    border-radius: 7px;
+    padding-inline: 2px;
+    box-shadow: #e8e8e8 -1px 2px 3px 1px;
+}
+
+.vendor-wallet-address-paste-button:hover {
+    background: linear-gradient(45deg, #6947e6fa, transparent);
+    transform: scale(110%)
+}
+
+.vendor-submit-button-styles:disabled {
+    opacity: 20%;
+    cursor: not-allowed !important;
+}
+
+.payment-info-back-button {
+    width: 5vw;
+    position: relative;
+    bottom: -25px;
+    left: -25px;
+    border-radius: 5px;
+    background: none;
+    outline: none;
+    border-color: #c2bfbf3d;
+    box-shadow: #00000080 3px 2px 7px 1px;
+}
+
+.payment-info-back-button:hover {
+    background: linear-gradient(45deg, white, whitesmoke);
+}
+
+.manual-signup-edits-info{
+    text-align: center;
+    font-size: 14px;
+    font-style: italic;
+    color: lightslategray;
+}

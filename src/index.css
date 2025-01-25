@@ -12,6 +12,10 @@ body {
   min-height: 100vh;
 }
 
+body.vendor {
+  background: #929090;
+}
+
 /* Code Styling */
 code {
   font-family: 'Roboto Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -537,4 +541,26 @@ th {
 .token-list-wrapper {
   display: flex;
   justify-content: space-evenly;
+}
+
+.custom-dropdown-input-styles {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 27vw;
+}
+.custom-dropdown-input-styles-wrapper{
+  width:29vw;
+  position: relative;
+}
+.custom-dropdown-input-styles-wrapper::after{
+  content: '▼'; /* This adds the down arrow symbol */
+  font-size: 18px;
+  color: #888; /* Arrow color */
+  position: absolute;
+  right: 10px; /* Position the arrow to the right end of the input */
+  top: 50%;
+  transform: translateY(-50%); /* Vertically center the arrow */
+  pointer-events: none;
 }
