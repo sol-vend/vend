@@ -23,7 +23,7 @@ const App = () => {
           <WalletModalProvider>
             <Routes>  {/* Declare the routing structure here */}
               {/* Route for Vend path */}
-              <Route path="/vend" element={
+              <Route path="/" element={
                 <ItemsProvider>
                   <div className="App">
                     <Items />
@@ -33,7 +33,7 @@ const App = () => {
               } />
 
               {/* Route for Vendor page */}
-              <Route path="/vend/vendor" element={
+              <Route path="/vendor" element={
                 <div>
                   <VendorApp />
                   <CustomBodyBackground />
