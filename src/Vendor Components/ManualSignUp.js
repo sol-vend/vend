@@ -1,39 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../Components/Shared';
 import {
-    formStyles,
-    inputGroupStyles,
-    inputFieldStyles,
-    passwordContainerStyles,
-    passwordToggleBtnStyles,
     passwordToggleBtnHoverStyles,
-    buttonStyles,
-    buttonHoverStyles,
-    socialMediaInputsStyles,
-    addButtonStyles,
-    removeButtonStyles,
-    submitButtonStyles,
-    headingStyles,
-    optionStyles,
-    imgStyles,
-    comboGroupStyles,
-    showHideStyles,
-    expansionWrapperStyles
 } from './ManualSignUpStyles';  // Import the styles
 import { socialPlatforms } from './Shared';
 import LocationComponent from './LocationComponent';
 import CustomDropdown from './CustomDropdown';
 import DivExpandButton from './DivExpandButton';
 import PaymentInfoForm from './PaymentInfoForm';
+import CustomWeekdayPicker from './CustomWeekdayPicker';
+import CustomCheckbox from './CustomCheckbox';
 
 const ManualSignUp = () => {
     const [formData, setFormData] = useState({
         emailAddress: '',
+        confirmationPassword: '',
         initialPassword: '',
         businessName: '',
         logo: null,
         businessDescription: '',
-        businessHours: { open: '', close: '' },
+        businessHours: { },
         businessPhone: '',
         businessSocials: [{ platform: '', url: '' }],
         businessReviews: '',
@@ -51,6 +37,7 @@ const ManualSignUp = () => {
     const [isBusinessLogo, setIsBusinessLogo] = useState(false);
     const [showHours, setShowHours] = useState(false);
     const [showAddEmployees, setShowAddEmployees] = useState(false);
+    const [passwordVerify, setPasswordVerify] = useState(false);
     const [submitResponse, setSubmitResponse] = useState({
         result: null,
         doProceed: false,
@@ -62,7 +49,6 @@ const ManualSignUp = () => {
     useEffect(() => {
         const captureMetadata = async () => {
             if (!formData.ipAddress) {
-                console.log('capturing metadata')
                 const ipAddress = await getIpAddress();  // Fetch IP address using an external API
                 const userAgent = navigator.userAgent;  // Get the user agent string
                 const referer = document.referrer;      // Get the referer (the previous page URL)
@@ -79,12 +65,10 @@ const ManualSignUp = () => {
                 }));
             }
         };
-
         captureMetadata();  // Make sure the function is called
     }, [formData.ipAddress]);  // Optionally add dependencies if needed
 
     useEffect(() => {
-        console.log(formData);
         console.log(submitResponse);
     }, [submitResponse])
 
@@ -123,6 +107,16 @@ const ManualSignUp = () => {
             [name]: value,
         }));
     };
+
+    const handlePasswordChange = (e) => {
+        const { name, value } = e.target;
+        if (value.length > 0) {
+            setPasswordVerify(true);
+        } else {
+            setPasswordVerify(false);
+        }
+        handleChange(e);
+    }
 
     const formatPhoneNumber = (value) => {
         const cleaned = value.replace(/\D/g, '');
@@ -169,10 +163,10 @@ const ManualSignUp = () => {
         }));
     };
 
-    const handleLocationServicesChange = (e) => {
+    const handleLocationServicesChange = (isEnabled) => {
         setFormData((prevState) => ({
             ...prevState,
-            isLocationServicesEnabled: e.target.checked,
+            isLocationServicesEnabled: isEnabled,
         }));
     };
 
@@ -258,10 +252,15 @@ const ManualSignUp = () => {
                     <PaymentInfoForm setSubmitResponse={setSubmitResponse} submitResponse={submitResponse} formData={formData} setFormData={setFormData} />
                 )}
             {!submitResponse.doProceed && (
-                <div style={formStyles}>
-                    <h2 style={headingStyles}>Create Your Business Account</h2>
+                <div
+                    className='vendor-form-styles'
+                >
+                    <h2
+                        className='vendor-heading-styles'
+                    >Create Your Business Account</h2>
                     <form onSubmit={handleSubmit}>
-                        <div style={inputGroupStyles}>
+                        <div
+                            className='vendor-input-group-styles'>
                             <label>Email Address:</label>
                             <input
                                 type="email"
@@ -269,103 +268,144 @@ const ManualSignUp = () => {
                                 value={formData.emailAddress}
                                 onChange={handleChange}
                                 required
-                                style={inputFieldStyles}
+                                className='vendor-input-field-styles'
                             />
                         </div>
-                        <div style={inputGroupStyles}>
-                            <label>Password:</label>
-                            <div style={passwordContainerStyles}>
-                                <input
-                                    type={passwordVisible ? 'text' : 'password'}
-                                    name="initialPassword"
-                                    value={formData.initialPassword}
-                                    onChange={handleChange}
-                                    required
-                                    style={inputFieldStyles}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setPasswordVisible(!passwordVisible)}
-                                    style={passwordToggleBtnStyles}
-                                    onMouseOver={(e) => (e.target.style.color = passwordToggleBtnHoverStyles.color)}
-                                    onMouseOut={(e) => (e.target.style.color = '#007bff')}
+                        <div
+                            className='vendor-input-group-styles'>
+                            <div>
+                                <label>Password:</label>
+                                <div
+                                    className='vendor-password-container-styles'
                                 >
-                                    {passwordVisible ? 'Hide Password' : 'Show Password'}
-                                </button>
+                                    <input
+                                        type={passwordVisible ? 'text' : 'password'}
+                                        name="initialPassword"
+                                        value={formData.initialPassword}
+                                        onChange={handlePasswordChange}
+                                        required
+                                        className='vendor-input-field-styles'
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setPasswordVisible(!passwordVisible)}
+                                        className='vendor-password-toggle-button-styles'
+                                        onMouseOver={(e) => (e.target.style.color = passwordToggleBtnHoverStyles.color)}
+                                        onMouseOut={(e) => (e.target.style.color = '#007bff')}
+                                    >
+                                        {passwordVisible ? 'Hide Password' : 'Show Password'}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div style={inputGroupStyles}>
-                            <label>Business Name:</label>
-                            <div style={passwordContainerStyles}>
-                                <input
-                                    type="text"
-                                    name="businessName"
-                                    value={formData.businessName}
-                                    onChange={handleChange}
-                                    style={inputFieldStyles}
-                                    placeholder='Optional'
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setIsBusinessLogo(!isBusinessLogo)}
-                                    style={passwordToggleBtnStyles}
-                                    onMouseOver={(e) => (e.target.style.color = passwordToggleBtnHoverStyles.color)}
-                                    onMouseOut={(e) => (e.target.style.color = '#007bff')}
-                                >
-                                    {isBusinessLogo ? 'Hide' : 'Upload Logo'}
-                                </button>
-                                {isBusinessLogo && (
-                                    <div style={inputGroupStyles}>
-                                        <label
-                                            htmlFor='logo-upload'
-                                        >Upload
-                                            <div
-                                                style={{ ...addButtonStyles, width: '14%' }}
-                                            >Select File
-                                            </div>
-                                        </label>
+                            {passwordVerify &&
+                                <div>
+                                    <label>Confirm Password:</label>
+                                    <div
+                                        className='vendor-password-container-styles'
+                                    >
                                         <input
-                                            type="file"
-                                            accept="image/*"
-                                            id="logo-upload"
-                                            onChange={handleLogoChange}
-                                            style={{ ...inputFieldStyles, display: 'none' }}
+                                            type={passwordVisible ? 'text' : 'password'}
+                                            name="confirmationPassword"
+                                            value={formData.confirmationPassword}
+                                            onChange={handleChange}
+                                            required
+                                            className='vendor-input-field-styles'
                                         />
-                                        {formData.logo && formData.logo.previewURL && (
-                                            <div>
-                                                <h4>Logo Preview:</h4>
-                                                <img src={formData.logo.previewURL} alt="Logo Preview" style={{ width: '100px', height: 'auto' }} />
-                                            </div>
-                                        )}
                                     </div>
-                                )}
+                                </div>
+                            }
+                            {formData.initialPassword !== formData.confirmationPassword &&
+                                <div>
+                                    Passwords do not match!
+                                </div>
+                            }
+                        </div>
+                        <div
+                            className='vendor-input-group-styles'>
+                            <label>Business Name:</label>
+                            <div
+                                className='vendor-password-container-styles'
+                            >
+                                <div
+                                    className='business-name-logo-preview-wrapper'
+                                >
+                                    <input
+                                        type="text"
+                                        name="businessName"
+                                        value={formData.businessName}
+                                        onChange={handleChange}
+                                        className='vendor-input-field-styles'
+                                        placeholder='Optional'
+                                    />
+                                    {formData.logo!== null &&
+                                        <div
+                                            className='preview-logo-image-wrapper'
+                                        >
+                                            <img src={formData.logo.previewURL}></img>
+                                        </div>
+                                    }
+                                </div>
+                                <div
+                                    type="button"
+                                    onClick={() => { setIsBusinessLogo(false); setTimeout(() => document.getElementById('logo-upload').click(), 100); }}  // Trigger the file input click directly
+                                    className='vendor-show-hide-styles'
+                                >
+                                    {isBusinessLogo ? 'Add Logo' : 'Change Logo'}
+                                </div>
+
+                                <div
+                                    style={{ display: 'none' }}
+                                >
+                                    <label
+                                        htmlFor='logo-upload'
+                                        className='vendor-input-field-styles' // Keep the styling for the label (optional)
+                                    >
+                                        {isBusinessLogo ? (
+                                            <div
+                                                className='vendor-add-button-styles'
+                                                style={{ width: '14%' }}
+                                            >
+                                                Select File
+                                            </div>
+                                        ) : null}
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="logo-upload"
+                                        onChange={handleLogoChange}
+                                        className='vendor-input-field-styles'
+                                        style={{ display: 'none' }} // Hide the file input
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div style={inputGroupStyles}>
+                        <div
+                            className='vendor-input-group-styles'>
                             <label>Business Description:</label>
                             <textarea
                                 name="businessDescription"
                                 value={formData.businessDescription}
                                 onChange={handleChange}
-                                style={inputFieldStyles}
+                                className='vendor-input-field-styles'
                                 placeholder='Optional'
                             />
                         </div>
                         {!showHours &&
-                            <div style={expansionWrapperStyles}>
+                            <div className='vendor-expansion-wrapper-styles'>
                                 <DivExpandButton
                                     onClick={(e) => setShowHours(!showHours)}
                                     children={
                                         <div
                                             style={{
                                                 display: 'flex',
-                                                alignItems: 'center'
+                                                alignItems: 'center',
+                                                paddingInline: '5px',
                                             }}
                                         >
-                                            Add Business Hours
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
-                                                <path d="M12 2L12 22M12 22L6 16M12 22L18 16" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
+                                            Business Hours
+                                            <span>+</span>
                                         </div>
                                     }
                                 >
@@ -373,26 +413,30 @@ const ManualSignUp = () => {
                             </div>
                         }
                         {showHours &&
-                            <div style={{ ...inputGroupStyles, ...expansionWrapperStyles }}>
-                                <label>Business Hours:</label>
-                                <div style={socialMediaInputsStyles}>
-                                    <label>Open:</label>
+                            <div
+                                className='vendor-input-group-styles vendor-expansion-wrapper-styles'
+                            >                                
+                                <div>Business Hours:</div>
+                                <CustomWeekdayPicker />
+                                <div
+                                    className='vendor-social-media-inputs-styles'>
                                     <input
                                         type="time"
                                         name="open"
+                                        style={{display:'none'}}
                                         value={formData.businessHours.open}
                                         onChange={handleBusinessHoursChange}
-                                        style={inputFieldStyles}
+                                        className='vendor-input-field-styles'
                                     />
                                 </div>
-                                <div style={socialMediaInputsStyles}>
-                                    <label>Close:</label>
+                                <div className='vendor-social-media-inputs-styles'>
                                     <input
                                         type="time"
                                         name="close"
+                                        style={{display:'none'}}
                                         value={formData.businessHours.close}
                                         onChange={handleBusinessHoursChange}
-                                        style={inputFieldStyles}
+                                        className='vendor-input-field-styles'
                                     />
                                 </div>
 
@@ -405,27 +449,16 @@ const ManualSignUp = () => {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            Hide Business Hours
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24"
-                                                width="14"
-                                                height="14"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path d="M12 19V6M5 13l7-7 7 7" />
-                                            </svg>
+                                            Business Hours
+                                            <span>-</span>
                                         </div>
                                     }
                                 >
                                 </DivExpandButton>
                             </div>
                         }
-                        <div style={inputGroupStyles}>
+                        <div
+                            className='vendor-input-group-styles'>
                             <label>Phone:</label>
                             <input
                                 type="tel"
@@ -433,13 +466,16 @@ const ManualSignUp = () => {
                                 placeholder="(XXX) XXX-XXXX"
                                 value={formData.businessPhone}
                                 onChange={handlePhoneNumberChange}
-                                style={inputFieldStyles}
+                                className='vendor-input-field-styles'
                             />
                         </div>
-                        <div style={inputGroupStyles}>
+                        <div
+                            className='vendor-input-group-styles'>
                             <label>Socials:</label>
                             {formData.businessSocials.map((social, index) => (
-                                <div key={index} style={{ ...socialMediaInputsStyles, ...comboGroupStyles }}>
+                                <div key={index}
+                                    className='vendor-social-media-inputs-styles vendor-combo-group-styles'
+                                >
                                     <CustomDropdown
                                         options={socialPlatforms}
                                         selectedValue={social.platform}
@@ -453,51 +489,52 @@ const ManualSignUp = () => {
                                         placeholder="Handle"
                                         value={social.url}
                                         onChange={(e) => handleSocialMediaChange(index, e)}
-                                        style={{ ...inputFieldStyles, marginTop: "0px !important" }}
+                                        className='vendor-input-field-styles'
+                                        style={{ ...{ marginTop: "0px !important" } }}
                                     />
                                     <button
                                         type="button"
                                         onClick={() => handleRemoveSocialMedia(index)}
-                                        style={removeButtonStyles}
+                                        className='vendor-remove-button-styles'
                                     >
-                                        Remove Social
+                                        -
                                     </button>
                                 </div>
                             ))}
                             <button
                                 type="button"
                                 onClick={handleAddSocialMedia}
-                                style={addButtonStyles}
+                                className='vendor-add-button-styles'
                             >
-                                Add Social Media Account
+                                +
                             </button>
                         </div>
-                        <div style={inputGroupStyles}>
-                            <label>Business Location:</label>
+                        <div
+                            className='vendor-input-group-styles'>
+                            <label>Business Address:</label>
                             <input
                                 type="text"
                                 name="businessLocation"
                                 value={formData.businessLocation}
                                 onChange={handleChange}
-                                style={inputFieldStyles}
+                                className='vendor-input-field-styles'
                                 placeholder='Optional'
                             />
                         </div>
-                        <div style={inputGroupStyles}>
-                            <label>Enable Location Services:</label>
-                            <input
-                                type="checkbox"
+                        <div
+                            className='vendor-input-group-styles'>
+                                <CustomCheckbox 
+                                label={"Enable Location Services:"}
                                 name="isLocationServicesEnabled"
                                 checked={formData.isLocationServicesEnabled}
                                 onChange={handleLocationServicesChange}
-                                style={inputFieldStyles}
-                            />
+                                />
                         </div>
                         {formData.isLocationServicesEnabled &&
                             <LocationComponent />
                         }
                         {!showAddEmployees &&
-                            <div style={expansionWrapperStyles}>
+                            <div className='vendor-expansion-wrapper-styles'>
                                 <DivExpandButton
                                     onClick={(e) => setShowAddEmployees(!showAddEmployees)}
                                     children={
@@ -518,10 +555,10 @@ const ManualSignUp = () => {
                             </div>
                         }
                         {showAddEmployees &&
-                            <div style={{
-                                ...inputGroupStyles, ...expansionWrapperStyles
-                            }}>
-                                <h3>Approved Read-Only Employees</h3>
+                            <div
+                                className='vendor-input-group-styles vendor-expansion-wrapper-styles'
+                            >
+                                <p>Add Your Employees:</p>
 
                                 {formData.approvedReadOnlyEmployees.map((employee, index) => (
                                     <div
@@ -542,8 +579,9 @@ const ManualSignUp = () => {
                                                 name="name"
                                                 value={employee.name}
                                                 onChange={(e) => handleEmployeeChange(index, e)}
+                                                className='vendor-input-field-styles'
                                                 style={{
-                                                    ...inputFieldStyles, ...{
+                                                    ...{
                                                         maxWidth: '40vw',
                                                         color: employee.isLocked ? 'gray' : '',
                                                         backgroundColor: employee.isLocked ? 'whitesmoke' : ''
@@ -557,8 +595,9 @@ const ManualSignUp = () => {
                                                 name="role"
                                                 value={employee.role}
                                                 onChange={(e) => handleEmployeeChange(index, e)}
+                                                className='vendor-input-field-styles'
                                                 style={{
-                                                    ...inputFieldStyles, ...{
+                                                    ...{
                                                         maxWidth: '40vw',
                                                         color: employee.isLocked ? 'gray' : '',
                                                         backgroundColor: employee.isLocked ? 'whitesmoke' : ''
@@ -588,8 +627,9 @@ const ManualSignUp = () => {
                                         }
                                         <button
                                             name='isLocked'
+                                            className='vendor-add-button-styles'
                                             style={{
-                                                ...addButtonStyles, ...{
+                                                ...{
                                                     marginLeft: 'auto',
                                                     maxWidth: '10vw',
                                                     maxHeight: '5vh',
@@ -608,11 +648,13 @@ const ManualSignUp = () => {
                                 <button
                                     type="button"
                                     onClick={handleAddEmployee}
-                                    style={addButtonStyles}
+                                    className='vendor-add-button-styles'
                                 >
                                     Add Employee
                                 </button>
-                                <div style={{ ...inputGroupStyles }}>
+                                <div
+                                    className='vendor-input-group-styles'
+                                >
 
                                     <DivExpandButton
                                         onClick={(e) => setShowAddEmployees(!showAddEmployees)}
@@ -645,25 +687,25 @@ const ManualSignUp = () => {
                             </div>
                         }
                         {!submitResponse.isApproved &&
-                            <button type="submit" style={submitButtonStyles}>
+                            <button type="submit" className='vendor-submit-button-styles'>
                                 Submit
                             </button>
                         }
                         {submitResponse.isApproved &&
-                        <p
-                        className='manual-signup-edits-info'
-                        >Need to make some edits or additions? No problem.</p>
+                            <p
+                                className='manual-signup-edits-info'
+                            >Need to make some edits or additions? No problem.</p>
                         }
                         {submitResponse.isApproved &&
-                                <button
-                                    className='payment-info-back-button'
-                                    style={{
-                                        left: '95%'
-                                    }}
-                                    onClick={updateSubmitProceedResponse}
-                                >
-                                    {"--->"}
-                                </button>                            
+                            <button
+                                className='payment-info-back-button'
+                                style={{
+                                    left: '90%'
+                                }}
+                                onClick={updateSubmitProceedResponse}
+                            >
+                                {"--->"}
+                            </button>
                         }
                     </form>
                     {!submitResponse.doProceed && !submitResponse.isApproved && submitResponse.hasAttempted &&

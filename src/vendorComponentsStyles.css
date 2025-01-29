@@ -1,3 +1,231 @@
+.vendor-form-styles {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: auto;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.vendor-input-group-styles {
+    display: flex;
+    flex-direction: column;
+    margin-block: 10px;
+    padding: 10px;
+    border: solid #3af50012 .25px;
+    border-radius: 2px;
+    box-shadow: #8080805c 2px 2px 20px;
+}
+
+.vendor-combo-group-styles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.vendor-input-field-styles {
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    max-width: 94%;
+    margin-bottom: 8px;
+}
+
+.vendor-radio-button-input-styles {
+    padding-block: 10px;
+    border: #f3f3f3;
+    border-style: solid;
+    border-radius: 20px;
+    max-width: 20vw;
+    box-shadow: #f0f8ff8f -4px -2px 18px 11px;
+    background: linear-gradient(180deg, #f4f4f4, transparent);
+    margin-bottom: 10px;
+}
+
+.vendor-password-container-styles {
+    position: relative;
+}
+
+.vendor-password-toggle-button-styles {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.vendor-password-toggle-button:hover-styles {
+    color: #0056b3;
+}
+
+.vendor-button-styles {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.vendor-button:hover-styles {
+    background-color: #0056b3;
+}
+
+.vendor-social-media-inputs-styles {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.vendor-add-button-styles {
+    background-color: #007bff00;
+    color: #333;
+    border: none;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: solid black 1px;
+    transition: background-color 0.3s ease;
+    max-width: 20vw;
+    min-width: 10vw;
+    width: fit-content;
+}
+
+.vendor-add-button-styles:hover {
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    transform: scale(1.0125);
+}
+
+.vendor-remove-button-styles {
+    background-color: #007bff00;
+    color: #333;
+    border: none;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: solid black 1px;
+    transition: background-color 0.3s ease;
+    max-width: 20vw;
+    min-width: 10vw;
+    width: fit-content;
+}
+
+.vendor-remove-button-styles:hover {
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(121, 8, 8), #bd0808a3);
+    transform: scale(1.0125)
+}
+
+.vendor-submit-button-styles {
+    background-color: #007bff00;
+    color: #333;
+    border: none;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: solid black 1px;
+    transition: background-color 0.3s ease;
+    min-width: 10vw;
+    width: 100%;
+}
+
+.vendor-submit-button-styles:hover{
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    transform: scale(1.0125);
+}
+
+.vendor-heading-styles {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
+
+.vendor-img-styles {
+    width: 20px;
+    /* Adjust size as needed */
+    height: 20px;
+    /* Adjust size as needed */
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.vendor-option-styles {
+    display: flex;
+    align-items: center;
+}
+
+.vendor-show-hide-styles {
+    display: flex;
+    justify-content: flex-end;
+    padding-block: 5px;
+    padding-inline: 7.5px;
+    border-radius: 2px;
+    border: solid black .5px;
+    font-size: 14px;
+    max-width: fit-content;
+    align-content: center;
+    align-items: center;
+    flex-direction: row-reverse;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.vendor-show-hide-styles:hover {
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    transform: scale(1.0125);
+}
+
+.vendor-expansion-wrapper-styles {
+    border-color: #98989817;
+    border-radius: 4px;
+    border-style: solid;
+    box-shadow: #f2f1f1 5px 1px 19px 6px;
+    max-width: fit-content;
+    margin-left: auto;
+    max-height: 0px;
+    margin-bottom: 6vh;
+    transition: all 0.5s ease-in-out
+}
+
+.vendor-expansion-wrapper-styles span {
+    position: absolute;
+    top: -2px;
+    right: 0px;
+    margin-right: 2px;
+    text-shadow: 0px 0px 8px black;
+}
+
+.vendor-input-group-styles.vendor-expansion-wrapper-styles {
+    max-width: 100%;
+    max-height: fit-content;
+}
+
 .custom-dropdown-input-styles {
     padding: 12px 12px;
     border: 1px solid #ccc;
@@ -109,7 +337,7 @@
 }
 
 .payment-info-back-button {
-    width: 5vw;
+    width: 50px;
     position: relative;
     bottom: -25px;
     left: -25px;
@@ -124,9 +352,467 @@
     background: linear-gradient(45deg, white, whitesmoke);
 }
 
-.manual-signup-edits-info{
+.manual-signup-edits-info {
     text-align: center;
     font-size: 14px;
     font-style: italic;
     color: lightslategray;
 }
+
+.payment-info-form-bottom-banner-warning-wrapper {
+    padding: 10px;
+    border-radius: 20px;
+    border: solid black 1px;
+    width: 80%;
+    margin: auto;
+    background: linear-gradient(45deg, white, whitesmoke);
+}
+
+.payment-info-form-bottom-banner-warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: red;
+}
+
+.success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+}
+
+.success-message-box {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.success-heading {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.success-message {
+    font-size: 16px;
+    color: #333;
+    margin-top: 15px;
+}
+
+.success-footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.vendor-body-background {
+    z-index: -100;
+    opacity: 1;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    margin: 0px;
+    top: 0px;
+    left: 0px;
+}
+
+.custom-dropdown-option-wrapper {
+    position: relative;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    height: 22px;
+}
+
+.custom-dropdown-option-list {
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    right: 0px;
+    background-color: white;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: min-content;
+}
+
+.custom-dropdown-option-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.custom-dropdown-option-item img {
+    border-radius: 2px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.custom-dropdown-option-item:hover img {
+    height: 30px;
+    border: solid black .5px;
+}
+
+.custom-dropdown-option-item:hover {
+    background: linear-gradient(239deg, #e5e2e21a, #13c73552);
+}
+
+.preview-logo-image-wrapper img {
+    height: 48px;
+    max-width: 220px;
+}
+
+.business-name-logo-preview-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5vw;
+}
+
+/* Custom Time Picker Styles */
+.custom-date-time-time-picker {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    border: solid black .5px;
+    width: 100%;
+}
+
+.custom-date-time-time-picker-container {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 15vh;
+    width: 15vw;
+    background: white;
+}
+
+.custom-date-time-time-input {
+    width: 100%;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.custom-date-time-time-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.custom-date-time-hour-input,
+.custom-date-time-minute-input {
+    width: 60px;
+}
+
+.custom-date-time-apply-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-date-time-apply-button:hover {
+    background-color: #0056b3;
+}
+
+/* Custom Weekday Picker Styles */
+.custom-date-time-weekday-picker {
+    margin: 20px 0;
+}
+
+.custom-date-time-weekdays {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.custom-date-time-weekday-option:hover {
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    transform: scale(0.95);
+}
+
+.custom-date-time-weekday-option {
+    margin: 5px 0;
+    display: flex;
+    padding: 2px;
+    border: solid black 1px;
+    width: 10vw;
+    justify-content: center;
+}
+
+.custom-date-time-weekday-option.date-time-selected {
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    transform: scale(0.95);
+}
+
+.custom-date-time-checkbox {}
+
+label {
+    margin-left: 8px;
+}
+
+.custom-date-time-weekday-wrapper {
+    width: 100%;
+}
+
+.clock-face {
+    opacity: 75%;
+    transform: scale(0.9);
+}
+
+.clock-face-wrapper {
+    display: flex;
+}
+
+.clock-face:hover {
+    opacity: 100%;
+    transform: scale(1.0);
+}
+
+/* Time selection container styling */
+.time-selection {
+    display: flex;
+    justify-content: space-evenly;
+    /* Space out the selects */
+    width: 100%;
+    /* Ensure the selects take full width */
+    max-width: 400px;
+    /* Limit the maximum width */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    opacity: 0;
+    /* Initially hidden */
+    visibility: hidden;
+    /* Hide it off-screen */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    /* Smooth fade-in effect */
+}
+
+/* Add class when select is active (chooseTime is true) */
+.time-selection.visible {
+    opacity: 1;
+    /* Fully visible */
+    visibility: visible;
+    /* Make it visible */
+}
+
+/* Styling for each select dropdown */
+.time-selection select {
+    width: 30%;
+    /* Give each select box some room */
+    padding: 10px 15px;
+    /* Add padding for spacing inside the select box */
+    color: #333;
+    /* Dark text for contrast */
+    background-color: #fff;
+    /* White background for modern appearance */
+    border-radius: 8px;
+    /* Rounded corners */
+    border: 1px solid #ccc;
+    /* Light border */
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    cursor: pointer;
+    appearance: none;
+    /* Remove default arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.3s ease;
+    /* Smooth transition for hover effect */
+}
+
+/* Hover effect for select dropdown */
+.time-selection select:hover {
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3) !important;
+    /* Subtle background change */
+    color: white;
+    border-color: #888;
+    /* Slightly darker border */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    /* Highlight on hover */
+}
+
+/* Custom arrow styling for the select box */
+.time-selection select::after {
+    content: '▼';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #888;
+}
+
+/* Focus effect for select dropdown */
+.time-selection select:focus {
+    outline: none;
+    border-color: #5c6bc0;
+    /* Border color when focused */
+    box-shadow: 0 2px 12px rgba(92, 107, 192, 0.2);
+    /* Soft focus shadow */
+}
+
+/* General hover effect on time selection div */
+.time-selection>div:hover,
+.time-selection select:hover {
+    background: rgba(128, 128, 128, 0.197);
+    /* Slight background color on hover */
+    box-shadow: inset #ffffff00 0px 0px 0px 0px;
+}
+
+/* Optional: Add a placeholder option for better UX */
+.time-selection select option {
+    color: #888;
+    /* Light color for placeholder */
+}
+
+.time-selection select option:disabled {
+    font-style: italic;
+}
+
+.clock-face-consistent-hours{
+    max-width: 100px;
+}
+
+.clock-face-consistent-hours.clock-face-pressed{
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    box-shadow: inset 0px 0px 5px 3px rgb(0 0 0 / 91%);
+    cursor:pointer;
+    transform: scale(0.875);
+}
+.clock-face-consistent-hours.clock-face-unpressed{
+    background: white;
+    color:black;
+    transform: scale(0.925);
+    border: solid black 1px;
+}
+
+.clock-face-consistent-hours.clock-face-unpressed:hover{
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    box-shadow: inset 0px 0px 5px 3px rgb(0 0 0 / 91%);
+    cursor:pointer;
+    transform: scale(0.875);
+}
+
+.clock-face-consistent-hours.clock-face-pressed:hover{
+    background: white;
+    color:black;
+    transform: scale(0.925);
+    border: solid black 1px;
+}
+
+.clock-face-consistent-hours{
+    font-size: 12px;
+    text-align: center;
+}
+
+.clock-face-modal-open-close-wrapper.clock-face-modal-show {
+    position: fixed;
+    bottom: 0px;
+    margin-left: 35%;
+    width: 85px;
+    text-align: center;
+    padding: 10px;
+    background: linear-gradient(45deg, #383636, #000000ab);
+    color: white;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: #302b2b99 1px 1px 18px 13px;
+    border: solid rgba(139, 138, 138, 0.197) 3px;
+    opacity: 1; /* Ensure it's fully visible */
+    visibility: visible; /* Make sure the element is visible */
+    transform: translateY(0); /* Reset to initial position */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Apply transition */
+}
+
+.clock-face-modal-open-close-wrapper.clock-face-modal-hide {
+    opacity: 0; /* Fade out */
+    visibility: hidden; /* Hide element from layout */
+    transform: translateY(100%); /* Slide it out of view */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Transition the opacity and position */
+}
+
+/* Custom Checkbox Styles */
+.custom-checkbox-wrapper {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+    justify-content: space-between;
+}
+
+.custom-checkbox-input {
+    display: none; /* Hide the default checkbox */
+}
+
+.custom-checkbox {
+    width: 40px;
+    height: 24px;
+    background: linear-gradient(45deg, #383636, #000000ab);
+    border-radius: 50px;
+    position: relative;
+    box-shadow: #302b2b99 1px 1px 10px 2px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-checkbox-inner {
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s ease;
+}
+
+.custom-checkbox-inner.checked {
+    transform: translateX(16px);
+}
+
+.custom-checkbox-input:checked + .custom-checkbox {
+    background: linear-gradient(45deg, lightgreen, lightblue);
+}
+
+.checkbox-label {
+    transition: color 0.3s ease;
+}
+
+.custom-checkbox-input:checked + .custom-checkbox + .checkbox-label {
+    color: #A0D1B7;
+}
+

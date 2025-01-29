@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { showHideStyles } from './ManualSignUpStyles';
 
 const DivExpandButton = ({ onClick, children }) => {
     const [isPressed, setIsPressed] = useState(false);
@@ -25,7 +24,8 @@ const DivExpandButton = ({ onClick, children }) => {
 
     return (
         <div
-            style={{ ...showHideStyles, ...buttonStyles }}
+            style={{...buttonStyles }}
+            className='vendor-show-hide-styles'
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseLeave}

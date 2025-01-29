@@ -8,6 +8,7 @@ import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'; // Correc
 import { clusterApiUrl } from '@solana/web3.js';
 import { WalletModalProvider, WalletConnectButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
 import VendorApp from './Vendor Components/VendorApp'
+import { CustomBodyBackground } from './Vendor Components/CustomBodyBackground';
 
 const App = () => {
   const network = 'mainnet-beta';  // Or 'devnet', 'testnet' based on your needs
@@ -32,7 +33,10 @@ const App = () => {
   } else {
     if (window.location.pathname === "/vend/vendor") {
       return (
-        <VendorApp />
+        <div>
+          <VendorApp />
+          <CustomBodyBackground />
+        </div>
       );
     }
   }
