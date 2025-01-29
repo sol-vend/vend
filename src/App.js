@@ -17,7 +17,7 @@ const App = () => {
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
-    <Router basename="/vend">
+    <Router>
       <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
           <WalletModalProvider>
