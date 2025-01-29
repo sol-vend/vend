@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import LoginGoogle from './LoginGoogle';
 
 const LoginForm = ({ setCreateAccount }) => {
     const [username, setUsername] = useState('');
@@ -127,8 +126,6 @@ const LoginForm = ({ setCreateAccount }) => {
             <div style={{
                 width: '50%',
             }}>
-                <LoginGoogle>
-                </LoginGoogle>
             </div >
             <div style={{
                 display: 'ruby',
