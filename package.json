@@ -30,7 +30,7 @@
     "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://sol-vend.github.io/vend/vendor",
+  "homepage": "https://sol-vend.github.io/vend",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",

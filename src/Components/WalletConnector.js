@@ -19,6 +19,7 @@ const WalletConnector = ({ hash }) => {
   const tokenFetchLimit = 3;
   const lastTokenElementRef = useRef();
   const retrievedMintAddresses = [];
+  const [finalHash, setFinalHash] = useState(null);
 
   useEffect(() => {
     if (hasMoreTokens) {
@@ -45,6 +46,16 @@ const WalletConnector = ({ hash }) => {
   const handleTokenClick = (token) => {
     setSelectedToken(token);
   };
+
+  useEffect(() => {
+    const getFinalHash = (h) => {
+      const lastHashIndex = h.lastIndexOf('#');
+      setFinalHash(lastHashIndex !== -1 ? h.slice(lastHashIndex + 1) : '');
+    }
+    if (!finalHash) {
+      getFinalHash(hash);
+    }
+  })
 
   const updateTokenBalance = async (updateMintAddress) => {
     console.log("Updating Token Balance...", updateMintAddress.mint);
@@ -283,7 +294,7 @@ const WalletConnector = ({ hash }) => {
                 inputAmount={swapMinimum}
                 slippageInBps={200}
                 buttonDialog={`Swap for ${Math.round(Math.pow(10, (ROUNDING_ORDER_MAG - 1)) * swapMinimum, ROUNDING_ORDER_MAG) / Math.pow(10, (ROUNDING_ORDER_MAG - 1))} ${selectedToken.metadata?.data?.name || 'Solana'}`}
-                hash={hash}
+                hash={finalHash}
                 updateTokenBalance={updateTokenBalance}
               />
             </div>
