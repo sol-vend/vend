@@ -640,7 +640,7 @@ const ManualSignUp = () => {
                                             style={{
                                                 ...{
                                                     marginLeft: 'auto',
-                                                    maxWidth: '10vw',
+                                                    maxWidth: '25px',
                                                     maxHeight: '5vh',
                                                     marginTop: 'auto'
                                                 }

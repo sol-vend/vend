@@ -62,6 +62,10 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
       setSelectedPayment(paymentMethod);
   }, [availableTokens])
 
+  useEffect(() => {
+    setPaymentMethod(selectedPayment);
+  }, [selectedPayment])
+
   const handlePostResponse = () => {
     if (walletAddress.length > 0) {
       if (selectedPayment) {
@@ -231,7 +235,6 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
               <div style={inputGroupStyles}>
                 <button
                   type="submit"
-                  style={{ ...submitButtonStyles, ...buttonStyles }}
                   className='vendor-submit-button-styles'
                   disabled={walletAddress ? false : true}
                   onClick={() => handlePostResponse()}
@@ -252,12 +255,12 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
               }
             </div>
             {submitResponse.doProceed &&
-              <button
+              <div
                 className='payment-info-back-button'
                 onClick={updateSubmitProceedResponseFalse}
               >
                 {"<---"}
-              </button>
+              </div>
             }
           </div>
         </div>
