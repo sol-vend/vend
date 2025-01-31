@@ -538,6 +538,93 @@ th {
 }
 
 
+@media screen and (max-width: 768px) {
+    .vendor-form-styles {
+        padding: 20px;
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .vendor-password-container-styles {
+        width: 100% !important;
+    }
+
+    .vendor-input-group-styles {
+        padding: 8px;
+        margin-block: 8px;
+    }
+
+    .vendor-input-field-styles {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .vendor-button-styles,
+    .vendor-submit-button-styles {
+        width: 100%;
+        padding: 12px;
+        font-size: 18px;
+    }
+
+    .vendor-heading-styles {
+        font-size: 24px;
+    }
+
+    .vendor-img-styles {
+        width: 12vw;
+        height: auto;
+        margin-right: 8px;
+    }
+
+    .vendor-radio-button-input-styles {
+        max-width: 40vw;
+    }
+
+    .vendor-social-media-inputs-styles {
+        align-items: flex-start;
+    }
+
+    .custom-dropdown-input-styles {
+        width: 80%;
+    }
+
+    .vendor-add-button-styles,
+    .vendor-remove-button-styles {
+        width: 100%;
+    }
+
+    .vendor-show-hide-styles {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .custom-checkbox-wrapper {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .time-selection {
+        width: 100%;
+    }
+
+    .time-selection select {
+        width: 100%;
+    }
+
+    .custom-date-time-time-picker-container {
+        width: 90%;
+    }
+
+    .clock-face-consistent-hours {
+        font-size: 10px;
+    }
+
+    .clock-face-modal-open-close-wrapper.clock-face-modal-show {
+        width: 70%;
+        margin-left: 15%;
+    }
+}
+
 .vendor-form-styles {
     display: flex;
     flex-direction: column;
@@ -632,6 +719,20 @@ th {
     align-items: center;
 }
 
+.password-control-visibility-wrapper {
+    border: solid #ddd 1px;
+    display: flex;
+    border-radius: 6px;
+}
+
+.password-input-field-styles {
+    border: transparent;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 95%;
+}
+
 .vendor-add-button-styles {
     background-color: #007bff00;
     color: #333;
@@ -690,9 +791,10 @@ th {
     transition: background-color 0.3s ease;
     min-width: 10vw;
     width: 100%;
+    margin-top: 2vh;
 }
 
-.vendor-submit-button-styles:hover{
+.vendor-submit-button-styles:hover {
     color: white;
     border-color: white;
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
@@ -728,13 +830,13 @@ th {
     border-radius: 2px;
     border: solid black .5px;
     font-size: 14px;
-    max-width: -moz-fit-content;
-    max-width: fit-content;
     align-content: center;
     align-items: center;
     flex-direction: row-reverse;
     cursor: pointer;
     margin-left: auto;
+    text-align: center;
+    max-width: min-content;
 }
 
 .vendor-show-hide-styles:hover {
@@ -799,6 +901,9 @@ th {
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
+}
+.password-control-visibility-wrapper:focus-visible, .password-control-visibility-wrapper:focus, .vendor-password-container-styles:focus-visible{
+    outline: -webkit-focus-ring-color auto 1px;
 }
 
 .custom-dropdown-input-styles::placeholder {
@@ -1246,42 +1351,43 @@ label {
     font-style: italic;
 }
 
-.clock-face-consistent-hours{
+.clock-face-consistent-hours {
     max-width: 100px;
 }
 
-.clock-face-consistent-hours.clock-face-pressed{
+.clock-face-consistent-hours.clock-face-pressed {
     color: white;
     border-color: white;
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
     box-shadow: inset 0px 0px 5px 3px rgb(0 0 0 / 91%);
-    cursor:pointer;
+    cursor: pointer;
     transform: scale(0.875);
 }
-.clock-face-consistent-hours.clock-face-unpressed{
+
+.clock-face-consistent-hours.clock-face-unpressed {
     background: white;
-    color:black;
+    color: black;
     transform: scale(0.925);
     border: solid black 1px;
 }
 
-.clock-face-consistent-hours.clock-face-unpressed:hover{
+.clock-face-consistent-hours.clock-face-unpressed:hover {
     color: white;
     border-color: white;
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
     box-shadow: inset 0px 0px 5px 3px rgb(0 0 0 / 91%);
-    cursor:pointer;
+    cursor: pointer;
     transform: scale(0.875);
 }
 
-.clock-face-consistent-hours.clock-face-pressed:hover{
+.clock-face-consistent-hours.clock-face-pressed:hover {
     background: white;
-    color:black;
+    color: black;
     transform: scale(0.925);
     border: solid black 1px;
 }
 
-.clock-face-consistent-hours{
+.clock-face-consistent-hours {
     font-size: 12px;
     text-align: center;
 }
@@ -1298,17 +1404,25 @@ label {
     border-radius: 10px 10px 0px 0px;
     box-shadow: #302b2b99 1px 1px 18px 13px;
     border: solid rgba(139, 138, 138, 0.197) 3px;
-    opacity: 1; /* Ensure it's fully visible */
-    visibility: visible; /* Make sure the element is visible */
-    transform: translateY(0); /* Reset to initial position */
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Apply transition */
+    opacity: 1;
+    /* Ensure it's fully visible */
+    visibility: visible;
+    /* Make sure the element is visible */
+    transform: translateY(0);
+    /* Reset to initial position */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    /* Apply transition */
 }
 
 .clock-face-modal-open-close-wrapper.clock-face-modal-hide {
-    opacity: 0; /* Fade out */
-    visibility: hidden; /* Hide element from layout */
-    transform: translateY(100%); /* Slide it out of view */
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Transition the opacity and position */
+    opacity: 0;
+    /* Fade out */
+    visibility: hidden;
+    /* Hide element from layout */
+    transform: translateY(100%);
+    /* Slide it out of view */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    /* Transition the opacity and position */
 }
 
 /* Custom Checkbox Styles */
@@ -1321,10 +1435,19 @@ label {
             user-select: none;
     transition: all 0.3s ease;
     justify-content: space-between;
+    width: 95%;
+}
+
+.custom-checkbox-wrapper-paragraph-descriptor {
+    color: #383636;
+    font-size: 12px;
+    font-style: italic;
+    margin-left: 10px;
 }
 
 .custom-checkbox-input {
-    display: none; /* Hide the default checkbox */
+    display: none;
+    /* Hide the default checkbox */
 }
 
 .custom-checkbox {
@@ -1352,7 +1475,7 @@ label {
     transform: translateX(16px);
 }
 
-.custom-checkbox-input:checked + .custom-checkbox {
+.custom-checkbox-input:checked+.custom-checkbox {
     background: linear-gradient(45deg, lightgreen, lightblue);
 }
 
@@ -1360,11 +1483,46 @@ label {
     transition: color 0.3s ease;
 }
 
-.custom-checkbox-input:checked + .custom-checkbox + .checkbox-label {
+.custom-checkbox-input:checked+.custom-checkbox+.checkbox-label {
     color: #A0D1B7;
 }
 
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
 
+.password-toggle-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: #a8acb1cf;
+}
+
+.password-toggle-btn:hover svg {
+    fill: #0056b3;
+}
+
+.password-toggle-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-field-styles:focus-visible {
+    outline: none;
+}
+
+.signup-submission-failure-wrapper{
+    display:flex;
+    color:red;
+    text-align: center;
+}
 .tutorial-modal-backdrop {
     position: fixed;
     top: 0;
@@ -1453,4 +1611,4 @@ label {
     cursor: pointer;
 }
 
-/*# sourceMappingURL=main.8d9f69d9.css.map*/
+/*# sourceMappingURL=main.e6644625.css.map*/
