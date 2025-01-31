@@ -14,7 +14,8 @@ const Items = () => {
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
-      const hashWithoutHash = hash.substring(1);
+      const lastHashIndex = hash.lastIndexOf('#'); 
+      const hashWithoutHash = hash.slice(lastHashIndex + 1);
       setHashValue(hashWithoutHash);
     } else {
       selectVendMessage = "Select the item you want to purchase and try again..."

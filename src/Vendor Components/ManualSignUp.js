@@ -10,6 +10,7 @@ import DivExpandButton from './DivExpandButton';
 import PaymentInfoForm from './PaymentInfoForm';
 import CustomWeekdayPicker from './CustomWeekdayPicker';
 import CustomCheckbox from './CustomCheckbox';
+import PasswordToggle from './PasswordToggle';
 
 const ManualSignUp = () => {
     const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const ManualSignUp = () => {
         businessName: '',
         logo: null,
         businessDescription: '',
-        businessHours: { },
+        businessHours: {},
         businessPhone: '',
         businessSocials: [{ platform: '', url: '' }],
         businessReviews: '',
@@ -38,6 +39,7 @@ const ManualSignUp = () => {
     const [showHours, setShowHours] = useState(false);
     const [showAddEmployees, setShowAddEmployees] = useState(false);
     const [passwordVerify, setPasswordVerify] = useState(false);
+    const [submitFailureMessage, setSubmitFailureMessage] = useState(false);
     const [submitResponse, setSubmitResponse] = useState({
         result: null,
         doProceed: false,
@@ -102,6 +104,11 @@ const ManualSignUp = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'confirmationPassword'){
+            if (submitFailureMessage){
+                setSubmitFailureMessage(false);
+            }
+        }
         setFormData((prevState) => ({
             ...prevState,
             [name]: value,
@@ -231,14 +238,20 @@ const ManualSignUp = () => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        setSubmitResponse({
-            result: null,
-            doProceed: true,
-            isApproved: true,
-            error: null,
-            hasAttempted: true
-        });
+        e.preventDefault();
+        if (formData.initialPassword !== formData.confirmationPassword) {
+            setSubmitFailureMessage("It looks like your passwords do not match. Fix this and then come back and see me.")
+        } else if (formData.confirmationPassword.length === 0) {
+            setSubmitFailureMessage("You must confirm your password to continue.")
+        } else {
+            setSubmitResponse({
+                result: null,
+                doProceed: true,
+                isApproved: true,
+                error: null,
+                hasAttempted: true
+            });
+        }
     };
 
     const generateEmployeePin = () => {
@@ -277,40 +290,47 @@ const ManualSignUp = () => {
                                 <label>Password:</label>
                                 <div
                                     className='vendor-password-container-styles'
+                                    style={{ width: '50%' }}
                                 >
-                                    <input
-                                        type={passwordVisible ? 'text' : 'password'}
-                                        name="initialPassword"
-                                        value={formData.initialPassword}
-                                        onChange={handlePasswordChange}
-                                        required
-                                        className='vendor-input-field-styles'
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setPasswordVisible(!passwordVisible)}
-                                        className='vendor-password-toggle-button-styles'
-                                        onMouseOver={(e) => (e.target.style.color = passwordToggleBtnHoverStyles.color)}
-                                        onMouseOut={(e) => (e.target.style.color = '#007bff')}
+                                    <div
+                                        className='password-control-visibility-wrapper'
                                     >
-                                        {passwordVisible ? 'Hide Password' : 'Show Password'}
-                                    </button>
+                                        <input
+                                            type={passwordVisible ? 'text' : 'password'}
+                                            name="initialPassword"
+                                            value={formData.initialPassword}
+                                            onChange={handlePasswordChange}
+                                            required
+                                            className='password-input-field-styles'
+                                        />
+                                        <div>
+                                            <PasswordToggle parentSetPasswordVisibility={setPasswordVisible} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {passwordVerify &&
                                 <div>
-                                    <label>Confirm Password:</label>
+                                    <label> Confirm Password:</label>
                                     <div
                                         className='vendor-password-container-styles'
+                                        style={{ width: '50%' }}
                                     >
-                                        <input
-                                            type={passwordVisible ? 'text' : 'password'}
-                                            name="confirmationPassword"
-                                            value={formData.confirmationPassword}
-                                            onChange={handleChange}
-                                            required
-                                            className='vendor-input-field-styles'
-                                        />
+                                        <div
+                                            className='password-control-visibility-wrapper'
+                                        >
+                                            <input
+                                                type={passwordVisible ? 'text' : 'password'}
+                                                name="confirmationPassword"
+                                                value={formData.confirmationPassword}
+                                                onChange={handleChange}
+                                                required
+                                                className='password-input-field-styles'
+                                            />
+                                            <div>
+                                                <PasswordToggle parentSetPasswordVisibility={setPasswordVisible} />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -337,7 +357,7 @@ const ManualSignUp = () => {
                                         className='vendor-input-field-styles'
                                         placeholder='Optional'
                                     />
-                                    {formData.logo!== null &&
+                                    {formData.logo !== null &&
                                         <div
                                             className='preview-logo-image-wrapper'
                                         >
@@ -392,71 +412,7 @@ const ManualSignUp = () => {
                                 placeholder='Optional'
                             />
                         </div>
-                        {!showHours &&
-                            <div className='vendor-expansion-wrapper-styles'>
-                                <DivExpandButton
-                                    onClick={(e) => setShowHours(!showHours)}
-                                    children={
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                paddingInline: '5px',
-                                            }}
-                                        >
-                                            Business Hours
-                                            <span>+</span>
-                                        </div>
-                                    }
-                                >
-                                </DivExpandButton>
-                            </div>
-                        }
-                        {showHours &&
-                            <div
-                                className='vendor-input-group-styles vendor-expansion-wrapper-styles'
-                            >                                
-                                <div>Business Hours:</div>
-                                <CustomWeekdayPicker />
-                                <div
-                                    className='vendor-social-media-inputs-styles'>
-                                    <input
-                                        type="time"
-                                        name="open"
-                                        style={{display:'none'}}
-                                        value={formData.businessHours.open}
-                                        onChange={handleBusinessHoursChange}
-                                        className='vendor-input-field-styles'
-                                    />
-                                </div>
-                                <div className='vendor-social-media-inputs-styles'>
-                                    <input
-                                        type="time"
-                                        name="close"
-                                        style={{display:'none'}}
-                                        value={formData.businessHours.close}
-                                        onChange={handleBusinessHoursChange}
-                                        className='vendor-input-field-styles'
-                                    />
-                                </div>
 
-                                <DivExpandButton
-                                    onClick={(e) => setShowHours(!showHours)}
-                                    children={
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center'
-                                            }}
-                                        >
-                                            Business Hours
-                                            <span>-</span>
-                                        </div>
-                                    }
-                                >
-                                </DivExpandButton>
-                            </div>
-                        }
                         <div
                             className='vendor-input-group-styles'>
                             <label>Phone:</label>
@@ -490,7 +446,7 @@ const ManualSignUp = () => {
                                         value={social.url}
                                         onChange={(e) => handleSocialMediaChange(index, e)}
                                         className='vendor-input-field-styles'
-                                        style={{ ...{ marginTop: "0px !important" } }}
+                                        style={{ ...{ marginTop: "0px !important", maxWidth: '50%', marginLeft: '10%' } }}
                                     />
                                     <button
                                         type="button"
@@ -523,15 +479,81 @@ const ManualSignUp = () => {
                         </div>
                         <div
                             className='vendor-input-group-styles'>
-                                <CustomCheckbox 
-                                label={"Enable Location Services:"}
+                            <CustomCheckbox
+                                label={{ title: "Location Services Preference:", description: "This will automatically let people know if you're open and how to find you." }}
                                 name="isLocationServicesEnabled"
                                 checked={formData.isLocationServicesEnabled}
                                 onChange={handleLocationServicesChange}
-                                />
+                            />
                         </div>
                         {formData.isLocationServicesEnabled &&
                             <LocationComponent />
+                        }
+                        {!showHours &&
+                            <div className='vendor-expansion-wrapper-styles'>
+                                <DivExpandButton
+                                    onClick={(e) => setShowHours(!showHours)}
+                                    children={
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                paddingInline: '5px',
+                                            }}
+                                        >
+                                            Business Hours
+                                            <span>+</span>
+                                        </div>
+                                    }
+                                >
+                                </DivExpandButton>
+                            </div>
+                        }
+                        {showHours &&
+                            <div
+                                className='vendor-input-group-styles vendor-expansion-wrapper-styles'
+                            >
+                                <div>Business Hours:</div>
+                                <CustomWeekdayPicker />
+                                <div
+                                    className='vendor-social-media-inputs-styles'>
+                                    <input
+                                        type="time"
+                                        name="open"
+                                        style={{ display: 'none' }}
+                                        value={formData.businessHours.open}
+                                        onChange={handleBusinessHoursChange}
+                                        className='vendor-input-field-styles'
+                                    />
+                                </div>
+                                <div className='vendor-social-media-inputs-styles'>
+                                    <input
+                                        type="time"
+                                        name="close"
+                                        style={{ display: 'none' }}
+                                        value={formData.businessHours.close}
+                                        onChange={handleBusinessHoursChange}
+                                        className='vendor-input-field-styles'
+                                    />
+                                </div>
+
+                                <DivExpandButton
+                                    onClick={(e) => setShowHours(!showHours)}
+                                    children={
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                width: '15vw'
+                                            }}
+                                        >
+                                            Business Hours
+                                            <span>-</span>
+                                        </div>
+                                    }
+                                >
+                                </DivExpandButton>
+                            </div>
                         }
                         {!showAddEmployees &&
                             <div className='vendor-expansion-wrapper-styles'>
@@ -545,9 +567,7 @@ const ManualSignUp = () => {
                                             }}
                                         >
                                             Add Employees
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
-                                                <path d="M12 2L12 22M12 22L6 16M12 22L18 16" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
+                                            <span>+</span>
                                         </div>
                                     }
                                 >
@@ -662,23 +682,11 @@ const ManualSignUp = () => {
                                             <div
                                                 style={{
                                                     display: 'flex',
-                                                    alignItems: 'center'
+                                                    alignItems: 'center',
+                                                    width: '15vw'
                                                 }}
                                             >
-                                                Hide Add Employees
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24"
-                                                    width="14"
-                                                    height="14"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <path d="M12 19V6M5 13l7-7 7 7" />
-                                                </svg>
+                                                Add Employees <span>-</span>
                                             </div>
                                         }
                                     >
@@ -687,9 +695,16 @@ const ManualSignUp = () => {
                             </div>
                         }
                         {!submitResponse.isApproved &&
+                        <div>
                             <button type="submit" className='vendor-submit-button-styles'>
                                 Submit
                             </button>
+                            {formData.initialPassword !== formData.confirmationPassword &&
+                                <div className='signup-submission-failure-wrapper'>
+                                    <p>{submitFailureMessage}</p>
+                                </div>
+                            }
+                            </div>
                         }
                         {submitResponse.isApproved &&
                             <p
