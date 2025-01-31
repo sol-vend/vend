@@ -733,7 +733,7 @@ th {
     width: 95%;
 }
 
-.vendor-add-button-styles {
+.vendor-add-button-styles, .payment-info-back-button {
     background-color: #007bff00;
     color: #333;
     border: none;
@@ -743,10 +743,8 @@ th {
     cursor: pointer;
     border: solid black 1px;
     transition: background-color 0.3s ease;
-    max-width: 20vw;
-    min-width: 10vw;
-    width: -moz-fit-content;
-    width: fit-content;
+    max-width: 100px;
+    min-width: 70px;
 }
 
 .vendor-add-button-styles:hover {
@@ -991,15 +989,8 @@ th {
 }
 
 .payment-info-back-button {
-    width: 50px;
-    position: relative;
-    bottom: -25px;
-    left: -25px;
-    border-radius: 5px;
-    background: none;
-    outline: none;
-    border-color: #c2bfbf3d;
-    box-shadow: #00000080 3px 2px 7px 1px;
+    width:10%;
+    margin-right:auto;
 }
 
 .payment-info-back-button:hover {
@@ -1574,7 +1565,7 @@ label {
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
     transform: scale(1.0125);
 }
-.clock-selection-selected{
+.clock-selection-selected, .payment-info-back-button:hover{
     color: white;
     border-color: white;
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
@@ -1700,4 +1691,4 @@ div ::-webkit-scrollbar-thumb:hover {
     cursor: pointer;
 }
 
-/*# sourceMappingURL=main.246cc132.css.map*/
+/*# sourceMappingURL=main.ce3405d0.css.map*/
