@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import ClockSelection from './ClockSelection';
 
 const ClockFace = ({ width, height, isOpen, setSelectedWeekdays, selectedWeekdays }) => {
     const [time, setTime] = useState({
@@ -9,9 +10,10 @@ const ClockFace = ({ width, height, isOpen, setSelectedWeekdays, selectedWeekday
     const [chooseTime, setChooseTime] = useState(true);
     const [hovered, setHovered] = useState(false);
     const [sameHours, setSameHours] = useState(true);
-    const handleMouseEnter = () => setTimeout(()=> setHovered(true), 250);
-    const handleMouseLeave = () => setTimeout(()=> setHovered(false), 500);
+    const handleMouseEnter = () => setTimeout(() => setHovered(true), 250);
+    const handleMouseLeave = () => setTimeout(() => setHovered(false), 500);
     const [currentSelectedWeekdays, setCurrentSelectedWeekdays] = useState([]);
+    const [isTimeSelectionOpen, setIsTimeSelectionOpen] = useState(false);
 
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString('en-US', {
@@ -19,11 +21,16 @@ const ClockFace = ({ width, height, isOpen, setSelectedWeekdays, selectedWeekday
         minute: '2-digit',
         hour12: true,
     });
-    console.log(selectedWeekdays);
+
     const [clockFaceRotationAngle, setClockFaceRotationAngle] = useState({
         hour: (((parseInt(formattedDate.split(':')[0]) % 12) / 12) * 360),
         minute: ((parseInt(formattedDate.split(':')[1].split(' ')[0]) / 60) * 360),
     });
+
+    const timeSelectionHandler = (e) => {
+        e.stopPropagation();
+        setIsTimeSelectionOpen(true);
+    }
 
     const getRotationAngleForCurrentTime = () => {
         if (time.hour === null) {
@@ -70,23 +77,12 @@ const ClockFace = ({ width, height, isOpen, setSelectedWeekdays, selectedWeekday
                 })));
         };
         let minutes = time.minute === null ? 0 : time.minute;
-        if (isOpen) {
+        if (isOpen && time.hour !== null) {
             setTimesForDay('open', `${time.hour}:${minutes.length === 1 ? '0' + minutes : minutes} ${time.amPm}`)
         } else {
             setTimesForDay('close', `${time.hour}:${minutes.length === 1 ? '0' + minutes : minutes} ${time.amPm}`)
         }
     }, [time, currentSelectedWeekdays]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setTime((prevState) => {
-            if (name === 'hour' && value) {
-                return { ...prevState, [name]: value, minute: 0 };
-            }
-            return { ...prevState, [name]: value };
-        });
-    };
 
     return (
         <div className="clock-face-wrapper">
@@ -167,63 +163,26 @@ const ClockFace = ({ width, height, isOpen, setSelectedWeekdays, selectedWeekday
                     y2="20"
                     stroke="slateblue"
                     strokeWidth="5"
-                    transform={`rotate(${clockFaceRotationAngle.minute} 100 100)`} // Minute hand rotation
+                    transform={`rotate(${clockFaceRotationAngle.minute} 100 100)`}
                 />
 
                 <circle cx="100" cy="100" r="10" fill="#A0D1B7" />
             </svg>
-
-            <div className={`time-selection ${chooseTime ? 'visible' : ''}`}>
-                <select name="hour" onChange={handleChange} value={time.hour || ''}>
-                    <option value="" disabled>
-                        Hour
-                    </option>
-                    {Array.from({ length: 12 }).map((_, index) => (
-                        <option key={index} value={index + 1}>
-                            {index + 1}
-                        </option>
-                    ))}
-                </select>
-                <select name="minute" onChange={handleChange} value={time.minute || ''}>
-                    <option value="" disabled>
-                        Minute
-                    </option>
-                    {Array.from({ length: 60 }).map((_, index) => (
-                        <option key={index} value={index}>
-                            {String(index).padStart(2, '0')}
-                        </option>
-                    ))}
-                </select>
-                <select name="amPm" onChange={handleChange} value={time.amPm || ''}>
-                    {['AM', 'PM'].map((amPm, index) => (
-                        <option key={index} value={amPm}>
-                            {amPm}
-                        </option>
-                    ))}
-                </select>
-                {true === false &&
-                    <div className={sameHours ? 'clock-face-consistent-hours clock-face-pressed' : 'clock-face-consistent-hours clock-face-unpressed'}
-                        onClick={() => setSameHours(!sameHours)}
-                    >
-                        {sameHours &&
-                            <p>
-                                {"Same hours everyday."}
-                            </p>
-                        }
-                        {!sameHours &&
-                            <p>
-                                {"Different hours certain days."}
-                            </p>
-                        }
-                    </div>
+            <div
+                className="joint-time-selection"
+                onClick={timeSelectionHandler}
+            >
+                {Object.values(selectedWeekdays).some(day => day[isOpen ? 'open' : 'close']) &&
+                    <p>{Object.values(selectedWeekdays).find(day => day[isOpen ? 'open' : 'close'])[isOpen ? 'open' : 'close'].includes('nul') ? 'Select Time' : Object.values(selectedWeekdays).find(day => day[isOpen ? 'open' : 'close'])[isOpen ? 'open' : 'close']}</p>
                 }
+                {!Object.values(selectedWeekdays).some(day => day[isOpen ? 'open' : 'close']) &&
+                    <p>Select Time</p>
+                }
+
+                {isTimeSelectionOpen && (
+                    <ClockSelection setTime={setTime} setIsTimeSelectionOpen={setIsTimeSelectionOpen} isTimeSelectionOpen={isTimeSelectionOpen} />
+                )}
             </div>
-            {hovered && 
-                <div
-                className={hovered ? 'clock-face-modal-open-close-wrapper clock-face-modal-show' : 'clock-face-modal-open-close-wrapper clock-face-modal-hide'}>
-                    <p>{isOpen ? "What time do you open?" : "What time do you close?"}</p>
-                </div>
-            }
         </div>
     );
 };

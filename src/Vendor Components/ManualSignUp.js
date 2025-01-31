@@ -629,19 +629,8 @@ const ManualSignUp = () => {
                                         </div>
 
                                         {employee.isLocked &&
-                                            <div
-                                                style={{
-                                                    textAlign: 'center',
-                                                    maxWidth: '25vw',
-                                                    marginBottom: 'auto',
-                                                    borderRadius: '5px',
-                                                    paddingInline: '10px',
-                                                    boxShadow: '#8080805e 2px 2px 3px 3px',
-                                                    background: 'linear-gradient(45deg, #f3f2f2a6, transparent)',
-                                                    color: 'blue'
-                                                }}
-                                            >
-                                                <h3>Employee Login Pin</h3>
+                                            <div>
+                                                <p>Employee Login Pin:</p>
                                                 <p>{employee.pin}</p>
                                             </div>
                                         }

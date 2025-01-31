@@ -4,21 +4,23 @@ import ClockFace from './ClockFace';
 
 const CustomWeekdayPicker = ({ onWeekdayChange }) => {
     const [selectedWeekdays, setSelectedWeekdays] = useState({
-        sunday: { label: 'Sun', isSelected: false, open: {}, close: {} },
-        monday: { label: 'Mon', isSelected: false, open: {}, close: {} },
-        tuesday: { label: 'Tue', isSelected: false, open: {}, close: {} },
-        wednesday: { label: 'Weds', isSelected: false, open: {}, close: {} },
-        thursday: { label: 'Thur', isSelected: false, open: {}, close: {} },
-        friday: { label: 'Fri', isSelected: false, open: {}, close: {} },
-        saturday: { label: 'Sat', isSelected: false, open: {}, close: {} },
+        sunday: { label: 'Sun', isSelected: false, open: false, close: false },
+        monday: { label: 'Mon', isSelected: false, open: false, close: false },
+        tuesday: { label: 'Tue', isSelected: false, open: false, close: false },
+        wednesday: { label: 'Weds', isSelected: false, open: false, close: false },
+        thursday: { label: 'Thur', isSelected: false, open: false, close: false },
+        friday: { label: 'Fri', isSelected: false, open: false, close: false },
+        saturday: { label: 'Sat', isSelected: false, open: false, close: false },
     });
-
+    console.log(selectedWeekdays);
     const handleDayChange = (day) => {
         setSelectedWeekdays((prevState) => ({
             ...prevState,
             [day]: {
                 ...prevState[day],
-                isSelected: !prevState[day].isSelected
+                isSelected: !prevState[day].isSelected,
+                open: prevState[day].isSelected ? false : prevState[day].open,
+                close: prevState[day].isSelected ? false : prevState[day].close
             }
         }));
     }
