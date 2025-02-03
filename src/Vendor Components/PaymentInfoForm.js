@@ -25,7 +25,7 @@ import PaypalOptions from './PaypalOptions';
 import CustomDropdownInput from './CustomDropdownInput';
 import CustomRadioButton from './CustomRadioButton';
 import TutorialModal from './TutorialModal'
-import SuccessfulSignup from './SuccessfulSignup';
+import AccountGenerationEmail from './AccountGenerationEmail';
 
 const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormData }) => {
   const initialTokenDisplayLimit = 50;
@@ -267,7 +267,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
       }
       {signupComplete &&
         <div>
-          <SuccessfulSignup />
+          <AccountGenerationEmail userEmailAddress={formData.emailAddress} businessName={formData.businessName}/>
         </div>
       }
     </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import LoginForm from './LoginForm';
 import ManualSignUp from './ManualSignUp';
+import { VENDOR_BANNER_IMG } from '../Components/Shared';
 
 const VendorApp = () => {
     document.body.classList.add('vendor');
@@ -14,12 +15,12 @@ const VendorApp = () => {
         <div className='vendor-interface'>
             <div className='vendor-title-wrapper' style={{
                 borderBottomColor: 'black',
-                borderBottomStyle: 'groove'
+                borderBottomStyle: 'groove',
+                display: 'flex',
+                justifyContent: 'center',
+                maxHeight: '120px'
             }}>
-                <h2>
-                    Vend
-                </h2>
-                <p>Solana Payment Platform (probably need a logo here somewhere)</p>
+                <img src={`/vend/solvendlogo-banner.jpg?v=${Date.now()}`}></img>
             </div>
 
             {!createAccount && (

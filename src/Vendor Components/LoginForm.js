@@ -31,9 +31,9 @@ const LoginForm = ({ setCreateAccount }) => {
         console.log('Form submitted with', { username, password });
     };
     return (
-        <div 
-        className='vendor-form-styles'
-        style={{width:'60%'}}>
+        <div
+            className='vendor-form-styles'
+            style={{ width: '60%' }}>
             <h2>Login</h2>
             {error && <p>{error}</p>}
             <form onSubmit={handleSubmit}>
@@ -91,7 +91,7 @@ const LoginForm = ({ setCreateAccount }) => {
                         onClick={handleClick}
                         onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect
                         onMouseLeave={(e) => e.target.style.color = '#007BFF'}  // Mouse out effect
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', color: "#007BFF" }}
                     >
                         Sign Up
                     </p>

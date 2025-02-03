@@ -270,7 +270,7 @@ const ManualSignUp = () => {
                 >
                     <h2
                         className='vendor-heading-styles'
-                    >Create Your Business Account</h2>
+                    >{"Create a "}<strong>Vend</strong>{" Account"}</h2>
                     <form onSubmit={handleSubmit}>
                         <div
                             className='vendor-input-group-styles'>
