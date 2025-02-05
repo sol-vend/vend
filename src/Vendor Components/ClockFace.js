@@ -7,9 +7,7 @@ const ClockFace = ({ width, height, isOpen, setSelectedWeekdays, selectedWeekday
         minute: null,
         amPm: 'AM'
     });
-    const [chooseTime, setChooseTime] = useState(true);
     const [hovered, setHovered] = useState(false);
-    const [sameHours, setSameHours] = useState(true);
     const handleMouseEnter = () => setTimeout(() => setHovered(true), 250);
     const handleMouseLeave = () => setTimeout(() => setHovered(false), 500);
     const [currentSelectedWeekdays, setCurrentSelectedWeekdays] = useState([]);

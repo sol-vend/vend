@@ -6,7 +6,6 @@ const PaypalOptions = ({ parentSetWalletAddress }) => {
         isAddressValid: false
     });
 
-    console.log(walletAddressDatas.walletAddress);
     const handleWalletAddressChange = (e) => {
         const address = e.target.value;
         const solanaAddressRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
@@ -38,7 +37,6 @@ const PaypalOptions = ({ parentSetWalletAddress }) => {
 
     useEffect(() => {
         if (walletAddressDatas.isAddressValid) {
-            console.log('valid');
             parentSetWalletAddress(walletAddressDatas.walletAddress);
         } else {
             parentSetWalletAddress(false);
@@ -47,7 +45,7 @@ const PaypalOptions = ({ parentSetWalletAddress }) => {
 
     return (
         <div>
-            <div style={{ width: '300px' }}>
+            <div className='vendor-input-field-styles'>
                 <label htmlFor="walletAddress" style={{ display: 'block', fontWeight: 'bold', marginTop: '15px' }}>
                     Wallet Address:
                 </label>

@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import LoginForm from './LoginForm';
 import ManualSignUp from './ManualSignUp';
-import { VENDOR_BANNER_IMG } from '../Components/Shared';
 
 const VendorApp = () => {
     document.body.classList.add('vendor');
     const [createAccount, setCreateAccount] = useState(false);
 
     useEffect(() => {
-        console.log(createAccount);
     }, [createAccount])
 
     return (

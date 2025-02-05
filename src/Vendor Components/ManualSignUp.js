@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../Components/Shared';
-import {
-    passwordToggleBtnHoverStyles,
-} from './ManualSignUpStyles';  // Import the styles
 import { socialPlatforms } from './Shared';
 import LocationComponent from './LocationComponent';
 import CustomDropdown from './CustomDropdown';
@@ -44,6 +41,7 @@ const ManualSignUp = () => {
     const [isUserExists, setIsUserExists] = useState(false);
     const [resetPasswordRequest, setResetPasswordRequest] = useState(false);
     const [passwordComplexityMessage, setPasswordComplexityMessage] = useState('');
+    const [allowEmailProceed, setAllowEmailProceed] = useState(false);
     const [submitResponse, setSubmitResponse] = useState({
         result: null,
         doProceed: false,
@@ -73,10 +71,6 @@ const ManualSignUp = () => {
         };
         captureMetadata();  // Make sure the function is called
     }, [formData.ipAddress]);  // Optionally add dependencies if needed
-
-    useEffect(() => {
-        console.log(submitResponse);
-    }, [submitResponse])
 
     const getIpAddress = async () => {
         try {
@@ -136,11 +130,15 @@ const ManualSignUp = () => {
                         });
                         const data = await response.json();
                         setIsUserExists(data.result);
+                        setAllowEmailProceed(!data.result)
                     } catch (error) {
                         console.error(error);
                     }
                 }
                 checkUserExistStatus();
+            } else {
+                setIsUserExists(false);
+                setAllowEmailProceed(false);
             }
         }
     }
@@ -158,7 +156,6 @@ const ManualSignUp = () => {
             const hasUpperCase = /[A-Z]/.test(password);
             const hasNumber = /\d/.test(password);
             const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
             if (password.length < minLength) {
                 return 'Password must be at least 8 characters long.';
             }
@@ -184,11 +181,9 @@ const ManualSignUp = () => {
     const formatPhoneNumber = (value) => {
         const cleaned = value.replace(/\D/g, '');
         const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
-
         if (match) {
             return `(${match[1]}) ${match[2]}-${match[3]}`;
         }
-
         return value;
     };
 
@@ -296,14 +291,16 @@ const ManualSignUp = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (passwordComplexityMessage !== "") {
-            console.log(passwordComplexityMessage);
             setSubmitFailureMessage("Your password must contain a minimum of 8 characters. It must have at least one UPPERCASE and one lowercase letter, a number and a special character.")
         }
         else if (formData.initialPassword !== formData.confirmationPassword) {
             setSubmitFailureMessage("It looks like your passwords do not match. Fix this and then come back and see me.")
         } else if (formData.confirmationPassword.length === 0) {
             setSubmitFailureMessage("You must confirm your password to continue.")
-        } else {
+        } else if (!allowEmailProceed) {
+            setSubmitFailureMessage("It looks like there's a problem with your email address. Fix this and let's try again.")
+        }
+        else {
             setSubmitResponse({
                 result: null,
                 doProceed: true,
@@ -332,7 +329,7 @@ const ManualSignUp = () => {
                         <h2
                             className='vendor-heading-styles'
                         >{"Welcome to "}<strong>Vend</strong></h2>
-                        <p>Powered by <SolanaLogoSvg/></p>
+                        <p>Powered by <SolanaLogoSvg /></p>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div
@@ -784,18 +781,24 @@ const ManualSignUp = () => {
                                         <p>{submitFailureMessage}</p>
                                     </div>
                                 }
+                                {!allowEmailProceed &&
+                                    <div className='signup-submission-failure-wrapper'>
+                                        <p>{submitFailureMessage}</p>
+                                    </div>
+                                }
                             </div>
                         }
                         {submitResponse.isApproved &&
                             <p
                                 className='manual-signup-edits-info'
-                            >Need to make some edits or additions? No problem.</p>
+                            >Need to make some edits or additions? No problem. This can be done now or later in our Employer Panel</p>
                         }
                         {submitResponse.isApproved &&
                             <button
                                 className='payment-info-back-button'
                                 style={{
-                                    left: '90%'
+                                    marginLeft: '90%',
+                                    minWidth: '60px'
                                 }}
                                 onClick={updateSubmitProceedResponse}
                             >

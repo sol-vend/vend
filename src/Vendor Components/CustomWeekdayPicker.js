@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import CustomTimePicker from './CustomTimePicker';
 import ClockFace from './ClockFace';
 
 const CustomWeekdayPicker = ({ onWeekdayChange }) => {
@@ -12,7 +11,6 @@ const CustomWeekdayPicker = ({ onWeekdayChange }) => {
         friday: { label: 'Fri', isSelected: false, open: false, close: false },
         saturday: { label: 'Sat', isSelected: false, open: false, close: false },
     });
-    console.log(selectedWeekdays);
     const handleDayChange = (day) => {
         setSelectedWeekdays((prevState) => ({
             ...prevState,

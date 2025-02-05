@@ -22,14 +22,15 @@ const CustomDropdownInput = ({ options, displayKeys, imageKey, placeholderValue,
 
     const handleSelect = (option) => {
         setSelectedValue(option);
+        setter(option);
         setInputValue(option[displayKeys[0]]);
         setIsOpen(false);
     };
-
+/*
     useEffect(() => {
         setter(selectedValue);
     }, [selectedValue])
-
+*/
     return (
         <div style={{ position: 'relative', width: '100%' }}>
             <div

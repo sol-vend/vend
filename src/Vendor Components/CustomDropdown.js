@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const CustomDropdown = ({ options, selectedValue, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef(null);  // Ref for dropdown container
+    const dropdownRef = useRef(null);  
 
     const handleToggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -13,14 +13,12 @@ const CustomDropdown = ({ options, selectedValue, onSelect }) => {
         setIsOpen(false); 
     };
 
-    // Close the dropdown if user clicks outside of the dropdown
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setIsOpen(false);
         }
     };
 
-    // Set up event listener on mount and clean up on unmount
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {

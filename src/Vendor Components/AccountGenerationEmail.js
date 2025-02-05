@@ -110,9 +110,7 @@ const AccountGenerationEmail = ({ userEmailAddress, businessName }) => {
             emailAddress: userEmailAddress,
             htmlContent: JSON.stringify(htmlContent),
         };
-        console.log(formData);
         await axios.post(`${API_URL}/api/send_confirmation_email`, formData).then(response => {
-            console.log(response);
             setAccountCreationStatus(response.data)
         })
             .catch(error => {
@@ -131,7 +129,6 @@ const AccountGenerationEmail = ({ userEmailAddress, businessName }) => {
         handleSubmit();
         setIsLoad(false);
     }
-    console.log(accountCreationStatus);
     return (
         <div>
             {accountCreationStatus.doContinue &&

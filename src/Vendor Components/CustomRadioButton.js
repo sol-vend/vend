@@ -10,6 +10,7 @@ const CustomRadioButton = ({
 }) => {
 
     return (
+        <div style={checked ? {border: "solid black 1px"} : {}} className='vendor-input-radio-button-wrapper'>
         <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', marginLeft: '10px', gap: '15px' }}>
             <input
                 type="radio"
@@ -19,46 +20,20 @@ const CustomRadioButton = ({
                 style={{ display: 'none' }} // Hide the default radio button
             />
             <span
-                style={{
-                    boxShadow: "#2d4e8559 -4px 3px 20px 1px",
-                    borderRadius: "50%",
-                    width: "20px",
-                    height: "20px"
-                }}
+                className='radio-button-outline-wrapper'
             >
                 <span
-                    className="custom-radio-btn"
-                    style={{
-                        width: size,
-                        height: size,
-                        borderRadius: '50%',
-                        border: `2px solid ${color}`,
-                        backgroundColor: 'white',
-                        display: 'inline-block',
-                        position: 'relative',
-                        transition: 'background-color 0.3s ease, border 0.3s ease',
-                        cursor: 'pointer',
-                        boxShadow: "inset #d8d7d7 -5px 5px 10px 1px"
-                    }}
+                    className="radio-button-inline-wrapper"
                 >
                     {checked && (
-                        <span
-                            style={{
-                                content: "",
-                                position: 'absolute',
-                                top: '4px',
-                                left: '4px',
-                                width: `calc(${size} - 8px)`,
-                                height: `calc(${size} - 8px)`,
-                                borderRadius: '20%',
-                                background: "linear-gradient(45deg, #dc1fff, #0373fff2, transparent)"
-                            }}
+                        <span className='custom-radio-button-inner-span-checked'
                         />
                     )}
                 </span>
             </span>
             {label}
         </label>
+        </div>
     );
 };
 

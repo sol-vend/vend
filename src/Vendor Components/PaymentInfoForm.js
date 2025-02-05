@@ -2,24 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { API_URL } from '../Components/Shared';
 import {
   formStyles,
-  inputGroupStyles,
-  inputFieldStyles,
-  passwordContainerStyles,
   passwordToggleBtnStyles,
   passwordToggleBtnHoverStyles,
-  buttonStyles,
-  buttonHoverStyles,
-  socialMediaInputsStyles,
-  addButtonStyles,
-  removeButtonStyles,
-  submitButtonStyles,
-  headingStyles,
-  optionStyles,
-  imgStyles,
-  comboGroupStyles,
-  showHideStyles,
-  expansionWrapperStyles,
-  radioButtonInputStyles
+  headingStyles
 } from './ManualSignUpStyles';
 import PaypalOptions from './PaypalOptions';
 import CustomDropdownInput from './CustomDropdownInput';
@@ -27,14 +12,13 @@ import CustomRadioButton from './CustomRadioButton';
 import TutorialModal from './TutorialModal'
 import AccountGenerationEmail from './AccountGenerationEmail';
 
-const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormData }) => {
+const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData }) => {
   const initialTokenDisplayLimit = 50;
   const [paymentMethod, setPaymentMethod] = useState("paypal");
-  const [currency, setCurrency] = useState('');
   const [walletAddress, setWalletAddress] = useState(null);
   const [availableTokens, setAvailableTokens] = useState([]);
   const [tokenDisplayLimit, setTokenDisplayLimit] = useState(initialTokenDisplayLimit);
-  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [selectedPaymentCurrency, setSelectedPaymentCurrency] = useState();
   const [displayTutorial, setDisplayTutorial] = useState(false);
   const [signupComplete, setSignupComplete] = useState(false);
   const [bottomBannerWarning, setBottomBannerWarning] = useState('');
@@ -48,7 +32,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setAvailableTokens(data); // Set the fetched tokens to the state
+        setAvailableTokens(data);
       } catch (error) {
         console.error('Error fetching tokens:', error);
       }
@@ -59,29 +43,32 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
   }, []);
 
   useEffect(() => {
-    if (tokenDisplayLimit === initialTokenDisplayLimit)
-      setSelectedPayment(paymentMethod);
-  }, [availableTokens])
+    if (paymentMethod == 'paypal') {
+      setSelectedPaymentCurrency(getPaypalUsd());
+    }
+  }, [paymentMethod])
 
   useEffect(() => {
-    setPaymentMethod(selectedPayment);
-  }, [selectedPayment])
+    if (selectedPaymentCurrency === undefined) {
+      setSelectedPaymentCurrency(getPaypalUsd())
+    }
+  }, [availableTokens])
+
 
   const handlePostResponse = () => {
     if (walletAddress.length > 0) {
-      if (selectedPayment) {
+      if (selectedPaymentCurrency) {
         let now = new Date();
         now.setMinutes(now.getMinutes() + 15)
         const updatedFormData = {
           ...formData,
           vendorWalletAddress: walletAddress,
           vendorPaymentNetwork: 'Solana',
-          selectedPaymentMethod: paymentMethod == 'paypal' ? getPaypalUsd() : selectedPayment,
+          selectedPaymentMethod: selectedPaymentCurrency,
           isAccountVerified: false,
           verificationEmailExpiry: now.toISOString(),
           verificationPin: Math.floor(100000 + Math.random() * 900000)
         }
-        console.log(updatedFormData);
         const postData = async () => {
           try {
             const response = await fetch(`${API_URL}/api/initialize_user`, {
@@ -130,12 +117,10 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
 
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
-    setSelectedPayment(null);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log({ paymentMethod, currency, walletAddress });
   };
 
   const updateSubmitProceedResponseFalse = () => {
@@ -198,9 +183,8 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
               <form
                 onSubmit={handleSubmit}
               >
-                <div style={inputGroupStyles}>
+                <div className='vendor-input-field-styles'>
                   <div
-                    style={radioButtonInputStyles}
                   >
                     <CustomRadioButton
                       label="PayPal"
@@ -211,7 +195,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
                     />
                   </div>
                   <div
-                    style={radioButtonInputStyles}
+
                   >
                     <CustomRadioButton
                       label="Solana Wallet"
@@ -224,7 +208,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
                 </div>
 
                 {paymentMethod === 'paypal' && (
-                  <div style={inputGroupStyles}>
+                  <div className='vendor-input-field-styles'>
                     <label htmlFor="currency">Preferred Currency:</label>
                     <div
                       className='paypal-selected-div-input'
@@ -240,14 +224,14 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
                 )}
 
                 {paymentMethod === 'phantom' && (
-                  <div style={inputGroupStyles}>
+                  <div className='vendor-input-field-styles'>
                     <label htmlFor="currency">Preferred Token:</label>
                     <CustomDropdownInput
                       options={prioritizeMajors(availableTokens.slice(0, tokenDisplayLimit), 'usd')}
                       displayKeys={['name', 'symbol']}
                       imageKey={'logoURI'}
                       placeholderValue={'Enter coin address or select coin...'}
-                      setter={setSelectedPayment}
+                      setter={setSelectedPaymentCurrency}
                     />
                     <p className='vendor-payment-change-text'>
                       You can switch your payment method later if you change you mind.
@@ -257,7 +241,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
                 {paymentMethod &&
                   <PaypalOptions parentSetWalletAddress={setWalletAddress} />
                 }
-                <div style={inputGroupStyles}>
+                <div>
                   <button
                     type="submit"
                     className='vendor-submit-button-styles'
