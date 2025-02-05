@@ -733,18 +733,24 @@ th {
     width: 95%;
 }
 
-.vendor-add-button-styles, .payment-info-back-button {
+.vendor-add-button-styles,
+.payment-info-back-button {
     background-color: #007bff00;
     color: #333;
     border: none;
     padding: 8px;
-    font-size: 16px;
+    font-size: 12px;
     border-radius: 2px;
     cursor: pointer;
     border: solid black 1px;
     transition: background-color 0.3s ease;
     max-width: 100px;
     min-width: 70px;
+}
+
+.vendor-add-button-styles:disabled {
+    cursor: not-allowed;
+    opacity: 50%;
 }
 
 .vendor-add-button-styles:hover {
@@ -871,6 +877,25 @@ th {
     max-height: fit-content;
 }
 
+.vendor-form-header-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.vendor-form-header-wrapper p {
+    display: flex;
+    width: 50%;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0px;
+}
+
+.vendor-form-header-wrapper svg {
+    height: 28px;
+}
+
 .custom-dropdown-input-styles {
     padding: 12px 12px;
     border: 1px solid #ccc;
@@ -989,8 +1014,8 @@ th {
 }
 
 .payment-info-back-button {
-    width:10%;
-    margin-right:auto;
+    width: 10%;
+    margin-right: auto;
 }
 
 .payment-info-back-button:hover {
@@ -1532,7 +1557,7 @@ label {
     flex-direction: row-reverse;
     cursor: pointer;
     text-align: center;
-    max-height:40px;
+    max-height: 40px;
     max-width: 200px;
     margin-left: 5%;
 }
@@ -1550,22 +1575,24 @@ label {
 
 .joint-time-selection-time {
     overflow-y: auto;
-    width:5vw;
+    width: 5vw;
     padding-inline: 1vw;
 }
 
-.joint-time-selection:hover{
+.joint-time-selection:hover {
     border-color: white;
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
 }
 
-.joint-time-selection-time p:hover{
+.joint-time-selection-time p:hover {
     color: white;
     border-color: white;
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
     transform: scale(1.0125);
 }
-.clock-selection-selected, .payment-info-back-button:hover{
+
+.clock-selection-selected,
+.payment-info-back-button:hover {
     color: white;
     border-color: white;
     background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
@@ -1691,4 +1718,4 @@ div ::-webkit-scrollbar-thumb:hover {
     cursor: pointer;
 }
 
-/*# sourceMappingURL=main.ce3405d0.css.map*/
+/*# sourceMappingURL=main.1aebb804.css.map*/
