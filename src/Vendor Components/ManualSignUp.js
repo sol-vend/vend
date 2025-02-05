@@ -11,6 +11,7 @@ import PaymentInfoForm from './PaymentInfoForm';
 import CustomWeekdayPicker from './CustomWeekdayPicker';
 import CustomCheckbox from './CustomCheckbox';
 import PasswordToggle from './PasswordToggle';
+import SolanaLogoSvg from './SolanaLogoSvg';
 
 const ManualSignUp = () => {
     const [formData, setFormData] = useState({
@@ -40,6 +41,9 @@ const ManualSignUp = () => {
     const [showAddEmployees, setShowAddEmployees] = useState(false);
     const [passwordVerify, setPasswordVerify] = useState(false);
     const [submitFailureMessage, setSubmitFailureMessage] = useState(false);
+    const [isUserExists, setIsUserExists] = useState(false);
+    const [resetPasswordRequest, setResetPasswordRequest] = useState(false);
+    const [passwordComplexityMessage, setPasswordComplexityMessage] = useState('');
     const [submitResponse, setSubmitResponse] = useState({
         result: null,
         doProceed: false,
@@ -104,8 +108,8 @@ const ManualSignUp = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'confirmationPassword'){
-            if (submitFailureMessage){
+        if (name === 'confirmationPassword') {
+            if (submitFailureMessage) {
                 setSubmitFailureMessage(false);
             }
         }
@@ -115,6 +119,32 @@ const ManualSignUp = () => {
         }));
     };
 
+    const handleEmailChange = (e) => {
+        handleChange(e)
+        const { name, value } = e.target;
+        if (value.length > 0) {
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (regex.test(value)) {
+                const checkUserExistStatus = async () => {
+                    try {
+                        const response = await fetch(`${API_URL}/api/user_in_database`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ emailAddress: value }),
+                        });
+                        const data = await response.json();
+                        setIsUserExists(data.result);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+                checkUserExistStatus();
+            }
+        }
+    }
+
     const handlePasswordChange = (e) => {
         const { name, value } = e.target;
         if (value.length > 0) {
@@ -122,6 +152,32 @@ const ManualSignUp = () => {
         } else {
             setPasswordVerify(false);
         }
+        const testPasswordComplexity = (password) => {
+            const minLength = 8;
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            if (password.length < minLength) {
+                return 'Password must be at least 8 characters long.';
+            }
+            if (!hasLowerCase) {
+                return 'Password must contain at least one lowercase letter.';
+            }
+            if (!hasUpperCase) {
+                return 'Password must contain at least one uppercase letter.';
+            }
+            if (!hasNumber) {
+                return 'Password must contain at least one number.';
+            }
+            if (!hasSpecialChar) {
+                return 'Password must contain at least one special character.';
+            }
+
+            return '';
+        }
+        setPasswordComplexityMessage(testPasswordComplexity(value));
         handleChange(e);
     }
 
@@ -239,7 +295,11 @@ const ManualSignUp = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (formData.initialPassword !== formData.confirmationPassword) {
+        if (passwordComplexityMessage !== "") {
+            console.log(passwordComplexityMessage);
+            setSubmitFailureMessage("Your password must contain a minimum of 8 characters. It must have at least one UPPERCASE and one lowercase letter, a number and a special character.")
+        }
+        else if (formData.initialPassword !== formData.confirmationPassword) {
             setSubmitFailureMessage("It looks like your passwords do not match. Fix this and then come back and see me.")
         } else if (formData.confirmationPassword.length === 0) {
             setSubmitFailureMessage("You must confirm your password to continue.")
@@ -268,9 +328,12 @@ const ManualSignUp = () => {
                 <div
                     className='vendor-form-styles'
                 >
-                    <h2
-                        className='vendor-heading-styles'
-                    >{"Create a "}<strong>Vend</strong>{" Account"}</h2>
+                    <div className='vendor-form-header-wrapper'>
+                        <h2
+                            className='vendor-heading-styles'
+                        >{"Welcome to "}<strong>Vend</strong></h2>
+                        <p>Powered by <SolanaLogoSvg/></p>
+                    </div>
                     <form onSubmit={handleSubmit}>
                         <div
                             className='vendor-input-group-styles'>
@@ -279,10 +342,25 @@ const ManualSignUp = () => {
                                 type="email"
                                 name="emailAddress"
                                 value={formData.emailAddress}
-                                onChange={handleChange}
+                                onChange={handleEmailChange}
                                 required
                                 className='vendor-input-field-styles'
                             />
+                            {isUserExists &&
+                                <div>
+                                    <p className='payment-info-form-bottom-banner-warning' style={{ justifyContent: 'flex-start', fontSize: '12px' }}>
+                                        An account with this email address already exists.
+                                    </p>
+                                    <p
+                                        onClick={() => { setResetPasswordRequest(true) }}
+                                        onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect
+                                        onMouseLeave={(e) => e.target.style.color = '#007BFF'}  // Mouse out effect
+                                        style={{ cursor: 'pointer', color: "#007BFF" }}
+                                    >
+                                        Reset your password?
+                                    </p>
+                                </div>
+                            }
                         </div>
                         <div
                             className='vendor-input-group-styles'>
@@ -308,6 +386,11 @@ const ManualSignUp = () => {
                                         </div>
                                     </div>
                                 </div>
+                                {passwordComplexityMessage && formData.initialPassword &&
+                                    <div>
+                                        <p className='payment-info-form-bottom-banner-warning' style={{ justifyContent: 'flex-start', fontSize: '12px' }}>{passwordComplexityMessage}</p>
+                                    </div>
+                                }
                             </div>
                             {passwordVerify &&
                                 <div>
@@ -335,9 +418,7 @@ const ManualSignUp = () => {
                                 </div>
                             }
                             {formData.initialPassword !== formData.confirmationPassword &&
-                                <div>
-                                    Passwords do not match!
-                                </div>
+                                <p className='payment-info-form-bottom-banner-warning' style={{ justifyContent: 'flex-start', fontSize: '12px' }}>Passwords do not match!</p>
                             }
                         </div>
                         <div
@@ -499,6 +580,7 @@ const ManualSignUp = () => {
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 paddingInline: '5px',
+                                                width: '100px'
                                             }}
                                         >
                                             Business Hours
@@ -536,23 +618,25 @@ const ManualSignUp = () => {
                                         className='vendor-input-field-styles'
                                     />
                                 </div>
-
-                                <DivExpandButton
-                                    onClick={(e) => setShowHours(!showHours)}
-                                    children={
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                width: '15vw'
-                                            }}
-                                        >
-                                            Business Hours
-                                            <span>-</span>
-                                        </div>
-                                    }
-                                >
-                                </DivExpandButton>
+                                <div style={{ boxShadow: "#cbcbcbc2 0px -0.5px 0px 0px" }}>
+                                    <DivExpandButton
+                                        onClick={(e) => setShowHours(!showHours)}
+                                        children={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    paddingInline: '5px',
+                                                    width: '100px',
+                                                }}
+                                            >
+                                                Business Hours
+                                                <span>-</span>
+                                            </div>
+                                        }
+                                    >
+                                    </DivExpandButton>
+                                </div>
                             </div>
                         }
                         {!showAddEmployees &&
@@ -563,7 +647,9 @@ const ManualSignUp = () => {
                                         <div
                                             style={{
                                                 display: 'flex',
-                                                alignItems: 'center'
+                                                alignItems: 'center',
+                                                paddingInline: '5px',
+                                                width: '100px'
                                             }}
                                         >
                                             Add Employees
@@ -637,19 +723,18 @@ const ManualSignUp = () => {
                                         <button
                                             name='isLocked'
                                             className='vendor-add-button-styles'
+                                            disabled={employee.name ? false : true}
                                             style={{
                                                 ...{
                                                     marginLeft: 'auto',
-                                                    maxWidth: '25px',
-                                                    maxHeight: '5vh',
-                                                    marginTop: 'auto'
+                                                    maxHeight: '10vh',
                                                 }
                                             }}
                                             onClick={(e) =>
                                                 handleEmployeeChange(index, e)
                                             }
                                         >
-                                            {employee.isLocked ? 'Unlock' : 'Lock'}
+                                            {!employee.name ? 'Enter Name' : employee.isLocked ? 'Edit Employee Details' : 'Generate Login Pin'}
                                         </button>
 
                                     </div>
@@ -657,12 +742,12 @@ const ManualSignUp = () => {
                                 <button
                                     type="button"
                                     onClick={handleAddEmployee}
-                                    className='vendor-add-button-styles'
+                                    className={'vendor-add-button-styles'}
                                 >
-                                    Add Employee
+                                    +
                                 </button>
                                 <div
-                                    className='vendor-input-group-styles'
+                                    style={{ boxShadow: "#cbcbcbc2 0px -0.5px 0px 0px" }}
                                 >
 
                                     <DivExpandButton
@@ -672,7 +757,8 @@ const ManualSignUp = () => {
                                                 style={{
                                                     display: 'flex',
                                                     alignItems: 'center',
-                                                    width: '15vw'
+                                                    paddingInline: '5px',
+                                                    width: '100px'
                                                 }}
                                             >
                                                 Add Employees <span>-</span>
@@ -684,15 +770,20 @@ const ManualSignUp = () => {
                             </div>
                         }
                         {!submitResponse.isApproved &&
-                        <div>
-                            <button type="submit" className='vendor-submit-button-styles'>
-                                Submit
-                            </button>
-                            {formData.initialPassword !== formData.confirmationPassword &&
-                                <div className='signup-submission-failure-wrapper'>
-                                    <p>{submitFailureMessage}</p>
-                                </div>
-                            }
+                            <div>
+                                <button type="submit" className='vendor-submit-button-styles'>
+                                    Submit
+                                </button>
+                                {formData.initialPassword !== formData.confirmationPassword &&
+                                    <div className='signup-submission-failure-wrapper'>
+                                        <p>{submitFailureMessage}</p>
+                                    </div>
+                                }
+                                {passwordComplexityMessage !== "" &&
+                                    < div className='signup-submission-failure-wrapper'>
+                                        <p>{submitFailureMessage}</p>
+                                    </div>
+                                }
                             </div>
                         }
                         {submitResponse.isApproved &&
@@ -712,14 +803,15 @@ const ManualSignUp = () => {
                             </button>
                         }
                     </form>
-                    {!submitResponse.doProceed && !submitResponse.isApproved && submitResponse.hasAttempted &&
+                    {
+                        !submitResponse.doProceed && !submitResponse.isApproved && submitResponse.hasAttempted &&
                         <div>
                             <p>{"There was an issue with adding your account.  This is most likely a problem with our servers.  Please contact support."}</p>
                         </div>
                     }
-                </div>
+                </div >
             )}
-        </div>
+        </div >
     );
 };
 

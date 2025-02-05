@@ -38,6 +38,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
   const [displayTutorial, setDisplayTutorial] = useState(false);
   const [signupComplete, setSignupComplete] = useState(false);
   const [bottomBannerWarning, setBottomBannerWarning] = useState('');
+  const [isRepeatSignup, setIsRepeatSignup] = useState(false);
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -93,7 +94,13 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
 
             if (response.ok) {
               const result = await response.json();
-              setSignupComplete(true);
+              if (result.status) {
+                if (result.status.doContinue) {
+                  setSignupComplete(true);
+                } else {
+                  setIsRepeatSignup(true);
+                }
+              }
             } else {
               setSubmitResponse({
                 result: null,
@@ -158,120 +165,139 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setFormD
     return (availableTokens.filter((token) => token.address == "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo")[0]);
   }
 
-  return (
-    <div>
-      {!signupComplete &&
-        <div>
+  if (isRepeatSignup) {
+    return (
+      <div className='account-exists-container'>
+        <div className="account-exists-message">
+          <h2>Account Already Exists</h2>
+          <p>
+            It looks like an account with this email address already exists.
+            If you've forgotten your password, you can reset it.
+          </p>
+          <p>
+            <a href="/reset-password" className="reset-password-link">
+              Reset your password here.
+            </a>
+          </p>
+        </div>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        {!signupComplete &&
           <div>
-            {displayTutorial &&
-              <TutorialModal keepOpen={setDisplayTutorial} />
-            }
-          </div>
-
-          <div style={formStyles}>
-            <h3 style={headingStyles}>Set Up Your Payment Information</h3>
-            <form
-              onSubmit={handleSubmit}
-            >
-              <div style={inputGroupStyles}>
-                <div
-                  style={radioButtonInputStyles}
-                >
-                  <CustomRadioButton
-                    label="PayPal"
-                    value="paypal"
-                    checked={paymentMethod === 'paypal'}
-                    onChange={handlePaymentMethodChange}
-                    color="#1c74bb" // Custom color
-                  />
-                </div>
-                <div
-                  style={radioButtonInputStyles}
-                >
-                  <CustomRadioButton
-                    label="Solana Wallet"
-                    value="phantom"
-                    checked={paymentMethod === 'phantom'}
-                    onChange={handlePaymentMethodChange}
-                    color="#1c74bb" // Custom color
-                  />
-                </div>
-              </div>
-
-              {paymentMethod === 'paypal' && (
-                <div style={inputGroupStyles}>
-                  <label htmlFor="currency">Preferred Currency:</label>
-                  <div
-                    className='paypal-selected-div-input'
-                  >PayPal USD</div>
-                  <div>
-                    <button
-                      onClick={() => setDisplayTutorial(true)}
-                      style={relativePasswordButtonStyles}
-                      onMouseOver={(e) => (e.target.style.color = passwordToggleBtnHoverStyles.color)}
-                      onMouseOut={(e) => (e.target.style.color = '#007bff')}
-                    >Need some help getting integrating with PayPal?</button></div>
-                </div>
-              )}
-
-              {paymentMethod === 'phantom' && (
-                <div style={inputGroupStyles}>
-                  <label htmlFor="currency">Preferred Token:</label>
-                  <CustomDropdownInput
-                    options={prioritizeMajors(availableTokens.slice(0, tokenDisplayLimit), 'usd')}
-                    displayKeys={['name', 'symbol']}
-                    imageKey={'logoURI'}
-                    placeholderValue={'Enter coin address or select coin...'}
-                    setter={setSelectedPayment}
-                  />
-                  <p className='vendor-payment-change-text'>
-                    You can switch your payment method later if you change you mind.
-                  </p>
-                </div>
-              )}
-              {paymentMethod &&
-                <PaypalOptions parentSetWalletAddress={setWalletAddress} />
-              }
-              <div style={inputGroupStyles}>
-                <button
-                  type="submit"
-                  className='vendor-submit-button-styles'
-                  disabled={walletAddress ? false : true}
-                  onClick={() => handlePostResponse()}
-                >
-                  {walletAddress ? "Add Payment Info" : "Wallet Address Required"}
-                </button>
-              </div>
-            </form>
             <div>
-              {bottomBannerWarning != "" &&
+              {displayTutorial &&
+                <TutorialModal keepOpen={setDisplayTutorial} />
+              }
+            </div>
+
+            <div style={formStyles}>
+              <h3 style={headingStyles}>Set Up Your Payment Information</h3>
+              <form
+                onSubmit={handleSubmit}
+              >
+                <div style={inputGroupStyles}>
+                  <div
+                    style={radioButtonInputStyles}
+                  >
+                    <CustomRadioButton
+                      label="PayPal"
+                      value="paypal"
+                      checked={paymentMethod === 'paypal'}
+                      onChange={handlePaymentMethodChange}
+                      color="#1c74bb" // Custom color
+                    />
+                  </div>
+                  <div
+                    style={radioButtonInputStyles}
+                  >
+                    <CustomRadioButton
+                      label="Solana Wallet"
+                      value="phantom"
+                      checked={paymentMethod === 'phantom'}
+                      onChange={handlePaymentMethodChange}
+                      color="#1c74bb" // Custom color
+                    />
+                  </div>
+                </div>
+
+                {paymentMethod === 'paypal' && (
+                  <div style={inputGroupStyles}>
+                    <label htmlFor="currency">Preferred Currency:</label>
+                    <div
+                      className='paypal-selected-div-input'
+                    >PayPal USD</div>
+                    <div>
+                      <button
+                        onClick={() => setDisplayTutorial(true)}
+                        style={relativePasswordButtonStyles}
+                        onMouseOver={(e) => (e.target.style.color = passwordToggleBtnHoverStyles.color)}
+                        onMouseOut={(e) => (e.target.style.color = '#007bff')}
+                      >Need some help getting integrating with PayPal?</button></div>
+                  </div>
+                )}
+
+                {paymentMethod === 'phantom' && (
+                  <div style={inputGroupStyles}>
+                    <label htmlFor="currency">Preferred Token:</label>
+                    <CustomDropdownInput
+                      options={prioritizeMajors(availableTokens.slice(0, tokenDisplayLimit), 'usd')}
+                      displayKeys={['name', 'symbol']}
+                      imageKey={'logoURI'}
+                      placeholderValue={'Enter coin address or select coin...'}
+                      setter={setSelectedPayment}
+                    />
+                    <p className='vendor-payment-change-text'>
+                      You can switch your payment method later if you change you mind.
+                    </p>
+                  </div>
+                )}
+                {paymentMethod &&
+                  <PaypalOptions parentSetWalletAddress={setWalletAddress} />
+                }
+                <div style={inputGroupStyles}>
+                  <button
+                    type="submit"
+                    className='vendor-submit-button-styles'
+                    disabled={walletAddress ? false : true}
+                    onClick={() => handlePostResponse()}
+                  >
+                    {walletAddress ? "Add Payment Info" : "Wallet Address Required"}
+                  </button>
+                </div>
+              </form>
+              <div>
+                {bottomBannerWarning != "" &&
+                  <div
+                    className='payment-info-form-bottom-banner-warning-wrapper'
+                  >
+                    <h2
+                      className='payment-info-form-bottom-banner-warning'
+                    >{bottomBannerWarning}</h2>
+                  </div>
+                }
+              </div>
+              {submitResponse.doProceed &&
                 <div
-                  className='payment-info-form-bottom-banner-warning-wrapper'
+                  className='payment-info-back-button'
+                  onClick={updateSubmitProceedResponseFalse}
                 >
-                  <h2
-                    className='payment-info-form-bottom-banner-warning'
-                  >{bottomBannerWarning}</h2>
+                  {"<---"}
                 </div>
               }
             </div>
-            {submitResponse.doProceed &&
-              <div
-                className='payment-info-back-button'
-                onClick={updateSubmitProceedResponseFalse}
-              >
-                {"<---"}
-              </div>
-            }
           </div>
-        </div>
-      }
-      {signupComplete &&
-        <div>
-          <AccountGenerationEmail userEmailAddress={formData.emailAddress} businessName={formData.businessName}/>
-        </div>
-      }
-    </div>
-  );
-};
+        }
+        {signupComplete &&
+          <div>
+            <AccountGenerationEmail userEmailAddress={formData.emailAddress} businessName={formData.businessName} />
+          </div>
+        }
+      </div>
+    );
+  };
+}
 
 export default PaymentInfoForm;

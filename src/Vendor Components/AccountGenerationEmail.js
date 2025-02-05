@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactDOMServer from 'react-dom/server'; // Import the ReactDOMServer module
 import { API_URL } from '../Components/Shared';
 import LogoSvg from './LogoSvg';
 
-const AccountGenerationEmail = ({userEmailAddress, businessName}) => {
+const AccountGenerationEmail = ({ userEmailAddress, businessName }) => {
+    const [accountCreationStatus, setAccountCreationStatus] = useState({ loading: true });
+    const [isLoad, setIsLoad] = useState(true);
 
     const introductoryMessage = `
     Solana offers high-speed peer-to-peer payments through its innovative blockchain technology, 
@@ -18,7 +20,7 @@ const AccountGenerationEmail = ({userEmailAddress, businessName}) => {
     Through PayPal's interface, this can easily be exchanged for dollars. 
     `;
 
-    const emailConfirmationMessage = `Congratulations ${businessName ? businessName : userEmailAddress} - your account has been created!
+    const emailConfirmationMessage = `Congratulations! Your account has been created!
     You can click the link below to continue to our Point of Sale Interface and finish setting up your account.  We have developed this with simplicity in mind and our hope is that you can personalize your interface.  
     At VEND, we want you to be able to be a part of this experience.  If you want to keep it basic, keep it basic, if you want to make it your own, by all means.  We are here to support you and we thank you for your interest in our product!`;
 
@@ -104,32 +106,87 @@ const AccountGenerationEmail = ({userEmailAddress, businessName}) => {
 
     const handleSubmit = async (e) => {
         const htmlContent = createHTMLContent();
-
         const formData = {
             emailAddress: userEmailAddress,
             htmlContent: JSON.stringify(htmlContent),
         };
         console.log(formData);
-        try {
-            const response = await axios.post(`${API_URL}/api/send_confirmation_email`, formData);
-            console.log('Email request sent:', response.data);
-        } catch (error) {
-            console.error('Error sending email request:', error);
-        }
+        await axios.post(`${API_URL}/api/send_confirmation_email`, formData).then(response => {
+            console.log(response);
+            setAccountCreationStatus(response.data)
+        })
+            .catch(error => {
+                if (error.response) {
+                    try {
+                        setAccountCreationStatus({ error: error.response.data.error });
+                    } catch {
+                        setAccountCreationStatus({ error: "An error occurred before account creation." });
+                    }
+                } else {
+                    setAccountCreationStatus({ error: "An error occurred before account creation." });
+                }
+            })
     };
-    handleSubmit();
+    if (isLoad) {
+        handleSubmit();
+        setIsLoad(false);
+    }
+    console.log(accountCreationStatus);
     return (
-        <div className="success-container">
-            <div className="success-message-box">
-                <h2 className="success-heading">Signup Successful!</h2>
-                <p className="success-message">
-                    Congratulations! Your signup was successful.
-                </p>
-                <p className="success-message">
-                    A verification email has been sent to your email address. Please check your inbox (and spam folder) for a link to verify your account and complete the registration process.
-                </p>
-                <p className="success-footer">Thank you for joining us!</p>
-            </div>
+        <div>
+            {accountCreationStatus.doContinue &&
+                <div className="success-container">
+                    <div className="success-message-box">
+                        <h2 className="success-heading">Signup Successful!</h2>
+                        <p className="success-message">
+                            Congratulations! Your signup was successful.
+                        </p>
+                        <p className="success-message">
+                            A verification email has been sent to your email address. Please check your inbox (and spam folder) for a link to verify your account and complete the registration process.
+                        </p>
+                        <p className="success-footer">Thank you for joining us!</p>
+                    </div>
+                </div>
+            }
+            {!accountCreationStatus.doContinue &&
+                <div className='account-exists-container'>
+                    <div className="account-exists-message">
+                        <h2>Account Already Exists</h2>
+                        <p>
+                            It looks like an account with this email address already exists.
+                            If you've forgotten your password, you can reset it.
+                        </p>
+                        <p>
+                            <a href="/reset-password" className="reset-password-link">
+                                Reset your password here.
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            }
+            {accountCreationStatus.error &&
+                <div className='server-error-container'>
+                    <div className="server-error-message">
+                        <h2>Oops! Something Went Wrong</h2>
+                        <p>
+                            {accountCreationStatus.error}
+                        </p>
+                        <p>
+                            Please try again later. If the issue persists, contact support.
+                        </p>
+                    </div>
+                </div>
+            }
+            {accountCreationStatus.loading &&
+                <div className="modal-overlay" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="modal">
+                        <div className="loading-dialog">
+                            <p>Loading...</p>
+                            <div className="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     )
 };

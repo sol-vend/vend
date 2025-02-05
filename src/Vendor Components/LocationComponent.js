@@ -39,10 +39,10 @@ const LocationComponent = () => {
 
     return (
         <div>
-            {error && <p>{error}</p>}
+            {error && <p></p>}
             {cityState ? (
                 <p>
-                    {`${cityState.city}, ${cityState.state}`}
+                    {cityState.city !== undefined ? `${cityState.city}, ${cityState.state}` : `${cityState.state}`}
                 </p>
             ) : (
                 <></>

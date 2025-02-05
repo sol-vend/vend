@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PasswordToggle from './PasswordToggle';
+import axios from 'axios';
+import { API_URL } from '../Components/Shared';
 
 const LoginForm = ({ setCreateAccount }) => {
     const [username, setUsername] = useState('');
@@ -25,10 +27,29 @@ const LoginForm = ({ setCreateAccount }) => {
             setError('Both fields are required.');
             return;
         }
+        const postLoginData = async () => {
+            try {
+                const response = await axios.post(`${API_URL}/login`, {
+                    emailAddress: username,
+                    password: password
+                });
 
+                if (response.status >= 200 && response.status < 300) {
+                    console.log('Login successful:', response.data);
+                    if (response.data.success) {
+                        const token = response.data.authToken;
+                        localStorage.setItem('authToken', token);
+                    } else {
+                        console.log('Login failed:', response.data.message);
+                    }
+                } else {
+                    console.error('Unexpected status code:', response.status);
+                }
+            } catch (error) {
+                console.error('Error during login:', error.response ? error.response.data : error.message);
+            }
+        };
         setError('');
-        // Handle form submission logic here (e.g., API call)
-        console.log('Form submitted with', { username, password });
     };
     return (
         <div
