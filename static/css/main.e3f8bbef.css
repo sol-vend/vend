@@ -7,6 +7,9 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }
 
 
@@ -523,8 +526,8 @@ th {
   max-width: 15%;
 }
 
-.copy-wrapper div{
-  color:white;
+.copy-wrapper div {
+  color: white;
   background: black;
   box-shadow: #454545 2px 2px 2px;
   padding: 5px;
@@ -536,13 +539,17 @@ th {
   display: flex;
   justify-content: space-evenly;
 }
-
-
 @media screen and (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
     .vendor-form-styles {
         padding: 20px;
         max-width: 100%;
         margin: 10px;
+        max-height: 70vh;
+        overflow: auto;
     }
 
     .vendor-password-container-styles {
@@ -634,9 +641,11 @@ th {
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background: linear-gradient(45deg, #ffffff, #ffffff0b);
     margin-bottom: 20px;
     margin-top: 20px;
+    max-height: 100vh;
+    overflow: auto;
 }
 
 .vendor-input-group-styles {
@@ -863,7 +872,7 @@ th {
     transition: all 0.5s ease-in-out
 }
 
-.vendor-expansion-wrapper-styles span {
+.vendor-expansion-wrapper-styles .vendor-show-hide-styles span {
     position: absolute;
     top: -2px;
     right: 0px;
@@ -889,7 +898,20 @@ th {
     align-content: center;
     align-items: center;
     justify-content: center;
-    margin-top: 0px;
+    margin-top: -.5em;
+    border: solid black 1px;
+    border-radius: 2px;
+}
+
+.vendor-employee-pin-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    height: 100%;
+    border-left: inset #456eff 5px;
+    border-top-left-radius: 45%;
+    border-bottom-left-radius: 20%;
+    padding-top:5px;
+    padding-bottom: 5px;
 }
 
 .vendor-form-header-wrapper svg {
@@ -1014,8 +1036,12 @@ th {
 }
 
 .payment-info-back-button {
-    width: 10%;
+    max-width: 20px;
     margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
 }
 
 .payment-info-back-button:hover {
@@ -1083,14 +1109,16 @@ th {
 }
 
 .vendor-body-background {
-    z-index: -100;
-    opacity: 1;
     position: fixed;
-    width: 100%;
-    height: auto;
-    margin: 0px;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
+    z-index: -1
+}
+
+.vendor-body-background svg {
+    position: relative;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .custom-dropdown-option-wrapper {
@@ -1630,6 +1658,75 @@ div ::-webkit-scrollbar-thumb:hover {
     background-color: #555;
     /* Darker thumb color when hovered */
 }
+
+.custom-radio-button-inner-span-checked {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(10px);
+    height: calc(10px);
+    transform: rotateZ(45deg);
+    border-radius: 2%;
+    background: linear-gradient(45deg, rgb(154 0 182), rgb(92 111 204), #69e0a6);
+}
+
+.vendor-input-radio-button-wrapper {
+    padding-block: 10px;
+    border: solid rgb(197 195 195 / 76%) 0.5px;
+    border-radius: 2px;
+    max-width: 20vw;
+    box-shadow: rgba(240, 248, 255, 0.56) -4px -2px 18px 11px;
+    margin-bottom: 10px;
+}
+
+.radio-button-outline-wrapper {
+    box-shadow: rgb(45 78 133 / 20%) 0px 0px 10px 2px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+}
+
+.radio-button-inline-wrapper {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid rgb(9, 34, 55);
+    background-color: white;
+    display: inline-block;
+    position: relative;
+    transition: background-color 0.3s, border 0.3s;
+    cursor: pointer;
+    box-shadow: rgb(216 215 215 / 20%) -5px 5px 10px 1px inset;
+    border-style: inset;
+    bottom: 2px;
+}
+
+.tooltip-container {
+    position: relative;
+}
+
+.tooltip {
+    visibility: visible;
+    position: absolute;
+    background: linear-gradient(135deg, #333, #33333392);
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    bottom: 105%;
+    left: 100%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 120px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    visibility: hidden;
+}
+
+.tooltip-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
 .tutorial-modal-backdrop {
     position: fixed;
     top: 0;
@@ -1718,4 +1815,4 @@ div ::-webkit-scrollbar-thumb:hover {
     cursor: pointer;
 }
 
-/*# sourceMappingURL=main.1aebb804.css.map*/
+/*# sourceMappingURL=main.e3f8bbef.css.map*/
