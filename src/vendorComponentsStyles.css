@@ -1,8 +1,14 @@
 @media screen and (max-width: 768px) {
+    body{
+        overflow-x: hidden;
+    }
+    
     .vendor-form-styles {
         padding: 20px;
         max-width: 100%;
         margin: 10px;
+        max-height: 70vh;
+        overflow: auto;
     }
 
     .vendor-password-container-styles {
@@ -94,9 +100,11 @@
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background: linear-gradient(45deg, #ffffff, #ffffff0b);
     margin-bottom: 20px;
     margin-top: 20px;
+    max-height: 100vh;
+    overflow: auto;
 }
 
 .vendor-input-group-styles {
@@ -543,15 +551,17 @@
 }
 
 .vendor-body-background {
-    z-index: -100;
-    opacity: 1;
-    position: fixed;
-    width: 100%;
-    height: auto;
-    margin: 0px;
-    top: 0px;
-    left: 0px;
-}
+    position: fixed; 
+    top: 0;
+    left: 0;
+    z-index: -1
+  }
+
+  .vendor-body-background svg {
+    position: relative;
+    z-index: -1; 
+    pointer-events: none; 
+  }
 
 .custom-dropdown-option-wrapper {
     position: relative;
@@ -1089,7 +1099,7 @@ div ::-webkit-scrollbar-thumb:hover {
     /* Darker thumb color when hovered */
 }
 
-.custom-radio-button-inner-span-checked{
+.custom-radio-button-inner-span-checked {
     position: absolute;
     top: 5px;
     left: 5px;
@@ -1100,7 +1110,7 @@ div ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(45deg, rgb(154 0 182), rgb(92 111 204), #69e0a6);
 }
 
-.vendor-input-radio-button-wrapper{
+.vendor-input-radio-button-wrapper {
     padding-block: 10px;
     border: solid rgb(197 195 195 / 76%) 0.5px;
     border-radius: 2px;
@@ -1109,14 +1119,14 @@ div ::-webkit-scrollbar-thumb:hover {
     margin-bottom: 10px;
 }
 
-.radio-button-outline-wrapper{
+.radio-button-outline-wrapper {
     box-shadow: rgb(45 78 133 / 20%) 0px 0px 10px 2px;
     border-radius: 50%;
     width: 20px;
     height: 20px;
 }
 
-.radio-button-inline-wrapper{
+.radio-button-inline-wrapper {
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -1129,4 +1139,31 @@ div ::-webkit-scrollbar-thumb:hover {
     box-shadow: rgb(216 215 215 / 20%) -5px 5px 10px 1px inset;
     border-style: inset;
     bottom: 2px;
+}
+
+.tooltip-container {
+    position: relative;
+}
+
+.tooltip {
+    visibility: visible;
+    position: absolute;
+    background: linear-gradient(135deg, #333, #33333392);
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    bottom: 105%;
+    left: 100%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 120px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    visibility: hidden;
+}
+
+.tooltip-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }

@@ -7,6 +7,10 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
 }
 
 
@@ -523,8 +527,8 @@ th {
   max-width: 15%;
 }
 
-.copy-wrapper div{
-  color:white;
+.copy-wrapper div {
+  color: white;
   background: black;
   box-shadow: #454545 2px 2px 2px;
   padding: 5px;
@@ -536,4 +540,3 @@ th {
   display: flex;
   justify-content: space-evenly;
 }
-

@@ -4,9 +4,9 @@ import ReactDOMServer from 'react-dom/server'; // Import the ReactDOMServer modu
 import { API_URL } from '../Components/Shared';
 import LogoSvg from './LogoSvg';
 
-const AccountGenerationEmail = ({ userEmailAddress, businessName }) => {
+const AccountGenerationEmail = ({ userEmailAddress, setResetPasswordRequest }) => {
     const [accountCreationStatus, setAccountCreationStatus] = useState({ loading: true });
-    const [isLoad, setIsLoad] = useState(true);
+    const [isEmailSent, setIsEmailSent] = useState(false);
 
     const introductoryMessage = `
     Solana offers high-speed peer-to-peer payments through its innovative blockchain technology, 
@@ -125,9 +125,9 @@ const AccountGenerationEmail = ({ userEmailAddress, businessName }) => {
                 }
             })
     };
-    if (isLoad) {
+    if (!isEmailSent) {
         handleSubmit();
-        setIsLoad(false);
+        setIsEmailSent(true);
     }
     return (
         <div>
@@ -145,41 +145,46 @@ const AccountGenerationEmail = ({ userEmailAddress, businessName }) => {
                     </div>
                 </div>
             }
-            {!accountCreationStatus.doContinue &&
+            {Object.keys(accountCreationStatus).includes('doContinue') && !accountCreationStatus.doContinue &&
                 <div className='account-exists-container'>
-                    <div className="account-exists-message">
-                        <h2>Account Already Exists</h2>
-                        <p>
+                    <div className="success-message-box">
+                        <h2 className="success-heading">Account Already Exists</h2>
+                        <p className="success-message">
                             It looks like an account with this email address already exists.
                             If you've forgotten your password, you can reset it.
                         </p>
-                        <p>
-                            <a href="/reset-password" className="reset-password-link">
-                                Reset your password here.
-                            </a>
+                        <p className="success-footer">
+                            <p
+                                onClick={() => { setResetPasswordRequest(true) }}
+                                onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect
+                                onMouseLeave={(e) => e.target.style.color = '#007BFF'}  // Mouse out effect
+                                style={{ cursor: 'pointer', color: "#007BFF" }}
+                            >
+                                Reset your password?
+                            </p>
                         </p>
                     </div>
                 </div>
             }
             {accountCreationStatus.error &&
                 <div className='server-error-container'>
-                    <div className="server-error-message">
-                        <h2>Oops! Something Went Wrong</h2>
-                        <p>
+                    <div className="success-message-box">
+                        <h2 className="success-heading">Oops! Something Went Wrong</h2>
+                        <p className="success-message">
                             {accountCreationStatus.error}
                         </p>
-                        <p>
+                        <p className="success-message">
                             Please try again later. If the issue persists, contact support.
                         </p>
                     </div>
                 </div>
             }
             {accountCreationStatus.loading &&
-                <div className="modal-overlay" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="modal-overlay" style={{ display: 'flex', alignItems: 'center', background: "rgb(0 0 0 / 75%)" }}>
                     <div className="modal">
                         <div className="loading-dialog">
                             <p>Loading...</p>
-                            <div className="spinner"></div>
+                            <div className="spinner" style={{ marginLeft: '15%' }}></div>
                         </div>
                     </div>
                 </div>

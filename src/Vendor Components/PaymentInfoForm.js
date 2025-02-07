@@ -12,7 +12,7 @@ import CustomRadioButton from './CustomRadioButton';
 import TutorialModal from './TutorialModal'
 import AccountGenerationEmail from './AccountGenerationEmail';
 
-const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData }) => {
+const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setResetPasswordRequest }) => {
   const initialTokenDisplayLimit = 50;
   const [paymentMethod, setPaymentMethod] = useState("paypal");
   const [walletAddress, setWalletAddress] = useState(null);
@@ -194,9 +194,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData }) => {
                       color="#1c74bb" // Custom color
                     />
                   </div>
-                  <div
-
-                  >
+                  <div>
                     <CustomRadioButton
                       label="Solana Wallet"
                       value="phantom"
@@ -276,7 +274,7 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData }) => {
         }
         {signupComplete &&
           <div>
-            <AccountGenerationEmail userEmailAddress={formData.emailAddress} businessName={formData.businessName} />
+            <AccountGenerationEmail userEmailAddress={formData.emailAddress} setResetPasswordRequest={setResetPasswordRequest} />
           </div>
         }
       </div>

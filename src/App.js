@@ -23,7 +23,7 @@ const App = () => {
           <WalletModalProvider>
             <Routes>
               {/* Route paths are now relative to /vend */}
-              <Route path="/" element={ 
+              <Route path="/" element={
                 <ItemsProvider>
                   <div className="App">
                     <Items />
@@ -31,10 +31,11 @@ const App = () => {
                   </div>
                 </ItemsProvider>
               } />
-              <Route path="/vendor" element={ 
+              <Route path="/vendor/*" element={
                 <div>
-                  <VendorApp />
-                  <CustomBodyBackground />
+                  <CustomBodyBackground>
+                    <VendorApp />
+                  </CustomBodyBackground>
                 </div>
               } />
             </Routes>

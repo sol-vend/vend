@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../Components/Shared';
-import { socialPlatforms } from './Shared';
+import { socialPlatforms, getIpAddress, getLocationMetadataFromIp } from './Shared';
 import LocationComponent from './LocationComponent';
 import CustomDropdown from './CustomDropdown';
 import DivExpandButton from './DivExpandButton';
@@ -11,6 +11,7 @@ import PasswordToggle from './PasswordToggle';
 import SolanaLogoSvg from './SolanaLogoSvg';
 
 const ManualSignUp = () => {
+
     const [formData, setFormData] = useState({
         emailAddress: '',
         confirmationPassword: '',
@@ -72,33 +73,11 @@ const ManualSignUp = () => {
         captureMetadata();  // Make sure the function is called
     }, [formData.ipAddress]);  // Optionally add dependencies if needed
 
-    const getIpAddress = async () => {
-        try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            return data.ip;
-        } catch (error) {
-            console.error('Error fetching IP address:', error);
-            return 'Unknown';
-        }
-    };
-
     const handleSelectPlatform = (index, selectedPlatform) => {
         const newBusinessSocials = [...formData.businessSocials];
         newBusinessSocials[index].platform = selectedPlatform.value;
         setFormData({ ...formData, businessSocials: newBusinessSocials });
     };
-
-    const getLocationMetadataFromIp = async (ipAddress) => {
-        try {
-            const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching IP address:', error);
-            return 'Unknown';
-        }
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -319,7 +298,7 @@ const ManualSignUp = () => {
         <div>
             {submitResponse.doProceed && submitResponse.isApproved &&
                 (
-                    <PaymentInfoForm setSubmitResponse={setSubmitResponse} submitResponse={submitResponse} formData={formData} setFormData={setFormData} />
+                    <PaymentInfoForm setSubmitResponse={setSubmitResponse} submitResponse={submitResponse} formData={formData} setResetPasswordRequest={setResetPasswordRequest} />
                 )}
             {!submitResponse.doProceed && (
                 <div
@@ -791,7 +770,7 @@ const ManualSignUp = () => {
                         {submitResponse.isApproved &&
                             <p
                                 className='manual-signup-edits-info'
-                            >Need to make some edits or additions? No problem. This can be done now or later in our Employer Panel</p>
+                            >Need to make some edits or additions? No problem. This can be done now or later in our Employer Panel.</p>
                         }
                         {submitResponse.isApproved &&
                             <button

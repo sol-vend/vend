@@ -59,3 +59,25 @@ export const socialPlatforms = [
         console.error('Error getting city and state:', error);
     }
 };
+
+export const getIpAddress = async () => {
+  try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+  } catch (error) {
+      console.error('Error fetching IP address:', error);
+      return 'Unknown';
+  }
+};
+
+export const getLocationMetadataFromIp = async (ipAddress) => {
+  try {
+      const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('Error fetching IP address:', error);
+      return 'Unknown';
+  }
+}

@@ -1,18 +1,41 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
-export const CustomBodyBackground = () => {
+export const CustomBodyBackground = ({children}) => {
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
+
+    // Effect hook to update the state on window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+        window.addEventListener('resize', handleResize);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+    
     return (
+        <div style={{position: 'relative', top:'0px', left:'0px', width:'100vw', height:'100vh'}}>
+            {children}
         <div
             className='vendor-body-background'
         >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width={windowSize.width > 770 ? windowSize.width.toString() : ((770 / windowSize.width) * windowSize.width).toString()}>
                 <defs>
                     <linearGradient id="grad1" x1="0%" y1="0%" x2="50%" y2="100%">
                         <stop offset="0%" style={{ stopColor: 'rgba(250, 250, 250, 0.95)', stopOpacity: 1 }} />
                         <stop offset="100%" style={{ stopColor: 'rgba(245, 255, 245, 0.9)', stopOpacity: 1 }} />
                     </linearGradient>
                 </defs>
-                <rect width="100%" height="100%" fill="url(#grad1)" />
+                <rect width={"100%"} height={"100%"} fill="url(#grad1)" />
 
                 <g fill="white" opacity="0.85">
                     <circle cx="50" cy="30" r="8" />
@@ -57,6 +80,7 @@ export const CustomBodyBackground = () => {
                 <path d="M 5,90 C 30,80 50,90 70,75" stroke="#e4e4e4" opacity="0.05" strokeWidth="1" fill="transparent" />
                 <path d="M 40,0 Q 50,50 0,90" stroke="#d1d1d1" opacity="0.1" strokeWidth="1" fill="transparent" />
             </svg>
+        </div>
         </div>
     );
 };
