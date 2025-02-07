@@ -107,7 +107,6 @@ const LoginForm = ({ setCreateAccount }) => {
             </div >
             <div style={{ display: 'flex' }}>
                 <span>Don't have an account?
-
                     <p
                         onClick={handleClick}
                         onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect

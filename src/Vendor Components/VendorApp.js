@@ -59,7 +59,7 @@ const VendorApp = () => {
                 const sunrise = new Date(sunriseSunset.sunrise);
                 const sunset = new Date(sunriseSunset.sunset);
                 if (currentTime > sunrise.toISOString() && currentTime < sunset.toISOString()) {
-                    setIsNightMode(true);
+                    setIsNightMode(false);
                 } else {
                     setIsNightMode(true);
                 }

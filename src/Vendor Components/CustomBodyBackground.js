@@ -28,7 +28,7 @@ export const CustomBodyBackground = ({children}) => {
         <div
             className='vendor-body-background'
         >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width={windowSize.width > 770 ? windowSize.width.toString() : ((770 / windowSize.width) * windowSize.width).toString()}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width={windowSize.width > 1000 ? windowSize.width.toString() : ((770 / windowSize.width) * windowSize.width * 1.3).toString()}>
                 <defs>
                     <linearGradient id="grad1" x1="0%" y1="0%" x2="50%" y2="100%">
                         <stop offset="0%" style={{ stopColor: 'rgba(250, 250, 250, 0.95)', stopOpacity: 1 }} />

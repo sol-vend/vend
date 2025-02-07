@@ -14,7 +14,7 @@ const Items = () => {
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
-      const lastHashIndex = hash.lastIndexOf('#'); 
+      const lastHashIndex = hash.lastIndexOf('#');
       const hashWithoutHash = hash.slice(lastHashIndex + 1);
       setHashValue(hashWithoutHash);
     } else {
@@ -56,8 +56,8 @@ const Items = () => {
   }, [itemAddress, selectItem]);
 
   useEffect(() => {
-    if (urlCopied){
-      setTimeout(()=> {
+    if (urlCopied) {
+      setTimeout(() => {
         setUrlCopied(false)
       }, 5000);
     }

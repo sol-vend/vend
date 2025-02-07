@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 
-const CustomCheckbox = ({ label, checked, onChange, name }) => {
+const CustomCheckbox = ({ label, checked, onChange, name, index }) => {
     const [isChecked, setIsChecked] = useState(checked);
 
     const handleChange = (e) => {
         setIsChecked(e.target.checked);
         if (onChange) {
-            onChange(e.target.checked);
+            if (index !== undefined) {
+                onChange(index, e);
+            } else {
+                onChange(e.target.checked);
+            }
         }
     };
 
     return (
-        <div className='cutom-checkbox-wrapper'>
+        <div className='custom-checkbox-wrapper'>
             <div>
                 <label className="custom-checkbox-wrapper">
                     {label.title && <span className="checkbox-label">{label.title}</span>}

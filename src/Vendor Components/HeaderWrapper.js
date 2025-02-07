@@ -23,16 +23,17 @@ const HeaderWrapper = () => {
                         borderRadius: "5px"
                     }}
                     width='150px'
-                    src={`/vend/Vend Logo.png?v=${Date.now()}`}>
+                    src={`/Vend-Logo.png`}>
                     </img>
                 </div>
                 <div
                     style={{
-                        zIndex: '-1',
+                        zIndex: '0',
                         position: 'absolute',
                         width: "100%",
                         height: "150px",
-                        background: "linear-gradient(#303f56, #384249, #161422, #191524, #0c0b11)"
+                        background: "linear-gradient(#303f56, #384249, #161422, #191524, #0c0b11)",
+                        boxShadow: "black 1px 1px 20px 7px"
                     }}></div>
             </div>
         </div>

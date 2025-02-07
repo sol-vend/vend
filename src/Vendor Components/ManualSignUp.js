@@ -9,6 +9,7 @@ import CustomWeekdayPicker from './CustomWeekdayPicker';
 import CustomCheckbox from './CustomCheckbox';
 import PasswordToggle from './PasswordToggle';
 import SolanaLogoSvg from './SolanaLogoSvg';
+import Tooltip from './Tooltip';
 
 const ManualSignUp = () => {
 
@@ -17,6 +18,7 @@ const ManualSignUp = () => {
         confirmationPassword: '',
         initialPassword: '',
         businessName: '',
+        businessId: '',
         logo: null,
         businessDescription: '',
         businessHours: {},
@@ -25,7 +27,7 @@ const ManualSignUp = () => {
         businessReviews: '',
         businessLocation: '',
         isLocationServicesEnabled: false,
-        approvedReadOnlyEmployees: [{ name: '', role: '', isLocked: false, pin: '' }],
+        approvedReadOnlyEmployees: [{ name: '', role: '', isLocked: false, pin: '', contactInfo: '', contactPreference: 'email' }],
         ipAddress: '',
         userAgent: '',
         referer: '',
@@ -43,6 +45,7 @@ const ManualSignUp = () => {
     const [resetPasswordRequest, setResetPasswordRequest] = useState(false);
     const [passwordComplexityMessage, setPasswordComplexityMessage] = useState('');
     const [allowEmailProceed, setAllowEmailProceed] = useState(false);
+    const [employeeEmailFormattingIssue, setEmployeeEmailFormattingIssue] = useState([{ isError: false }])
     const [submitResponse, setSubmitResponse] = useState({
         result: null,
         doProceed: false,
@@ -81,16 +84,38 @@ const ManualSignUp = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'confirmationPassword') {
-            if (submitFailureMessage) {
-                setSubmitFailureMessage(false);
+        if (name == 'businessName') {
+            const cleaned = value.replace(/[^\w\s]/g, '');
+            const formatted = cleaned.replace(/\s+/g, '-');
+            setFormData((prevState) => ({
+                ...prevState,
+                [name]: value,
+                businessId: formatted
+            }));
+        } else {
+            if (name === 'confirmationPassword') {
+                if (submitFailureMessage) {
+                    setSubmitFailureMessage(false);
+                }
+            }
+            setFormData((prevState) => ({
+                ...prevState,
+                [name]: value,
+            }));
+        }
+    };
+
+    const checkEmailErrors = (value) => {
+        if (value.length > 0) {
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (regex.test(value)) {
+                return { value: value, isError: false };
+            } else {
+                return { value: value, isError: true };
             }
         }
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    };
+        return { value: value, isError: false };
+    }
 
     const handleEmailChange = (e) => {
         handleChange(e)
@@ -158,11 +183,34 @@ const ManualSignUp = () => {
     }
 
     const formatPhoneNumber = (value) => {
-        const cleaned = value.replace(/\D/g, '');
+        let cleaned = value.replace(/\D/g, '');
+        if (cleaned === '') {
+            return '';
+        }
+
+        if (cleaned.length > 10) {
+            cleaned = cleaned.substring(0, 10);
+        }
         const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
         if (match) {
-            return `(${match[1]}) ${match[2]}-${match[3]}`;
+            let formatted = '';
+
+            if (match[1]) {
+                formatted += `${match[1]}`;
+            }
+            if (match[2]) {
+                if (formatted) formatted += ' ';
+                formatted += match[2];
+            }
+
+            if (match[3]) {
+                if (formatted) formatted += '-';
+                formatted += match[3];
+            }
+
+            return formatted;
         }
+
         return value;
     };
 
@@ -180,11 +228,11 @@ const ManualSignUp = () => {
         if (file) {
             const logoObject = {
                 file,
-                previewURL: URL.createObjectURL(file),  // This creates a temporary URL for previewing the logo
+                previewURL: URL.createObjectURL(file),
             };
             setFormData((prevState) => ({
                 ...prevState,
-                logo: logoObject,  // Save the logo object with file and preview URL
+                logo: logoObject,
             }));
         }
     }
@@ -199,7 +247,7 @@ const ManualSignUp = () => {
             },
         }));
     };
-
+console.log(formData);
     const handleLocationServicesChange = (isEnabled) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -211,6 +259,32 @@ const ManualSignUp = () => {
         const { name, value } = e.target;
         const newEmployees = [...formData.approvedReadOnlyEmployees];
         let assignValue = value;
+
+        const updateEmployeeEmailStatus = (updateVal) => {
+            setEmployeeEmailFormattingIssue((prevList) =>
+                prevList.map((val, i) =>
+                    i === index
+                        ? { isError: updateVal } :
+                        val
+                )
+            )
+        };
+
+        if (name === 'contactInfo') {
+            if (e.target.placeholder !== "Email") {
+                assignValue = formatPhoneNumber(value);
+            } else {
+                const verifyEmail = checkEmailErrors(value);
+                if (verifyEmail.isError) {
+                    updateEmployeeEmailStatus(true);
+                } else {
+                    updateEmployeeEmailStatus(false);
+                }
+            }
+        }
+        if (name === 'contactPreference') {
+            assignValue = e.target.checked ? 'text' : 'email';
+        }
         if (e.target.tagName === 'BUTTON') {
             e.preventDefault();
             assignValue = !newEmployees[index][name];
@@ -223,7 +297,7 @@ const ManualSignUp = () => {
             ...prevState,
             approvedReadOnlyEmployees: newEmployees,
         }));
-    };
+    }
 
     const handleAddEmployee = () => {
         setFormData((prevState) => ({
@@ -233,6 +307,10 @@ const ManualSignUp = () => {
                 { name: '', role: '', isLocked: false, pin: '' },
             ],
         }));
+        setEmployeeEmailFormattingIssue((prevState) => ([
+            ...prevState,
+            { index: prevState.length, isError: false }
+        ]))
     };
 
     const handleAddSocialMedia = () => {
@@ -412,7 +490,8 @@ const ManualSignUp = () => {
                                         value={formData.businessName}
                                         onChange={handleChange}
                                         className='vendor-input-field-styles'
-                                        placeholder='Optional'
+                                        required
+                                        placeholder='Business Name'
                                     />
                                     {formData.logo !== null &&
                                         <div
@@ -641,7 +720,11 @@ const ManualSignUp = () => {
                                 className='vendor-input-group-styles vendor-expansion-wrapper-styles'
                             >
                                 <p>Add Your Employees:</p>
-
+                                <p
+                                    className='custom-checkbox-wrapper-paragraph-descriptor'
+                                >
+                                    Be sure to share the generated pin number so your employee can login.
+                                </p>
                                 {formData.approvedReadOnlyEmployees.map((employee, index) => (
                                     <div
                                         style={{
@@ -685,34 +768,85 @@ const ManualSignUp = () => {
                                                         backgroundColor: employee.isLocked ? 'whitesmoke' : ''
                                                     }
                                                 }}
-                                                placeholder="Role"
+                                                placeholder="Role / Job Description"
                                                 readOnly={employee.isLocked}
                                             />
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    gap: '3vw',
+                                                    justifyContent: 'space-between'
+                                                }}
+                                            >
+                                                <div>
+                                                    <Tooltip message={"Quickly share PIN with your employee."}>
+                                                        <input
+                                                            type={employee.contactInfo === 'email' ? 'email' : 'tel'}
+                                                            name="contactInfo"
+                                                            value={employee.contactInfo}
+                                                            onChange={(e) => handleEmployeeChange(index, e)}
+                                                            className={'vendor-input-field-styles'}
+                                                            style={{
+                                                                ...{
+                                                                    maxWidth: '40vw',
+                                                                    color: employee.isLocked ? 'gray' : '',
+                                                                    backgroundColor: employee.isLocked ? 'whitesmoke' : '',
+                                                                    borderColor: employeeEmailFormattingIssue[index].isError && employee.contactPreference === 'email' ? 'red' : ''
+                                                                }
+                                                            }}
+                                                            placeholder={employee.contactPreference === 'email' ? "Email" : "(XXX) XXX-XXXX"}
+                                                            readOnly={employee.isLocked}
+                                                        />
+                                                    </Tooltip>
+                                                    {employeeEmailFormattingIssue[index].isError && employee.contactPreference === 'email' &&
+                                                        <p
+                                                            style={{ fontSize: '12px' }}
+                                                            className='payment-info-form-bottom-banner-warning'>
+                                                            There may be a problem with this email address...
+                                                        </p>
+                                                    }
+                                                </div>
+                                                <div>
+                                                    <CustomCheckbox
+                                                        label={{ title: '', description: `Switch to ${employee.contactPreference === 'email' ? 'text' : 'email'}?` }}
+                                                        checked={employee.contactPreference === 'text'}
+                                                        onChange={handleEmployeeChange}
+                                                        name={'contactPreference'}
+                                                        index={index} />
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        {employee.isLocked &&
-                                            <div>
-                                                <p>Employee Login Pin:</p>
-                                                <p>{employee.pin}</p>
-                                            </div>
-                                        }
-                                        <button
-                                            name='isLocked'
-                                            className='vendor-add-button-styles'
-                                            disabled={employee.name ? false : true}
-                                            style={{
-                                                ...{
-                                                    marginLeft: 'auto',
-                                                    maxHeight: '10vh',
-                                                }
-                                            }}
-                                            onClick={(e) =>
-                                                handleEmployeeChange(index, e)
-                                            }
+                                        <div
+                                            className={employee.isLocked ? 'vendor-employee-pin-wrapper' : ''}
                                         >
-                                            {!employee.name ? 'Enter Name' : employee.isLocked ? 'Edit Employee Details' : 'Generate Login Pin'}
-                                        </button>
-
+                                            {employee.isLocked &&
+                                                <div
+                                                    style={{
+                                                        textAlign: 'end',
+                                                        fontSize: '14px'
+                                                    }}
+                                                >
+                                                    <p>Employee Login Pin: <strong>{employee.pin}</strong></p>
+                                                </div>
+                                            }
+                                            <button
+                                                name='isLocked'
+                                                className='vendor-add-button-styles'
+                                                disabled={employee.name ? false : true}
+                                                style={{
+                                                    ...{
+                                                        marginLeft: 'auto',
+                                                        maxHeight: '10vh',
+                                                    }
+                                                }}
+                                                onClick={(e) =>
+                                                    handleEmployeeChange(index, e)
+                                                }
+                                            >
+                                                {!employee.name ? 'Enter Name' : employee.isLocked ? 'Edit Employee Details' : 'Generate Login Pin'}
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                                 <button
