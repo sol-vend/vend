@@ -73,9 +73,16 @@ export const getIpAddress = async () => {
 
 export const getLocationMetadataFromIp = async (ipAddress) => {
   try {
-      const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
+      const response = await fetch(`https://ipinfo.io/${ipAddress}/json`);
       const data = await response.json();
-      return data;
+      if (data && data.loc){
+        let formattedData = data;
+        let lat = data.loc.split(',')[0]
+        let lon = data.loc.split(',')[1]
+        formattedData.lat = lat;
+        formattedData.lon = lon;
+        return formattedData;
+      }
   } catch (error) {
       console.error('Error fetching IP address:', error);
       return 'Unknown';

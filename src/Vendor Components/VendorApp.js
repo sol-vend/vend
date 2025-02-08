@@ -52,7 +52,6 @@ const VendorApp = () => {
     }, [userMetadata]);
 
     useEffect(() => {
-        console.log(sunriseSunset);
         if (sunriseSunset.sunrise && sunriseSunset.sunset) {
             const checkTimeAndUpdate = () => {
                 const currentTime = new Date().toISOString();
@@ -75,10 +74,27 @@ const VendorApp = () => {
         if (isNightMode) {
             document.body.style.transition = "filter 5s ease-in-out";
             document.body.style.filter = "invert(1)";
+            document.querySelector('.vendor-title-wrapper').style.filter = "invert(1)";
         } else {
             document.body.style.filter = "invert(0)";
+            document.querySelector('.vendor-title-wrapper').style.filter = "invert(0)";
         }
     }, [isNightMode]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (sunriseSunset.sunrise === null || sunriseSunset.sunrise === undefined) {
+                const now = new Date();
+                const hours = now.getHours();
+                if (hours > 7 && hours <=19){
+                    setIsNightMode(false);
+                } else{
+                    setIsNightMode(true);
+                }
+            }
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, []);
 
     function getSecondHash() {
         const hash = window.location.hash;
