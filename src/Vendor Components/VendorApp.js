@@ -77,7 +77,7 @@ const VendorApp = () => {
             document.querySelector('.vendor-title-wrapper').style.filter = "invert(1)";
         } else {
             document.body.style.filter = "invert(0)";
-            document.querySelector('.vendor-title-wrapper').style.filter = "invert(0)";
+            //document.querySelector('.vendor-title-wrapper').style.filter = "invert(0)";
         }
     }, [isNightMode]);
 
