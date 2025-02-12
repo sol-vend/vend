@@ -4,6 +4,9 @@ import axios from 'axios'
 import PasswordToggle from '../PasswordToggle';
 import { API_URL } from '../../Components/Shared';
 import Tooltip from '../Tooltip';
+import SolanaLogoSvg from '../SolanaLogoSvg';
+import Home from '../EmployerComponents/Home';
+import ManualSignUp from '../ManualSignUp';
 
 export const EmployeeLogin = () => {
     const [userDetails, setUserDetails] = useState(
@@ -23,21 +26,32 @@ export const EmployeeLogin = () => {
     const [password, setPassword] = useState('')
     const [businessName, setBusinessName] = useState('');
     const [error, setError] = useState('');
-    const [clicked, setClicked] = useState(false);
+    const [resetClicked, setResetClicked] = useState(false);
     const [pinVisible, setPinVisible] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [isEmployerLogin, setIsEmployerLogin] = useState(false);
     const [employeePinReset, setEmployeePinReset] = useState(false);
+    const [employerPasswordReset, setEmployerPasswordReset] = useState(false);
+    const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+    const [isSignupClick, setIsSignupClick] = useState(false);
 
     useEffect(() => {
-        if (clicked) {
-            setEmployeePinReset(true);
+        if (resetClicked) {
+            if (isEmployerLogin) {
+                setEmployerPasswordReset(true);
+            } else{
+                setEmployeePinReset(true);
+            }
         }
-    }, [clicked])
+    }, [resetClicked])
 
-    const handleClick = () => {
-        setClicked(!clicked);
+    const handleResetClick = () => {
+        setResetClicked(!resetClicked);
     };
+
+    const handleSignupClick = () => {
+        setIsSignupClick(true);
+    }
 
     const handlePinChange = (e) => {
         const value = e.target.value;
@@ -49,24 +63,27 @@ export const EmployeeLogin = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (!username || !pin) {
-            setError('Both fields are required.');
-            return;
+        if (!isEmployerLogin) {
+            if (!username || !pin) {
+                setError('Both fields are required.');
+                return;
+            }
         }
         const postLoginData = async () => {
             try {
-                const response = await axios.post(`${API_URL}/employee_login`, {
+                const route = isEmployerLogin ? 'login' : 'employee_login';
+                const postObject = isEmployerLogin ? { emailAddress: username, password: password } : {
                     businessName: businessName,
                     username: username,
                     pin: pin
-                });
-
+                };
+                console.log(route, postObject);
+                const response = await axios.post(`${API_URL}/api/${route}`, postObject);
                 if (response.status >= 200 && response.status < 300) {
-                    console.log('Login successful:', response.data);
-                    if (response.data.success) {
+                    if (response.data.authToken) {
                         const token = response.data.authToken;
                         localStorage.setItem('authToken', token);
-
+                        setIsLoginSuccess(true);
                     } else {
                         console.log('Login failed:', response.data.message);
                     }
@@ -80,163 +97,216 @@ export const EmployeeLogin = () => {
         setError('');
         postLoginData();
     };
-    return (
-        <div
-            className='vendor-form-styles'
-            style={isEmployerLogin ? { width: '60%' } : { width: '60%', background: 'linear-gradient(45deg, #a1b2dab0, transparent)' }}>
-            <h2 style={{ textAlign: 'center' }}>Business Login</h2>
-            {error && <p>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                {!isEmployerLogin &&
-                    <div>
-                        <div className='vendor-input-group-styles'>
-                            <label htmlFor="username">Business ID:</label>
-                            <input
-                                className='vendor-input-field-styles'
-                                type="text"
-                                id="businessName"
-                                value={businessName}
-                                onChange={(e) => setBusinessName(e.target.value)}
-                                placeholder="Enter your business ID"
-                                required
-                            />
-                            <p className='custom-checkbox-wrapper-paragraph-descriptor'>
-                                This is usually the business name but should have been provided by your employer.
-                            </p>
-                        </div>
-                        <div className='vendor-input-group-styles'>
-                            <label htmlFor="username">Username:</label>
-                            <input
-                                className='vendor-input-field-styles'
-                                type="text"
-                                id="username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Enter your username"
-                                required
-                            />
-                        </div>
-                        < div className='vendor-input-group-styles'>
-                            <div>
-                                <label>Pin:</label>
-                                <div
-                                    className='vendor-password-container-styles'
-                                >
-                                    <div
-                                        className='password-control-visibility-wrapper'
-                                    >
-                                        <input
-                                            type={pinVisible ? 'text' : 'password'}
-                                            inputMode='numeric'
-                                            pattern='[0-9]*'
-                                            id="pin"
-                                            value={pin}
-                                            onChange={(e) => handlePinChange(e)}
-                                            placeholder="Enter your pin"
-                                            className='password-input-field-styles'
-                                            required
-                                        />
-                                        <div>
-                                            <PasswordToggle parentSetPasswordVisibility={setPinVisible} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                {isEmployerLogin &&
-                    <div>
-                        <div className='vendor-input-group-styles'>
-                            <label htmlFor="username">Email Address:</label>
-                            <input
-                                className='vendor-input-field-styles'
-                                type="text"
-                                id="username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Enter your username"
-                                required
-                            />
-                        </div>
-                        <div className='vendor-input-group-styles'>
-                            <div>
-                                <label>Password:</label>
-                                <div
-                                    className='vendor-password-container-styles'
-                                >
-                                    <div
-                                        className='password-control-visibility-wrapper'
-                                    >
-                                        <input
-                                            type={passwordVisible ? 'text' : 'password'}
-                                            id="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            placeholder="Enter your password"
-                                            className='password-input-field-styles'
-                                            required
-                                        />
-                                        <div>
-                                            <PasswordToggle parentSetPasswordVisibility={setPasswordVisible} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+    if (isLoginSuccess) {
+        if (isEmployerLogin) {
+            return (
+                <Home />
+            )
+        } else{
+            return (
                 <div>
-                    <Tooltip message={!isEmployerLogin ? "Business owner looking for the management portal?" : "Switch back to employee portal."}>
-                        <CustomCheckbox
-                            label={!isEmployerLogin ? { title: "User Login", description: "Point of Sale Portal for Employees" } : { title: "Employer Login", description: "Manage Your Account" }}
-                            checked={isEmployerLogin}
-                            onChange={setIsEmployerLogin}
-                            name={'isEmployerLogin'}
-                        />
-                    </Tooltip>
+                    Employee Point of Sale
                 </div>
+            )
+        }
+    } else if (isSignupClick) {
+        return (
+            <ManualSignUp />
+        )
+    } else if (resetClicked){
+        if (isEmployerLogin){
+            return(
                 <div>
-                    <button
-                        type="submit"
-                        className='vendor-submit-button-styles'
-                    >
-                        Submit
-                    </button>
+                    Password Reset Protocol
                 </div>
-            </form >
+            )
+        } else{
+            return(
+                <div>
+                    Pin Reset Protocol
+                </div>
+            )
+        }
+    }
+    else {
+        return (
             <div>
-            </div >
-            {!isEmployerLogin &&
-                <div style={{ display: 'flex' }}>
-                    <span>Forget your pin? No problem. We can set you up with a new one with a quick email to your employer.
+                <div
+                    className='vendor-form-styles'
+                    style={isEmployerLogin ? { width: '60%' } : { width: '60%', background: 'linear-gradient(45deg, #a1b2dab0, transparent)' }}>
+                    <div className='vendor-form-header-wrapper'>
+                        <h2 style={{ textAlign: 'center' }}>Business Login</h2>
+                        <p>Powered by <SolanaLogoSvg /></p>
+                    </div>
+                    {error && <p>{error}</p>}
+                    <form onSubmit={handleSubmit}>
+                        {!isEmployerLogin &&
+                            <div>
+                                <div className='vendor-input-group-styles'>
+                                    <label htmlFor="username">Business ID:</label>
+                                    <input
+                                        className='vendor-input-field-styles'
+                                        type="text"
+                                        id="businessName"
+                                        value={businessName}
+                                        onChange={(e) => setBusinessName(e.target.value)}
+                                        placeholder="Enter your business ID"
+                                        required
+                                    />
+                                    <p className='custom-checkbox-wrapper-paragraph-descriptor'>
+                                        This is usually the business name but should have been provided by your employer.
+                                    </p>
+                                </div>
+                                <div className='vendor-input-group-styles'>
+                                    <label htmlFor="username">Username:</label>
+                                    <input
+                                        className='vendor-input-field-styles'
+                                        type="text"
+                                        id="username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        placeholder="Enter your username"
+                                        required
+                                    />
+                                </div>
+                                < div className='vendor-input-group-styles'>
+                                    <div>
+                                        <label>Pin:</label>
+                                        <div
+                                            className='vendor-password-container-styles'
+                                        >
+                                            <div
+                                                className='password-control-visibility-wrapper'
+                                            >
+                                                <input
+                                                    type={pinVisible ? 'text' : 'password'}
+                                                    inputMode='numeric'
+                                                    pattern='[0-9]*'
+                                                    id="pin"
+                                                    value={pin}
+                                                    onChange={(e) => handlePinChange(e)}
+                                                    placeholder="Enter your pin"
+                                                    className='password-input-field-styles'
+                                                    required
+                                                />
+                                                <div>
+                                                    <PasswordToggle parentSetPasswordVisibility={setPinVisible} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        {isEmployerLogin &&
+                            <div>
+                                <div className='vendor-input-group-styles'>
+                                    <label htmlFor="username">Email Address:</label>
+                                    <input
+                                        className='vendor-input-field-styles'
+                                        type="text"
+                                        id="username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        placeholder="Enter your username"
+                                        required
+                                    />
+                                </div>
+                                <div className='vendor-input-group-styles'>
+                                    <div>
+                                        <label>Password:</label>
+                                        <div
+                                            className='vendor-password-container-styles'
+                                        >
+                                            <div
+                                                className='password-control-visibility-wrapper'
+                                            >
+                                                <input
+                                                    type={passwordVisible ? 'text' : 'password'}
+                                                    id="password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    placeholder="Enter your password"
+                                                    className='password-input-field-styles'
+                                                    required
+                                                />
+                                                <div>
+                                                    <PasswordToggle parentSetPasswordVisibility={setPasswordVisible} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div>
+                            <Tooltip
+                                message={!isEmployerLogin ? "Business owner looking for the management portal?" : "Switch back to employee portal."}
+                                styles={{ left: '50%' }}
+                            >
+                                <CustomCheckbox
+                                    label={!isEmployerLogin ? { title: "User Login", description: "Point of Sale Portal for Employees" } : { title: "Employer Login", description: "Manage Your Account" }}
+                                    checked={isEmployerLogin}
+                                    onChange={setIsEmployerLogin}
+                                    name={'isEmployerLogin'}
+                                />
+                            </Tooltip>
+                        </div>
+                        <div>
+                            <button
+                                type="submit"
+                                className='vendor-submit-button-styles'
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </form >
+                    <div>
+                    </div >
+                    {!isEmployerLogin &&
+                        <div style={{ display: 'flex' }}>
+                            <span>Forget your pin? No problem. We can set you up with a new one with a quick email to your employer.
+                                <p
+                                    onClick={handleResetClick}
+                                    onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect
+                                    onMouseLeave={(e) => e.target.style.color = '#007BFF'}  // Mouse out effect
+                                    style={{ cursor: 'pointer', color: "#007BFF" }}
+                                >
+                                    Reset your pin.
+                                </p>
+                            </span>
+                        </div>
+                    }
+                    {isEmployerLogin &&
+                        <div style={{ display: 'flex' }}>
+                            <span>Forget your password?
+                                <p
+                                    onClick={handleResetClick}
+                                    onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect
+                                    onMouseLeave={(e) => e.target.style.color = '#007BFF'}  // Mouse out effect
+                                    style={{ cursor: 'pointer', color: "#007BFF" }}
+                                >
+                                    Reset it here.
+                                </p>
+                            </span>
+                        </div>
+                    }
+                </div >
+                <div className='login-create-account-wrapper'>
+                    <span className='login-create-account-wrapper'>Don't have an account?
                         <p
-                            onClick={handleClick}
+                            onClick={handleSignupClick}
                             onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect
                             onMouseLeave={(e) => e.target.style.color = '#007BFF'}  // Mouse out effect
                             style={{ cursor: 'pointer', color: "#007BFF" }}
                         >
-                            Reset your pin.
+                            Sign Up
                         </p>
                     </span>
                 </div>
-            }
-            {isEmployerLogin &&
-                <div style={{ display: 'flex' }}>
-                    <span>Forget your password?
-                        <p
-                            onClick={handleClick}
-                            onMouseEnter={(e) => e.target.style.color = '#0056b3'}  // Mouse hover effect
-                            onMouseLeave={(e) => e.target.style.color = '#007BFF'}  // Mouse out effect
-                            style={{ cursor: 'pointer', color: "#007BFF" }}
-                        >
-                            Reset it here.
-                        </p>
-                    </span>
-                </div>
-            }
-        </div >
-    );
+            </div>
+        );
+    }
 }
 
 export default EmployeeLogin;

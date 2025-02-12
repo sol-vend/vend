@@ -1180,3 +1180,122 @@ div ::-webkit-scrollbar-thumb:hover {
     visibility: visible;
     opacity: 1;
 }
+
+.home-screen-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.options-container {
+    padding-right: 5px;
+    border-right: solid black 3px;
+}
+
+.option-card {
+    background-color: #f4f4f4;
+    padding: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.option-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.option-card h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.option-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.user-settings-icon {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    height: 20px;
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.user-settings-icon:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.login-create-account-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+}
+
+.home-home-outer-wrapper {
+    display: flex;
+    flex-direction: column; /* Stack the child elements vertically */
+    height: 100vh; /* Full screen height */
+  }
+  
+  /* Top Banner */
+  .home-home-top-banner {
+    position:absolute;
+    left:25px;
+    top:0px;
+    height:150px;
+    width: 25vw;
+  }
+
+  .home-home-top-banner h1{
+    margin-top:25px;
+    font-size: 2vw;
+    text-align: left;
+    color:gray;
+  }
+
+  .home-home-top-banner p{
+    font-size: 1.5vw;
+    word-wrap: break-word;
+    color:gray;
+  }
+  
+  /* Main content wrapper (left and center) */
+  .home-home-main {
+    display: flex; /* Create a horizontal layout for left and center content */
+    flex-grow: 1; /* Take up the remaining space */
+  }
+  
+  /* Left Banner */
+  .home-home-left-banner {
+    width: 200px; /* Set width of the left banner */
+    padding: 10px;
+    box-sizing: border-box;
+    margin-left: 1vw;
+  }
+  
+  /* Center Content */
+  .home-home-center-content {
+    flex-grow: 1; /* Take up remaining space */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Bottom Banner */
+  .home-home-bottom-banner {
+    height: 50px; /* Set height of the bottom banner */
+    background-color: #f8f9fa;
+    text-align: center;
+    line-height: 50px; /* Center text vertically */
+  }
+
+  .home-home-primary-content{
+    display:flex;
+  }
+  

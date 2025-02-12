@@ -1,19 +1,54 @@
 import React, { useEffect, useState, useRef } from 'react';
-import LoginForm from './LoginForm';
 import ManualSignUp from './ManualSignUp';
 import EmployeeLogin from './EmployeeComponents/EmployeeLogin';
-import { getIpAddress, getLocationMetadataFromIp } from './Shared';
+import { getIpAddress, getLocationMetadataFromIp, fetchDataWithAuth } from './Shared';
 import HeaderWrapper from './HeaderWrapper';
+import Home from './EmployerComponents/Home';
 
 const VendorApp = () => {
     document.body.classList.add('vendor');
     const [createAccount, setCreateAccount] = useState(false);
     const [userMetadata, setUserMetadata] = useState(false);
     const [isNightMode, setIsNightMode] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [updateVendorWrapper, setUpdateVendorWrapper] = useState(false);
+    const [authToken, setAuthToken] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [autoLogin, setAutoLogin] = useState(
+        {
+            isLoggedIn: false,
+            emailAddress: '',
+            isAccountOwner: false,
+        }
+    )
     const [sunriseSunset, setSunriseSunset] = useState({
         sunrise: null,
         sunset: null
     });
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            setAuthToken(token);
+        }
+    }, [])
+
+    useEffect(() => {
+        if (authToken !== null) {
+            fetchDataWithAuth(setIsAuthenticated);
+        }
+    }, [authToken])
+
+    useEffect(() => {
+        //THIS IS GOING TO HAVE TO BE UPDATED WHEN WE FIGURE OUT HOW TO HANDLE EMPLOYEES (NON ACCOUNT OWNERS)
+        console.log(isAuthenticated);
+        if (isAuthenticated.isLoggedIn) {
+            setAutoLogin({
+                isLoggedIn: true,
+                emailAddress: isAuthenticated.user_id,
+            });
+        }
+    }, [isAuthenticated])
 
     useEffect(() => {
         if (!userMetadata) {
@@ -72,12 +107,33 @@ const VendorApp = () => {
 
     useEffect(() => {
         if (isNightMode) {
-            document.body.style.transition = "filter 5s ease-in-out";
+            const vendorTitleWrapper = document.querySelector('.vendor-title-wrapper');
+            if (vendorTitleWrapper) {
+                vendorTitleWrapper.style.filter = "invert(1)";
+            }
+        } else {
+            const vendorTitleWrapper = document.querySelector('.vendor-title-wrapper');
+            if (vendorTitleWrapper) {
+                vendorTitleWrapper.style.filter = "invert(0)";
+            }
+        }
+    }, [updateVendorWrapper])
+
+    useEffect(() => {
+        if (isNightMode) {
+            document.body.style.transition = "filter 0.5s ease-in-out";
             document.body.style.filter = "invert(1)";
-            document.querySelector('.vendor-title-wrapper').style.filter = "invert(1)";
+            setUpdateVendorWrapper(!updateVendorWrapper);
         } else {
             document.body.style.filter = "invert(0)";
-            //document.querySelector('.vendor-title-wrapper').style.filter = "invert(0)";
+            setUpdateVendorWrapper(!updateVendorWrapper);
+        }
+
+        if (isNightMode !== null) {
+            console.log('being changed...')
+            if (loading) {
+                setLoading(false);
+            }
         }
     }, [isNightMode]);
 
@@ -86,9 +142,9 @@ const VendorApp = () => {
             if (sunriseSunset.sunrise === null || sunriseSunset.sunrise === undefined) {
                 const now = new Date();
                 const hours = now.getHours();
-                if (hours > 7 && hours <=19){
+                if (hours > 7 && hours <= 19) {
                     setIsNightMode(false);
-                } else{
+                } else {
                     setIsNightMode(true);
                 }
             }
@@ -104,8 +160,27 @@ const VendorApp = () => {
         }
         return '';
     }
-
-    if (getSecondHash()) {
+    if (loading) {
+        return (
+            <div className="modal-overlay" style={{ display: 'flex', alignItems: 'center', background: "rgb(0 0 0 / 75%)" }}>
+                <div className="modal">
+                    <div className="loading-dialog">
+                        <p>Loading...</p>
+                        <div className="spinner" style={{ marginLeft: '15%' }}></div>
+                    </div>
+                </div>
+            </div>
+        )
+    } else if (autoLogin.isLoggedIn) {
+        console.log(autoLogin);
+        return (
+            <div>
+                <HeaderWrapper />
+                <Home loginInfos={autoLogin} />
+            </div>
+        )
+    }
+    else if (getSecondHash()) {
         console.log("Redirect to login functions")
         return (
             <div>
@@ -116,34 +191,26 @@ const VendorApp = () => {
     } else {
         return (
             <div>
-                {isNightMode === null || !sunriseSunset.sunrise || !sunriseSunset.sunset ? (
-                    <div className="modal-overlay" style={{ display: 'flex', alignItems: 'center', background: "rgb(0 0 0 / 75%)" }}>
-                        <div className="modal">
-                            <div className="loading-dialog">
-                                <p>Loading...</p>
-                                <div className="spinner" style={{ marginLeft: '15%' }}></div>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <div className='vendor-interface'>
-                        <HeaderWrapper />
-                        {!createAccount && (
-                            <div className='vendor-login-wrapper' style={{
-                                marginTop: '5vw'
-                            }}>
-                                <div>
-                                    <div className='vendor-login-inputs'>
-                                        <LoginForm setCreateAccount={setCreateAccount} />
-                                    </div>
+                <div className='vendor-interface'>
+                    <HeaderWrapper />
+                    {!createAccount && (
+                        <div className='vendor-login-wrapper' style={{
+                            marginTop: '5vw'
+                        }}>
+                            <div>
+                                <div className='vendor-login-inputs'>
+                                    <EmployeeLogin />
                                 </div>
                             </div>
-                        )}
-                        {createAccount && (
+                        </div>
+                    )}
+                    {createAccount && (
+                        <div>
+                            <HeaderWrapper />
                             <ManualSignUp />
-                        )}
-                    </div>
-                )}
+                        </div>
+                    )}
+                </div>
             </div>
         )
     }

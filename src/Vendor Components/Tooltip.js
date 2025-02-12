@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Tooltip = ({ message, children }) => {
+const Tooltip = ({ message, children, styles }) => {
     const [isHovered, setIsHovered] = useState(false);
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
@@ -12,7 +12,7 @@ const Tooltip = ({ message, children }) => {
             onMouseLeave={handleMouseLeave}
         >
             {children}
-            {isHovered && <div className="tooltip">{message}</div>}
+            {isHovered && <div className="tooltip" style={styles}>{message}</div>}
         </div>
     );
 };
