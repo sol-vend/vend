@@ -247,7 +247,7 @@ const ManualSignUp = () => {
             },
         }));
     };
-console.log(formData);
+
     const handleLocationServicesChange = (isEnabled) => {
         setFormData((prevState) => ({
             ...prevState,
