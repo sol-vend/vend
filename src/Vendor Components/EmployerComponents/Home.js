@@ -4,6 +4,7 @@ import Tooltip from '../Tooltip';
 import FrontendDesigner from './FrontendDesigner';
 import HeaderCarousel from '../HeaderCarousel';
 import EmployeeInterfaceDesigner from './EmployeeInterfaceDesigner';
+import { fetchDataWithAuth } from '../Shared';
 
 const Home = ({ loginInfos }) => {
     const [userSettingsDropdownClicked, setUserSettingsDropdownClicked] = useState(false);
@@ -11,6 +12,7 @@ const Home = ({ loginInfos }) => {
     const [selectedOptionCard, setSelectedOptionCard] = useState({ name: 'editPos', component: [<FrontendDesigner />, <EmployeeInterfaceDesigner />], headerOpts: ['Control what my Customers See', 'Control what my Employees See'], selectedIndex: 0 })
     const optionsRef = useRef(null);
     const userRef = useRef(null);
+    const [loginInformation, setLoginInformation] = useState(false);
 
     const handleUserSettingsClick = () => {
         setUserSettingsDropdownClicked(true);
@@ -33,6 +35,12 @@ const Home = ({ loginInfos }) => {
             }
         }
     };
+
+    useEffect(() => {
+        if (!loginInformation) {
+            fetchDataWithAuth(setLoginInformation);
+        }
+    }, [])
 
     useEffect(() => {
         document.addEventListener('click', handleClickOutside);
@@ -75,7 +83,10 @@ const Home = ({ loginInfos }) => {
             </div>
             <div className='home-home-top-banner'>
                 <h1>Manager</h1>
-                <p>{loginInfos.emailAddress ? loginInfos.emailAddress.includes('@') ? loginInfos.emailAddress.split('@')[0] : loginInfos.emailAddress : ""}</p>
+                {loginInformation && loginInformation.user_id &&
+                    <p>{loginInformation.user_id ? loginInformation.user_id.includes('@') ? loginInformation.user_id.split('@')[0] : loginInfos.user_id : ""}</p>
+                }
+
             </div>
             <div className='home-home-primary-content'>
                 {!isMobileDevice &&
