@@ -9,7 +9,11 @@ const CustomCheckbox = ({ label, checked, onChange, name, index }) => {
             if (index !== undefined) {
                 onChange(index, e);
             } else {
-                onChange(e.target.checked);
+                try {
+                    onChange(e.target.checked);
+                } catch {
+                    
+                }
             }
         }
     };

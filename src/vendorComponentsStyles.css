@@ -1,6 +1,55 @@
+body {
+    background: linear-gradient(90deg, rgba(245, 255, 245, 0.9), rgb(217, 235, 210, 0.66));
+}
+
 @media screen and (max-width: 768px) {
     body {
-        overflow-x: hidden;
+        overflow: hidden;
+    }
+
+    .frontend-options-wrapper {
+        margin-left: 2% !important;
+        width: 50vw;
+    }
+
+    .frontend-options-wrapper .vendor-input-group-styles {
+        width: 45vw;
+    }
+
+    .frontend-options-wrapper .vendor-input-group-styles input {
+        width: 40vw;
+    }
+
+    .home-home-bottom-banner .option-card {
+        color: white;
+    }
+
+    .option-card {
+        padding-top: 0px !important;
+        border-right: solid #ffffff45 0.5px !important;
+        height: 55px !important;
+    }
+
+    .option-card.selected,
+    .option-card:hover {
+        opacity: 75%;
+    }
+
+    .home-home-center-content {
+        padding: 0px !important;
+    }
+
+    .phone-outline {
+        height: 30vh !important;
+        margin-top: 15%;
+    }
+
+    .frontend-designer-bn {
+        padding-top: 25% !important;
+    }
+
+    .option-card h3 {
+        font-size: 2.5vw !important;
     }
 
     .vendor-form-styles {
@@ -366,7 +415,7 @@
     border-left: inset #456eff 5px;
     border-top-left-radius: 45%;
     border-bottom-left-radius: 20%;
-    padding-top:5px;
+    padding-top: 5px;
     padding-bottom: 5px;
 }
 
@@ -1192,16 +1241,24 @@ div ::-webkit-scrollbar-thumb:hover {
 }
 
 .option-card {
-    background-color: #f4f4f4;
-    padding: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #007bff00;
+    color: #333;
+    border: none;
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 2px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 5vw;
+    width: 80%;
 }
 
-.option-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+.option-card:hover,
+.option-card.selected {
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    transform: scale(1.0125);
 }
 
 .option-card h3 {
@@ -1219,6 +1276,7 @@ div ::-webkit-scrollbar-thumb:hover {
     top: 20px;
     right: 30px;
     height: 20px;
+    max-width: 20px;
     cursor: pointer;
     background-color: #fff;
     border-radius: 50%;
@@ -1231,7 +1289,7 @@ div ::-webkit-scrollbar-thumb:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.login-create-account-wrapper{
+.login-create-account-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1240,62 +1298,284 @@ div ::-webkit-scrollbar-thumb:hover {
 
 .home-home-outer-wrapper {
     display: flex;
-    flex-direction: column; /* Stack the child elements vertically */
-    height: 100vh; /* Full screen height */
-  }
-  
-  /* Top Banner */
-  .home-home-top-banner {
-    position:absolute;
-    left:25px;
-    top:0px;
-    height:150px;
-    width: 25vw;
-  }
+    flex-direction: column;
+    /* Stack the child elements vertically */
+    height: 100vh;
+    /* Full screen height */
+}
 
-  .home-home-top-banner h1{
-    margin-top:25px;
+/* Top Banner */
+.home-home-top-banner {
+    position: absolute;
+    left: 25px;
+    top: 0px;
+    height: 150px;
+    width: 25vw;
+}
+
+.home-home-top-banner h1 {
+    margin-top: 25px;
     font-size: 2vw;
     text-align: left;
-    color:gray;
-  }
+    color: gray;
+}
 
-  .home-home-top-banner p{
+.home-home-top-banner p {
     font-size: 1.5vw;
     word-wrap: break-word;
-    color:gray;
-  }
-  
-  /* Main content wrapper (left and center) */
-  .home-home-main {
-    display: flex; /* Create a horizontal layout for left and center content */
-    flex-grow: 1; /* Take up the remaining space */
-  }
-  
-  /* Left Banner */
-  .home-home-left-banner {
-    width: 200px; /* Set width of the left banner */
+    color: gray;
+}
+
+/* Main content wrapper (left and center) */
+.home-home-main {
+    display: flex;
+    /* Create a horizontal layout for left and center content */
+    flex-grow: 1;
+    /* Take up the remaining space */
+}
+
+/* Left Banner */
+.home-home-left-banner {
+    width: 200px;
+    /* Set width of the left banner */
     padding: 10px;
     box-sizing: border-box;
     margin-left: 1vw;
-  }
-  
-  /* Center Content */
-  .home-home-center-content {
-    flex-grow: 1; /* Take up remaining space */
+}
+
+/* Center Content */
+.home-home-center-content {
+    flex-grow: 1;
+    /* Take up remaining space */
     padding: 20px;
     box-sizing: border-box;
-  }
-  
-  /* Bottom Banner */
-  .home-home-bottom-banner {
-    height: 50px; /* Set height of the bottom banner */
-    background-color: #f8f9fa;
-    text-align: center;
-    line-height: 50px; /* Center text vertically */
-  }
+}
 
-  .home-home-primary-content{
-    display:flex;
-  }
-  
+/* Bottom Banner */
+.home-home-bottom-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 98%;
+    background-color: #191524;
+    color: white;
+    padding: 4px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+
+.home-home-primary-content {
+    display: flex;
+}
+
+#user-settings-dropdown {
+    position: relative;
+    width: 125px;
+    float: right;
+    direction: rtl;
+    text-align: right;
+    background: white;
+}
+
+#user-settings-dropdown>div {
+    padding-inline: 15px;
+    padding-block: 5px;
+    border-bottom: solid gray 0.5px;
+}
+
+#user-settings-dropdown>div:hover {
+    color: white;
+    border-color: white;
+    background: linear-gradient(45deg, rgb(76, 84, 91), #000000a3);
+    transform: scale(1.0125);
+}
+
+.phone-outline {
+    position: absolute;
+    width: 30vw;
+    max-width: 250px;
+    height: 100vh;
+    max-height: 400px;
+    border-radius: 16px;
+    border: solid black 4px;
+    text-align: center;
+    border-top: solid black 6px;
+}
+
+.mobile-demo-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    width: 100%;
+}
+
+.frontend-designer-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2%;
+}
+
+.frontend-options-wrapper {
+    margin-left: 10%;
+}
+
+.frontend-options-wrapper input {
+    width: 14vw;
+}
+
+.screen-outline {
+    margin-bottom: 1%;
+    height: 100%;
+    background: white;
+    border-radius: 16px;
+}
+
+.frontend-designer-bn {
+    padding-top: 10%;
+    font-size: 2vw;
+    font-weight: bold;
+}
+
+.frontend-designer-slogan {
+    margin-top: 5%;
+    font-size: 1vw;
+}
+
+.frontend-designer-footer {
+    display: flex;
+    height: 25%;
+    max-height: 85px;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 1vw;
+    font-style: italic;
+}
+
+.speaker-outline {
+    position: absolute;
+    margin-left: 25%;
+    width: 50%;
+    height: 15px;
+    background: black;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.power-on-button {
+    top: 50px;
+    right: -6px;
+    height: 20px;
+    width: 2px;
+    background: black;
+    position: absolute;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+}
+
+.volume-up-button {
+    top: 40px;
+    left: -6px;
+    height: 20px;
+    width: 2px;
+    background: black;
+    position: absolute;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+}
+
+.volume-down-button {
+    top: 75px;
+    left: -6px;
+    height: 20px;
+    width: 2px;
+    background: black;
+    position: absolute;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+}
+
+.mobile-demo-qr {
+    margin-top: 15%;
+}
+
+.mobile-tip-option-demo {
+    width: 100%;
+    height: 10px;
+    justify-content: center;
+    font-size: 1vw;
+}
+
+.mobile-tip-option-demo span {
+    padding: 3px;
+    border-radius: 35%;
+    border: solid black 0.5px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.mobile-tip-option-span-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 8px;
+}
+
+/* HeaderCarousel.css */
+
+.header-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.header-carousel-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-carousel-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    color: #333;
+}
+
+.header-carousel-arrow:focus {
+    outline: none;
+}
+
+.header-carousel-left-arrow {
+    margin-left: -20px;
+}
+
+.header-carousel-right-arrow {
+    margin-right: -20px;
+}
+
+.header-carousel-header h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.header-carousel-component {
+    padding-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .header-carousel-content {
+        gap: 10px;
+    }
+
+    .header-carousel-header h2 {
+        font-size: 18px;
+    }
+}

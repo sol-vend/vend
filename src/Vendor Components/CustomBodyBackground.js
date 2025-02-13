@@ -1,41 +1,43 @@
 import React, {useState, useEffect} from 'react';
 
 export const CustomBodyBackground = ({children}) => {
+    const [viewBox, setViewBox] = useState("50 0 100 100");
     const [windowSize, setWindowSize] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: "100vw",
+        height: "100vh",
+        scaleY: window.innerWidth / window.innerHeight
     });
 
     // Effect hook to update the state on window resize
     useEffect(() => {
         const handleResize = () => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            });
+            if (window.innerWidth < 800){
+                setViewBox("40 0 40 90")
+            } else{
+                setViewBox("50 0 100 100")
+            }
         };
         window.addEventListener('resize', handleResize);
 
-        // Clean up the event listener on component unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
     
     return (
-        <div style={{position: 'relative', top:'0px', left:'0px', width:'100vw', height:'100vh'}}>
+        <div style={{position: 'fixed', top:'0px', left:'0px', width:'100vw', height:'100vh', transform:`scaleY(1)`}}>
             {children}
         <div
             className='vendor-body-background'
         >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width={windowSize.width > 1000 ? windowSize.width.toString() : ((770 / windowSize.width) * windowSize.width * 1.3).toString()}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox}  height={"100vh"} width="100vw" style={{top:'150px', left: '0px'}}>
                 <defs>
                     <linearGradient id="grad1" x1="0%" y1="0%" x2="50%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: 'rgba(250, 250, 250, 0.95)', stopOpacity: 1 }} />
+                        <stop offset="0%" style={{ stopColor: 'rgba(217, 235, 210, 0.66)', stopOpacity: 1 }} />
                         <stop offset="100%" style={{ stopColor: 'rgba(245, 255, 245, 0.9)', stopOpacity: 1 }} />
                     </linearGradient>
                 </defs>
-                <rect width={"100%"} height={"100%"} fill="url(#grad1)" />
+                <rect width={"100vw"} height={"100vh"} fill="url(#grad1)" />
 
                 <g fill="white" opacity="0.85">
                     <circle cx="50" cy="30" r="8" />
