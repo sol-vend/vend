@@ -4,7 +4,6 @@ body {
 
 @media screen and (max-width: 768px) {
     body {
-        overflow: hidden;
     }
 
     .frontend-options-wrapper {

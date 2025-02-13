@@ -34,12 +34,13 @@ export const EmployeeLogin = () => {
     const [employerPasswordReset, setEmployerPasswordReset] = useState(false);
     const [isLoginSuccess, setIsLoginSuccess] = useState(false);
     const [isSignupClick, setIsSignupClick] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (resetClicked) {
             if (isEmployerLogin) {
                 setEmployerPasswordReset(true);
-            } else{
+            } else {
                 setEmployeePinReset(true);
             }
         }
@@ -62,7 +63,7 @@ export const EmployeeLogin = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        setLoading(true);
         if (!isEmployerLogin) {
             if (!username || !pin) {
                 setError('Both fields are required.');
@@ -94,15 +95,28 @@ export const EmployeeLogin = () => {
                 console.error('Error during login:', error.response ? error.response.data : error.message);
             }
         };
+        setLoading(false);
         setError('');
         postLoginData();
     };
-    if (isLoginSuccess) {
+    if (loading) {
+        return (
+            <div className="modal-overlay" style={{ display: 'flex', alignItems: 'center', background: "rgb(0 0 0 / 75%)" }}>
+                <div className="modal">
+                    <div className="loading-dialog">
+                        <p>Loading...</p>
+                        <div className="spinner" style={{ marginLeft: '15%' }}></div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    else if (isLoginSuccess) {
         if (isEmployerLogin) {
             return (
                 <Home />
             )
-        } else{
+        } else {
             return (
                 <div>
                     Employee Point of Sale
@@ -113,15 +127,15 @@ export const EmployeeLogin = () => {
         return (
             <ManualSignUp />
         )
-    } else if (resetClicked){
-        if (isEmployerLogin){
-            return(
+    } else if (resetClicked) {
+        if (isEmployerLogin) {
+            return (
                 <div>
                     Password Reset Protocol
                 </div>
             )
-        } else{
-            return(
+        } else {
+            return (
                 <div>
                     Pin Reset Protocol
                 </div>
@@ -131,6 +145,16 @@ export const EmployeeLogin = () => {
     else {
         return (
             <div>
+                {loading &&
+                    <div className="modal-overlay" style={{ display: 'flex', alignItems: 'center', background: "rgb(0 0 0 / 75%)" }}>
+                        <div className="modal">
+                            <div className="loading-dialog">
+                                <p>Loading...</p>
+                                <div className="spinner" style={{ marginLeft: '15%' }}></div>
+                            </div>
+                        </div>
+                    </div>
+                }
                 <div
                     className='vendor-form-styles'
                     style={isEmployerLogin ? { width: '60%' } : { width: '60%', background: 'linear-gradient(45deg, #a1b2dab0, transparent)' }}>

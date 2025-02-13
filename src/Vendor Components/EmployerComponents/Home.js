@@ -3,11 +3,12 @@ import { FaUser } from 'react-icons/fa';
 import Tooltip from '../Tooltip';
 import FrontendDesigner from './FrontendDesigner';
 import HeaderCarousel from '../HeaderCarousel';
+import EmployeeInterfaceDesigner from './EmployeeInterfaceDesigner';
 
 const Home = ({ loginInfos }) => {
     const [userSettingsDropdownClicked, setUserSettingsDropdownClicked] = useState(false);
     const [isMobileDevice, setIsMobileDevice] = useState(window.innerWidth <= 768);
-    const [selectedOptionCard, setSelectedOptionCard] = useState({ name: 'editPos', component: [<FrontendDesigner />], headerOpts: ['Control what my Customers See', 'Control what my Employees See'], selectedIndex: 0 })
+    const [selectedOptionCard, setSelectedOptionCard] = useState({ name: 'editPos', component: [<FrontendDesigner />, <EmployeeInterfaceDesigner />], headerOpts: ['Control what my Customers See', 'Control what my Employees See'], selectedIndex: 0 })
     const optionsRef = useRef(null);
     const userRef = useRef(null);
 
