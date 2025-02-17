@@ -95,10 +95,9 @@ const VendorApp = () => {
                 if (currentTime > sunrise.toISOString() && currentTime < sunset.toISOString()) {
                     setIsNightMode(false);
                 } else {
-                    setIsNightMode(true);
+                    setIsNightMode(false);
                 }
             };
-
             checkTimeAndUpdate();
             const intervalId = setInterval(checkTimeAndUpdate, 5 * 60 * 1000); // 5 minutes interval
             return () => clearInterval(intervalId);
@@ -123,6 +122,8 @@ const VendorApp = () => {
         if (isNightMode) {
             document.body.style.transition = "filter 0.5s ease-in-out";
             document.body.style.filter = "invert(1)";
+                
+            
             setUpdateVendorWrapper(!updateVendorWrapper);
         } else {
             document.body.style.filter = "invert(0)";
@@ -145,7 +146,7 @@ const VendorApp = () => {
                 if (hours > 7 && hours <= 19) {
                     setIsNightMode(false);
                 } else {
-                    setIsNightMode(true);
+                    setIsNightMode(false);
                 }
             }
         }, 5000);

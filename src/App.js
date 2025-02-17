@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { WalletProvider } from '@solana/wallet-adapter-react';
 import WalletConnector from './Components/WalletConnector';
@@ -33,9 +33,7 @@ const App = () => {
               } />
               <Route path="/vendor/*" element={
                 <div>
-                  <CustomBodyBackground>
-                    <VendorApp />
-                  </CustomBodyBackground>
+                  <VendorApp />
                 </div>
               } />
             </Routes>
