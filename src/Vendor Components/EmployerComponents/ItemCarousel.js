@@ -3,7 +3,7 @@ import { FaArrowLeft, FaArrowRight, FaCheck } from 'react-icons/fa';
 import SwipeIndicator from '../SwipeIndicator';
 import SnapSlider from './SnapSlider';
 
-const ItemCarousel = ({ groups, currentGroupIndex, handleItemChange, handleAddItem, selectedIndex, setSelectedIndex}) => {
+const ItemCarousel = ({ groups, currentGroupIndex, handleItemChange, handleAddItem, selectedIndex, setSelectedIndex }) => {
     const [transformValue, setTransformValue] = useState(0); // For scroll translation
     const [isMobile, setIsMobile] = useState(false); // Check if the device is mobile
     const defaultGap = 50; // Gap between items in the carousel (adjust this based on desired gap)
@@ -68,7 +68,7 @@ const ItemCarousel = ({ groups, currentGroupIndex, handleItemChange, handleAddIt
                                     <button className="header-carousel-arrow header-carousel-left-arrow" onClick={handlePrev}>
                                         <SwipeIndicator direction={'left'} numArrows={3} size={10} />
                                     </button>
-                                    {isMobile && <SnapSlider items={items} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} itemWidth={50} gap={20} />}
+                                    {isMobile && <SnapSlider items={items} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} itemWidth={50} gap={20} objectHeight={50} />}
                                     {!isMobile && <div>{items[selectedIndex].name === "" ? "Items" : items[selectedIndex].name}</div>}
                                     <button className="header-carousel-arrow header-carousel-right-arrow" onClick={handleNext}>
                                         <SwipeIndicator direction={'right'} numArrows={3} size={10} />
@@ -90,7 +90,7 @@ const ItemCarousel = ({ groups, currentGroupIndex, handleItemChange, handleAddIt
                                 <div
                                     className="vendor-input-group-styles"
                                     style={{
-                                        opacity: isSelected ? 1 : 0.1,
+                                        opacity: isSelected ? 1 : 0.01,
                                         transform: `translateX(${isSelected ? 0 : itemIndex < selectedIndex ? '-10px' : '10px'}) translateY(${isSelected ? "0" : "20px"})`,
                                         transition: 'transform 0.3s ease, opacity 0.3s ease',
                                         position: 'absolute',

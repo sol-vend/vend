@@ -3,6 +3,7 @@ import Phone from './Phone';
 import { FaArrowLeft, FaArrowRight, FaTrash, FaPlusCircle } from 'react-icons/fa'; // Arrow icons
 import ItemCarousel from './ItemCarousel';
 import SwipeIndicator from '../SwipeIndicator';
+import SnapSlider from './SnapSlider';
 
 const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
     const [groups, setGroups] = useState([]);
@@ -14,8 +15,11 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
     const [deleteButtonTranslationStartPosition, setDeleteButtonTranslationStartPosition] = useState(0)
     const [deleteButtonTranslationPosition, setDeleteButtonTranslationPostition] = useState(0);
     const [deleteButtonOpacity, setDeleteButtonOpacity] = useState(0.5);
+    const [groupNames, setGroupNames] = useState([]);
+    const [isGroupClicked, setIsGroupClicked] = useState(false);
 
-    const handleAddGroup = () => {
+    const handleAddGroup = (e) => {
+        e.preventDefault();
         setGroups([
             ...groups,
             {
@@ -25,9 +29,17 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
         ]);
     };
 
+    const handleTextboxClicked = () => {
+        setIsGroupClicked(true);
+    }
+
     useEffect(() => {
-        console.log(groups);
+        setGroupNames(groups.map(group => group.groupName));
     }, [groups])
+
+    useEffect(() => {
+        console.log(groupNames);
+    }, [groupNames])
 
     const handleRemoveGroup = (groupIndex) => {
         const updatedGroups = groups.filter((_, index) => index !== groupIndex);
@@ -131,19 +143,20 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
     }
 
     return (
-
         <div className='frontend-designer-wrapper' style={{ display: 'flex' }}>
             <div>
                 <div className='frontend-options-wrapper'>
                     <div>
                         <div className="carousel-controls header-carousel swipeable">
-                            <button className="header-carousel-arrow header-carousel-left-arrow" onClick={goToPreviousGroup} disabled={currentGroupIndex === 0}>{<SwipeIndicator direction={'left'} numArrows={3} size={10} />}</button>
-                            <h3>Groups</h3>
-                            <button className="header-carousel-arrow header-carousel-right-arrow" onClick={goToNextGroup} disabled={currentGroupIndex === groups.length - 1}>{<SwipeIndicator direction={'right'} numArrows={3} size={10} />}</button>
+                            {true && <button className="header-carousel-arrow header-carousel-left-arrow" onClick={goToPreviousGroup} disabled={currentGroupIndex === 0}>{<SwipeIndicator direction={'left'} numArrows={3} size={10} />}</button>}
+                            {!isMobileDevice && <h3>{groups[currentGroupIndex].groupName || "Groups"}</h3>}
+                            {isMobileDevice && <h3
+                            style={{transform: isGroupClicked ? 'scale(1)' : 'translateX(50px)'}}
+                            ><SnapSlider selectedIndex={currentGroupIndex} items={groupNames} setSelectedIndex={setCurrentGroupIndex} /></h3>}
+                            {true && <button className="header-carousel-arrow header-carousel-right-arrow" onClick={goToNextGroup} disabled={currentGroupIndex === groups.length - 1}>{<SwipeIndicator direction={'right'} numArrows={3} size={10} />}</button>}
                         </div>
                         <div className='vendor-show-hide-styles' style={{ marginBottom: 'auto' }} onClick={handleAddGroup}><FaPlusCircle /></div>
                     </div>
-                    {/* Carousel with swipe functionality */}
                     {groups.length > 0 && (
                         <div
                             key={currentGroupIndex}
@@ -171,10 +184,12 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
                                 }}
                             >
                                 <input
+                                    id="group-input-textbox"
                                     type="text"
                                     placeholder="Group Name"
                                     className='vendor-input-field-styles'
                                     value={groups[currentGroupIndex].groupName}
+                                    onClick={handleTextboxClicked}
                                     onChange={(e) =>
                                         handleGroupChange(currentGroupIndex, 'groupName', e.target.value)
                                     }
@@ -210,7 +225,7 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
                                 <div>{groups[currentGroupIndex].groupName}</div>
                             </div>
                             <div className='group-phone-contents'
-                            style={{height: `${document.querySelector('.phone-outline').offsetHeight - 40}px`}}
+                                style={{ height: `${document.querySelector('.phone-outline').offsetHeight - 60}px` }}
                             >
                                 {groups[currentGroupIndex].items.map((item, itemIndex) =>
                                     <div>
