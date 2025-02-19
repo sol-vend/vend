@@ -9,7 +9,7 @@ import { fetchDataWithAuth } from '../Shared';
 const Home = ({ loginInfos }) => {
     const [userSettingsDropdownClicked, setUserSettingsDropdownClicked] = useState(false);
     const [isMobileDevice, setIsMobileDevice] = useState(window.innerWidth <= 768);
-    const [selectedOptionCard, setSelectedOptionCard] = useState({ name: 'editPos', component: [<FrontendDesigner />, <EmployeeInterfaceDesigner />], headerOpts: ['What My Customers See', 'What My Employees Use'], selectedIndex: 0 })
+    const [selectedOptionCard, setSelectedOptionCard] = useState({ name: 'editPos', component: [<FrontendDesigner isMobileDevice={isMobileDevice} />, <EmployeeInterfaceDesigner isMobileDevice={isMobileDevice} />], headerOpts: ['What My Customers See', 'What My Employees Use'], selectedIndex: 0 })
     const optionsRef = useRef(null);
     const userRef = useRef(null);
     const [loginInformation, setLoginInformation] = useState(false);
@@ -146,7 +146,7 @@ const Home = ({ loginInfos }) => {
                         </div>
                     }
                     <div className='home-home-center-content'>
-                        <HeaderCarousel headerOpts={selectedOptionCard.headerOpts} setState={setSelectedOptionCard} name={'selectedIndex'}>
+                        <HeaderCarousel headerOpts={selectedOptionCard.headerOpts} setState={setSelectedOptionCard} name={'selectedIndex'} isMobileDevice={isMobileDevice}>
                             <h2>
                                 {selectedOptionCard.headerOpts[selectedOptionCard.selectedIndex]}
                             </h2>

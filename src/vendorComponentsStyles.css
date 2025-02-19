@@ -21,16 +21,24 @@ body {
         height: 25vh !important;
     }
 
+    .group-phone-contents {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        gap: 0px calc(15%);
+        margin-top: 1px;
+        overflow: auto;
+        height: 100%;
+        width: 95%;
+        padding-right:15px;
+    }
+
     .frontend-designer-wrapper {
         min-height: 67vh !important;
     }
 
     .group {
         width: 50vw !important;
-    }
-
-    .header-carousel-arrow {
-        opacity: 5% !important;
     }
 
     .frontend-options-wrapper .vendor-input-group-styles {
@@ -83,6 +91,14 @@ body {
         overflow: auto;
     }
 
+    .custom-checkbox-inner.checked {
+        transform: translateX(100%) !important;
+    }
+
+    .custom-checkbox {
+        width: 45px !important;
+    }
+
     .vendor-password-container-styles {
         width: 100% !important;
     }
@@ -93,7 +109,7 @@ body {
     }
 
     .vendor-input-field-styles {
-        width: 100%;
+        width: 75%;
         margin-top: 10px;
     }
 
@@ -161,6 +177,24 @@ body {
         width: 70%;
         margin-left: 15%;
     }
+
+    @keyframes slideIndicator {
+        0% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(-5px); /* Slight movement to the right */
+        }
+        100% {
+          transform: translateX(0); /* Return to the original position */
+        }
+      }
+      
+      .append-existing-phone-button.visible.mobile {
+        animation: slideIndicator 1s ease-in-out 2;
+      }
+      
+
 }
 
 .vendor-form-styles {
@@ -1442,8 +1476,8 @@ div ::-webkit-scrollbar-thumb:hover {
     width: 100%;
 }
 
-.frontend-options-wrapper div{
-    display:flex;
+.frontend-options-wrapper div {
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -1612,6 +1646,7 @@ div ::-webkit-scrollbar-thumb:hover {
     align-items: center;
     background: linear-gradient(45deg, #3e3e3e, #818181);
     color: white;
+    overflow: hidden;
 }
 
 .carousel-controls {
@@ -1693,11 +1728,26 @@ div ::-webkit-scrollbar-thumb:hover {
     right: 0px;
     opacity: 1;
     visibility: visible;
+    left: 60%;
+    width: 150%;
 }
 
-.item-carousel-wrapper {
 
+.carousel-items-wrapper {
+    display: flex;
+    height: 100%;
+    width: 100%;
 }
+
+.carousel-item {
+    scroll-snap-align: start;
+    /* Snap each item to the start of the container */
+    min-width: 100px;
+    /* Adjust based on your desired item size */
+    flex-shrink: 0;
+    padding: 10px;
+}
+
 
 .item-carousel-controls {
     display: flex;
@@ -1708,14 +1758,15 @@ div ::-webkit-scrollbar-thumb:hover {
 .item-carousel-items-wrapper {
     display: flex;
     justify-content: center;
+    overflow: hidden;
 }
 
 .item-carousel-items-wrapper .vendor-input-group-styles {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.wheel-leader-top{
-    top:-60px;
+.wheel-leader-top {
+    top: -60px;
     position: absolute;
     perspective: 1000px;
     width: 200px;
@@ -1732,13 +1783,13 @@ div ::-webkit-scrollbar-thumb:hover {
     padding-bottom: 10px;
 }
 
-.wheel-leader-top.visible{
+.wheel-leader-top.visible {
     opacity: 100%;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.item-carousel-items-wrapper.invisible{
-    opacity:0%;
-    transform: rotateX(60deg);
-    transition: opacity 0.75s ease, transform 0.5s ease;
+.item-carousel-items-wrapper.invisible {
+    opacity: 90%;
+    transform: scale(1.05);
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }

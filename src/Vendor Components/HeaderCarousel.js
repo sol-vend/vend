@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Arrow icons
+import SwipeIndicator from './SwipeIndicator';
 
-const HeaderCarousel = ({ headerOpts, setState, name }) => {
+const HeaderCarousel = ({ headerOpts, setState, name, isMobileDevice }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [startTouchX, setStartTouchX] = useState(0); // To track touch start position
     const [translateX, setTranslateX] = useState(0); // For swipe translation
@@ -23,7 +24,7 @@ const HeaderCarousel = ({ headerOpts, setState, name }) => {
         } else if (translateX < -100) {
             handleNext(); // Swiped left
         }
-        
+
         // Reset the translation back to 0 with smooth transition
         setTranslateX(0);
     };
@@ -59,7 +60,8 @@ const HeaderCarousel = ({ headerOpts, setState, name }) => {
         >
             <div className="header-carousel-content">
                 <button onClick={handlePrev} className="header-carousel-arrow header-carousel-left-arrow">
-                    <FaArrowLeft size={30} />
+                    {isMobileDevice && <SwipeIndicator direction={'left'} numArrows={5} size={12} />}
+                    {!isMobileDevice && <SwipeIndicator direction={'left'} numArrows={1} size={12} />}
                 </button>
 
                 <div className="header-carousel-header">
@@ -67,7 +69,8 @@ const HeaderCarousel = ({ headerOpts, setState, name }) => {
                 </div>
 
                 <button onClick={handleNext} className="header-carousel-arrow header-carousel-right-arrow">
-                    <FaArrowRight size={30} />
+                    {isMobileDevice && <SwipeIndicator direction={'right'} numArrows={5} size={12} />}
+                    {!isMobileDevice && <SwipeIndicator direction={'right'} numArrows={1} size={12} />}
                 </button>
             </div>
         </div>

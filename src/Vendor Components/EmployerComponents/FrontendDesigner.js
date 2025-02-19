@@ -6,7 +6,7 @@ import CustomCheckbox from '../CustomCheckbox';
 import Phone from './Phone';
 
 // Component to handle customization of each element
-const FrontendDesigner = () => {
+const FrontendDesigner = ({isMobileDevice}) => {
     const [rotatedDisplay, setRotatedDisplay] = useState(false);
     const [interfacePreferences, setInterfacePreferences] = useState({
         businessName: 'Business Name',
