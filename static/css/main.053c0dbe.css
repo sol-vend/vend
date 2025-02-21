@@ -2532,6 +2532,7 @@ div ::-webkit-scrollbar-thumb:hover {
         width: 100% !important;
         margin-left: 0% !important;
         box-shadow: #ffffff 1px 1px 1px 3px !important;
+        height: 20vh !important;
     }
 
     .vendor-portal,
@@ -2659,7 +2660,7 @@ div ::-webkit-scrollbar-thumb:hover {
     justify-content: center;
     align-items: center;
     width: 35%;
-    height: 25vh;
+    height: 30vh;
     box-sizing: border-box;
     cursor: pointer;
     border-radius: 5px;
@@ -2869,4 +2870,4 @@ div ::-webkit-scrollbar-thumb:hover {
     /* Adjust size as needed */
 }
 
-/*# sourceMappingURL=main.3e5e160b.css.map*/
+/*# sourceMappingURL=main.053c0dbe.css.map*/
