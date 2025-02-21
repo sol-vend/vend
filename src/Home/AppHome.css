@@ -257,10 +257,9 @@
 .vendor-map-text,
 .packages-text,
 .store-text {
-    font-size: 40px;
+    font-size: 2em;
     font-weight: bold;
     margin-bottom: 5px;
-    font-family: fantasy;
     -webkit-text-stroke: 0.1px #6c6c6c;
 }
 
