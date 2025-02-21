@@ -25,6 +25,7 @@
         width: 100% !important;
         margin-left: 0% !important;
         box-shadow: #ffffff 1px 1px 1px 3px !important;
+        height: 20vh !important;
     }
 
     .vendor-portal,
@@ -152,7 +153,7 @@
     justify-content: center;
     align-items: center;
     width: 35%;
-    height: 25vh;
+    height: 30vh;
     box-sizing: border-box;
     cursor: pointer;
     border-radius: 5px;
