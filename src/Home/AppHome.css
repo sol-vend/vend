@@ -1,0 +1,363 @@
+/* AppHome.css */
+
+@media screen and (max-width: 768px) {
+    .app-home {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: ui-monospace;
+        color: white;
+        background-color: black;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        overflow-x: hidden;
+    }
+
+    .vendor-portal,
+    .vendor-map,
+    .packages,
+    .store {
+        width: 100% !important;
+        margin-left: 0% !important;
+        box-shadow: #ffffff 1px 1px 1px 3px !important;
+    }
+
+    .vendor-portal,
+    .vendor-map,
+    .packages,
+    .store {
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Top Section Styling */
+    .top-section {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+    }
+
+    .header {
+        display: flex;
+        justify-content: flex-start;
+        /* Align items to the start */
+        align-items: center;
+        background-color: black;
+        color: white;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    .about-us-section{
+        margin-top: 15%;
+    }
+}
+
+.app-home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: ui-monospace;
+    color: white;
+    background-color: black;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    overflow-x: hidden;
+}
+
+.top-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-start;
+    width: 100vw !important;
+    align-items: center;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 50px;
+    opacity: 90%;
+    transform-origin: 0px;
+    transform:scale(0.95);
+    transition: opacity ease-in-out transform ease-in-out;
+}
+
+.header:hover{
+    cursor: pointer;
+    opacity: 100%;
+    transform: scale(1);
+    transition: opacity ease-in-out transform ease-in-out;
+}
+
+.menu-icon {
+    font-size: 24px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@keyframes pictureSwell {
+    0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05); /* Slight movement to the right */
+      }
+      100% {
+        transform: scale(1); /* Return to the original position */
+      }
+}
+
+.vendor-portal,
+.vendor-map,
+.packages,
+.store {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+    height: 25vh;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: #ffffff 1px 1px 12px 3px;
+    animation: pictureSwell 10s ease-in-out infinite;
+}
+
+
+
+.vendor-portal,
+.packages {
+    margin-left: 15%;
+}
+
+.vendor-portal:hover::before,
+.vendor-map:hover::before,
+.packages:hover::before,
+.store:hover::before {
+    opacity: 1;
+}
+
+.vendor-portal,
+.vendor-map,
+.packages,
+.store {
+    z-index: 1;
+}
+
+.vendor-portal::before {
+    background-image: url('../../public/apphome-1.png');
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /* Or contain, etc. */
+    background-position: center;
+    opacity: 0.75;
+    /* Adjust opacity as needed */
+    z-index: -1;
+    /* Place the pseudo-element behind the content */
+}
+
+
+.vendor-map::before {
+    background-image: url('../../public/apphome-2.jpg');
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /* Or contain, etc. */
+    background-position: center;
+    opacity: 0.75;
+    /* Adjust opacity as needed */
+    z-index: -1;
+    /* Place the pseudo-element behind the content */
+}
+
+
+.packages::before {
+    background-image: url('../../public/apphome-3.jpg');
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /* Or contain, etc. */
+    background-position: center;
+    opacity: 0.75;
+    /* Adjust opacity as needed */
+    z-index: -1;
+    /* Place the pseudo-element behind the content */
+}
+
+
+.store::before {
+    background-image: url('../../public/apphome-4.jpg');
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /* Or contain, etc. */
+    background-position: center;
+    opacity: 0.65;
+    /* Adjust opacity as needed */
+    z-index: -1;
+    /* Place the pseudo-element behind the content */
+}
+
+
+.vendor-portal-text,
+.vendor-map-text,
+.packages-text,
+.store-text {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-family: fantasy;
+    -webkit-text-stroke: 0.1px #6c6c6c;
+}
+
+
+.vendor-portal-subtext,
+.vendor-map-subtext,
+.packages-subtext,
+.store-subtext {
+    font-size: 24px;
+    color: white;
+    background: linear-gradient(0deg, #0000004a, transparent);
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.sol-logo{
+    position: absolute;
+    right: 50px;
+    height: 49px;
+    width: 30px;
+    top: -3px;
+}
+
+.sol-logo svg{
+    fill: white;
+    width: 75px;
+    height: 50px;
+}
+
+/* About Us Section Styling */
+.about-us-section {
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.about-us-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+.about-us-text {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+
+.read-more-button {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+/* Contact Section Styling */
+.contact-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Two columns */
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.contact-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+
+.contact-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+
+.contact-text {
+    font-size: 16px;
+}
+
+
+/* Font Awesome Icons (Ensure Font Awesome is included in your project) */
+.fab {
+    font-size: 30px;
+    /* Adjust size as needed */
+}
