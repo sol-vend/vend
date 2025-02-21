@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
 import Phone from './Phone';
 import { FaArrowLeft, FaArrowRight, FaTrash, FaPlusCircle } from 'react-icons/fa'; // Arrow icons
+import { EmployeeLogin } from '../EmployeeComponents/EmployeeLogin';
 import ItemCarousel from './ItemCarousel';
 import SwipeIndicator from '../SwipeIndicator';
 import SnapSlider from './SnapSlider';
+import { retrieveExistingData, updateExistingData } from '../Shared';
 
 const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
     const [groups, setGroups] = useState([]);
@@ -17,6 +20,34 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
     const [deleteButtonOpacity, setDeleteButtonOpacity] = useState(0.5);
     const [groupNames, setGroupNames] = useState([]);
     const [isGroupClicked, setIsGroupClicked] = useState(false);
+    const [isStartup, setIsStartup] = useState(true);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        if (isStartup) {
+            setIsStartup(false);
+            try {
+                const getCurrentGroups = async () => {
+                    const interfaceSetup = ['interfaceSetup'];
+                    const currentGroups = await retrieveExistingData(interfaceSetup);
+                    if (currentGroups.response) {
+                        if (currentGroups.response.interfaceSetup) {
+                            if (currentGroups.response.interfaceSetup !== null) {
+                                setGroups(currentGroups.response.interfaceSetup);
+                            }
+                        }
+                    } else if (currentGroups.status) {
+                        if (currentGroups.status === 500) {
+                            setError(true);
+                        }
+                    }
+                }
+                getCurrentGroups();
+            } catch (error) {
+                setError(true);
+            }
+        }
+    }, []);
 
     const handleAddGroup = (e) => {
         e.preventDefault();
@@ -34,12 +65,24 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
     }
 
     useEffect(() => {
-        setGroupNames(groups.map(group => group.groupName));
+        try {
+            setGroupNames(groups.map(group => group.groupName));
+            const updateDatabaseWithGroups = debounce(async () => {
+                const data = {
+                    interfaceSetup: groups
+                }
+                const status = await updateExistingData(data);
+                if (status.status) {
+                    if (status.status === 500) {
+                        setError(true);
+                    }
+                }
+            }, 10000);
+            updateDatabaseWithGroups();
+        } catch (error) {
+            setError(true);
+        }
     }, [groups])
-
-    useEffect(() => {
-        console.log(groupNames);
-    }, [groupNames])
 
     const handleRemoveGroup = (groupIndex) => {
         const updatedGroups = groups.filter((_, index) => index !== groupIndex);
@@ -142,126 +185,132 @@ const EmployeeInterfaceDesigner = ({ isMobileDevice }) => {
         setSelectedIndex(itemIndex);
     }
 
-    return (
-        <div className='frontend-designer-wrapper' style={{ display: 'flex' }}>
-            <div>
-                <div className='frontend-options-wrapper'>
-                    <div>
-                        <div className="carousel-controls header-carousel swipeable">
-                            {true && <button className="header-carousel-arrow header-carousel-left-arrow" onClick={goToPreviousGroup} disabled={currentGroupIndex === 0}>{<SwipeIndicator direction={'left'} numArrows={3} size={10} />}</button>}
-                            {!isMobileDevice && <h3>{groups[currentGroupIndex].groupName || "Groups"}</h3>}
-                            {isMobileDevice && <h3
-                            style={{transform: isGroupClicked ? 'scale(1)' : 'translateX(50px)'}}
-                            ><SnapSlider selectedIndex={currentGroupIndex} items={groupNames} setSelectedIndex={setCurrentGroupIndex} /></h3>}
-                            {true && <button className="header-carousel-arrow header-carousel-right-arrow" onClick={goToNextGroup} disabled={currentGroupIndex === groups.length - 1}>{<SwipeIndicator direction={'right'} numArrows={3} size={10} />}</button>}
+    if (error) {
+        return (
+            window.location.reload()
+        )
+    } else {
+        return (
+            <div className='frontend-designer-wrapper' style={{ display: 'flex' }}>
+                <div>
+                    <div className='frontend-options-wrapper'>
+                        <div>
+                            <div className="carousel-controls header-carousel swipeable">
+                                {true && <button className="header-carousel-arrow header-carousel-left-arrow" onClick={goToPreviousGroup} disabled={currentGroupIndex === 0}>{<SwipeIndicator direction={'left'} numArrows={3} size={10} />}</button>}
+                                {!isMobileDevice && <h3>{groups[currentGroupIndex].groupName || "Groups"}</h3>}
+                                {isMobileDevice && <h3
+                                    style={{ transform: isGroupClicked ? 'scale(1)' : 'translateX(50px)' }}
+                                ><SnapSlider selectedIndex={currentGroupIndex} items={groupNames} setSelectedIndex={setCurrentGroupIndex} /></h3>}
+                                {true && <button className="header-carousel-arrow header-carousel-right-arrow" onClick={goToNextGroup} disabled={currentGroupIndex === groups.length - 1}>{<SwipeIndicator direction={'right'} numArrows={3} size={10} />}</button>}
+                            </div>
+                            <div className='vendor-show-hide-styles' style={{ marginBottom: 'auto' }} onClick={handleAddGroup}><FaPlusCircle /></div>
                         </div>
-                        <div className='vendor-show-hide-styles' style={{ marginBottom: 'auto' }} onClick={handleAddGroup}><FaPlusCircle /></div>
-                    </div>
-                    {groups.length > 0 && (
-                        <div
-                            key={currentGroupIndex}
-                            className="group"
-                            style={{
-                                border: "solid #dedede 1px",
-                                width: '30vw',
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexDirection: 'column',
-                                padding: '2px',
-                                borderRadius: '2px',
-                                touchAction: 'none', // Disable default touch behavior
-                            }}
-                            onTouchStart={handleTouchStart} // Start swipe
-                            onTouchEnd={handleSwipe} // End swipe
-                        >
+                        {groups.length > 0 && (
                             <div
-                                className='vendor-input-group-styles'
+                                key={currentGroupIndex}
+                                className="group"
                                 style={{
-                                    width: '25vw',
-                                    background: "linear-gradient(45deg, #ffffff, transparent)",
-                                    border: "solid #ffffff 2px",
-                                    flexDirection: 'row'
+                                    border: "solid #dedede 1px",
+                                    width: '30vw',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexDirection: 'column',
+                                    padding: '2px',
+                                    borderRadius: '2px',
+                                    touchAction: 'none', // Disable default touch behavior
                                 }}
+                                onTouchStart={handleTouchStart} // Start swipe
+                                onTouchEnd={handleSwipe} // End swipe
                             >
-                                <input
-                                    id="group-input-textbox"
-                                    type="text"
-                                    placeholder="Group Name"
-                                    className='vendor-input-field-styles'
-                                    value={groups[currentGroupIndex].groupName}
-                                    onClick={handleTextboxClicked}
-                                    onChange={(e) =>
-                                        handleGroupChange(currentGroupIndex, 'groupName', e.target.value)
-                                    }
+                                <div
+                                    className='vendor-input-group-styles'
+                                    style={{
+                                        width: '25vw',
+                                        background: "linear-gradient(45deg, #ffffff, transparent)",
+                                        border: "solid #ffffff 2px",
+                                        flexDirection: 'row'
+                                    }}
+                                >
+                                    <input
+                                        id="group-input-textbox"
+                                        type="text"
+                                        placeholder="Group Name"
+                                        className='vendor-input-field-styles'
+                                        value={groups[currentGroupIndex].groupName}
+                                        onClick={handleTextboxClicked}
+                                        onChange={(e) =>
+                                            handleGroupChange(currentGroupIndex, 'groupName', e.target.value)
+                                        }
+                                    />
+                                </div>
+                                <div className='vendor-show-hide-styles' onClick={() => handleRemoveGroup(currentGroupIndex)}><FaTrash /></div>
+                            </div>
+                        )}
+                    </div>
+                    {groups[currentGroupIndex] &&
+                        groups[currentGroupIndex].items &&
+                        groups[currentGroupIndex].items.length > 0 && (
+                            <div
+                                className='frontend-options-wrapper'
+                            >
+                                <ItemCarousel
+                                    groups={groups}
+                                    currentGroupIndex={currentGroupIndex}
+                                    handleItemChange={handleItemChange}
+                                    handleAddItem={handleAddItem}
+                                    selectedIndex={selectedIndex}
+                                    setSelectedIndex={setSelectedIndex}
                                 />
                             </div>
-                            <div className='vendor-show-hide-styles' onClick={() => handleRemoveGroup(currentGroupIndex)}><FaTrash /></div>
-                        </div>
-                    )}
-                </div>
-                {groups[currentGroupIndex] &&
-                    groups[currentGroupIndex].items &&
-                    groups[currentGroupIndex].items.length > 0 && (
-                        <div
-                            className='frontend-options-wrapper'
-                        >
-                            <ItemCarousel
-                                groups={groups}
-                                currentGroupIndex={currentGroupIndex}
-                                handleItemChange={handleItemChange}
-                                handleAddItem={handleAddItem}
-                                selectedIndex={selectedIndex}
-                                setSelectedIndex={setSelectedIndex}
-                            />
-                        </div>
-                    )
-                }
-            </div>
-            <Phone>
-                <div style={{ position: 'absolute', paddingTop: '10px', height: '100%', width: '100%' }}>
-                    {groups.length > 0 &&
-                        <div>
-                            <div className='group-phone-header'>
-                                <div>{groups[currentGroupIndex].groupName}</div>
-                            </div>
-                            <div className='group-phone-contents'
-                                style={{ height: `${document.querySelector('.phone-outline').offsetHeight - 60}px` }}
-                            >
-                                {groups[currentGroupIndex].items.map((item, itemIndex) =>
-                                    <div>
-                                        {item.name !== '' &&
-                                            <div
-                                                className={isMobileDevice ? 'group-phone-display-button' : 'group-phone-display-button'}
-                                                style={{ display: 'flex', marginLeft: '2px', marginRight: '2px', cursor: 'pointer', width: '100%' }}
-                                                onClick={() => (handleDeletionSelection(currentGroupIndex, itemIndex))}
-                                            ><p>{item.name}</p>
-                                                {
-                                                    deletionSelectionItem.groupIndex === currentGroupIndex && deletionSelectionItem.itemIndex === itemIndex ?
-                                                        <p
-                                                            className={isMobileDevice ? 'append-existing-phone-button visible mobile' : 'append-existing-phone-button visible'}
-                                                            style={{ transform: `translateX(${-1 * deleteButtonTranslationPosition}px)`, opacity: deleteButtonOpacity, left: `${15 + (4.5 * item.name.length)}px` }}
-                                                            onClick={() => !isMobileDevice ? (handleItemChange(currentGroupIndex, itemIndex, 'name', ''), handleItemChange(currentGroupIndex, itemIndex, 'price', 0)) : () => { return null }}
-                                                            onTouchStart={handleDeletionSwipeTouchStart}
-                                                            onTouchMove={handleDeletionSwipeTouchMove}
-                                                            onTouchEnd={(e) => handleDeletionSwipeTouchEnd(e, currentGroupIndex, itemIndex)}
-                                                        >x</p>
-                                                        :
-                                                        <p
-                                                            className='append-existing-phone-button'
-                                                            onClick={() => (handleItemChange(currentGroupIndex, itemIndex, 'name', ''), handleItemChange(currentGroupIndex, itemIndex, 'price', 0))}
-                                                        >x</p>
-                                                }
-                                            </div>
-                                        }
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        )
                     }
                 </div>
-            </Phone>
-        </div>
-    );
-};
+                <Phone>
+                    <div style={{ position: 'absolute', paddingTop: '10px', height: '100%', width: '100%' }}>
+                        {groups.length > 0 &&
+                            <div>
+                                <div className='group-phone-header'>
+                                    <div>{groups[currentGroupIndex].groupName}</div>
+                                </div>
+                                <div className='group-phone-contents'
+                                    style={{ height: `${document.querySelector('.phone-outline').offsetHeight - 60}px` }}
+                                >
+                                    {groups[currentGroupIndex].items.map((item, itemIndex) =>
+                                        <div>
+                                            {item.name !== '' &&
+                                                <div
+                                                    className={isMobileDevice ? 'group-phone-display-button' : 'group-phone-display-button'}
+                                                    style={{ display: 'flex', marginLeft: '2px', marginRight: '2px', cursor: 'pointer', width: '100%' }}
+                                                    onClick={() => (handleDeletionSelection(currentGroupIndex, itemIndex))}
+                                                ><p>{item.name}</p>
+                                                    {
+                                                        deletionSelectionItem.groupIndex === currentGroupIndex && deletionSelectionItem.itemIndex === itemIndex ?
+                                                            <p
+                                                                className={isMobileDevice ? 'append-existing-phone-button visible mobile' : 'append-existing-phone-button visible'}
+                                                                style={{ transform: `translateX(${-1 * deleteButtonTranslationPosition}px)`, opacity: deleteButtonOpacity, left: `${15 + (4.5 * item.name.length)}px` }}
+                                                                onClick={() => !isMobileDevice ? (handleItemChange(currentGroupIndex, itemIndex, 'name', ''), handleItemChange(currentGroupIndex, itemIndex, 'price', 0)) : () => { return null }}
+                                                                onTouchStart={handleDeletionSwipeTouchStart}
+                                                                onTouchMove={handleDeletionSwipeTouchMove}
+                                                                onTouchEnd={(e) => handleDeletionSwipeTouchEnd(e, currentGroupIndex, itemIndex)}
+                                                            >x</p>
+                                                            :
+                                                            <p
+                                                                className='append-existing-phone-button'
+                                                                onClick={() => (handleItemChange(currentGroupIndex, itemIndex, 'name', ''), handleItemChange(currentGroupIndex, itemIndex, 'price', 0))}
+                                                            >x</p>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </Phone>
+            </div>
+        );
+    };
+}
 
 export default EmployeeInterfaceDesigner;

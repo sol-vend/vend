@@ -1417,6 +1417,7 @@ div ::-webkit-scrollbar-thumb:hover {
     padding: 4px;
     z-index: 1000;
     transition: transform 0.3s ease-in-out;
+    -webkit-transform: translateZ(0);
 }
 
 .home-home-primary-content {

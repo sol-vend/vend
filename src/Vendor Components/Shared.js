@@ -92,6 +92,13 @@ export const getLocationMetadataFromIp = async (ipAddress) => {
   }
 }
 
+const handleResponseRefreshToken = (response) => {
+  if (response.data.refreshToken) {
+    const token = response.data.refreshToken;
+    localStorage.setItem('authToken', token);
+  }
+}
+
 export const fetchDataWithAuth = async (setCallback) => {
   try {
     const token = localStorage.getItem("authToken");
@@ -100,9 +107,60 @@ export const fetchDataWithAuth = async (setCallback) => {
         "Authorization": `Bearer ${token}`,
       }
     });
-    setCallback(response.data);
+    if (response.data) {
+      setCallback(response.data);
+      handleResponseRefreshToken(response);
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
     setCallback({ "error": error, doContinue: false })
   }
 };
+
+export const retrieveExistingData = async (keys) => {
+  try {
+    const token = localStorage.getItem("authToken");
+    const apiUrl = `${API_URL}/api/get_data_by_keys`;  // Replace with your API endpoint
+    const postData = {
+      searchKeys: keys
+    };
+
+    // Use async/await for better handling of asynchronous code
+    const response = await axios.post(apiUrl, postData, {
+      headers: {
+        'Authorization': `Bearer ${token}`,  // Include the Bearer token in the Authorization header
+        'Content-Type': 'application/json'       // Set Content-Type to JSON if you're sending JSON data
+      }
+    });
+    console.log('Response:', response.data);
+    handleResponseRefreshToken(response);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error:', error);
+    return error;
+  }
+};
+
+export const updateExistingData = async (data) => {
+  try {
+    const token = localStorage.getItem("authToken");
+    const apiUrl = `${API_URL}/api/update_item`;  // Replace with your API endpoint
+    const postData = {
+      updateItems: data
+    };
+    const response = await axios.post(apiUrl, postData, {
+      headers: {
+        'Authorization': `Bearer ${token}`,  // Include the Bearer token in the Authorization header
+        'Content-Type': 'application/json'       // Set Content-Type to JSON if you're sending JSON data
+      }
+    })
+    console.log('Response:', response.data);
+    handleResponseRefreshToken(response);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error:', error);
+    return error;
+  }
+}
