@@ -6,7 +6,6 @@ import HeaderWrapper from './HeaderWrapper';
 import Home from './EmployerComponents/Home';
 
 const VendorApp = () => {
-    document.body.classList.add('vendor');
     const [createAccount, setCreateAccount] = useState(false);
     const [userMetadata, setUserMetadata] = useState(false);
     const [isNightMode, setIsNightMode] = useState(null);
@@ -122,8 +121,8 @@ const VendorApp = () => {
         if (isNightMode) {
             document.body.style.transition = "filter 0.5s ease-in-out";
             document.body.style.filter = "invert(1)";
-                
-            
+
+
             setUpdateVendorWrapper(!updateVendorWrapper);
         } else {
             document.body.style.filter = "invert(0)";
@@ -173,7 +172,6 @@ const VendorApp = () => {
             </div>
         )
     } else if (autoLogin.isLoggedIn) {
-        console.log(autoLogin);
         return (
             <div>
                 <HeaderWrapper />
@@ -182,7 +180,6 @@ const VendorApp = () => {
         )
     }
     else if (getSecondHash()) {
-        console.log("Redirect to login functions")
         return (
             <div>
                 <HeaderWrapper />
@@ -196,10 +193,8 @@ const VendorApp = () => {
                     <HeaderWrapper />
                     {!createAccount && (
                         <div className='vendor-login-wrapper'>
-                            <div>
-                                <div className='vendor-login-inputs'>
-                                    <EmployeeLogin />
-                                </div>
+                            <div className='vendor-login-inputs'>
+                                <EmployeeLogin />
                             </div>
                         </div>
                     )}

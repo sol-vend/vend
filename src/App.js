@@ -32,9 +32,9 @@ const App = () => {
                 </ItemsProvider>
               } />
               <Route path="/vendor/*" element={
-                <div>
+                <>
                   <VendorApp />
-                </div>
+                </>
               } />
             </Routes>
           </WalletModalProvider>

@@ -34,7 +34,8 @@ const HeaderWrapper = () => {
                         height: "150px",
                         background: "linear-gradient(#303f56, #384249, #161422, #191524, #0c0b11)",
                         boxShadow: "black 1px 1px 20px 7px"
-                    }}></div>
+                    }}>
+                </div>
             </div>
         </div>
     );
