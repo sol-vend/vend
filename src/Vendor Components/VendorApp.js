@@ -195,9 +195,7 @@ const VendorApp = () => {
                 <div className='vendor-interface'>
                     <HeaderWrapper />
                     {!createAccount && (
-                        <div className='vendor-login-wrapper' style={{
-                            marginTop: '5vw'
-                        }}>
+                        <div className='vendor-login-wrapper'>
                             <div>
                                 <div className='vendor-login-inputs'>
                                     <EmployeeLogin />
