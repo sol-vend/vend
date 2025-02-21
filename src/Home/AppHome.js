@@ -55,11 +55,7 @@ const AppHome = () => {
                 <div className="about-us-section">
                     <div className="about-us-title">About us</div>
                     <div className="about-us-text">
-                        We believe in the beauty of nature. By creating the Freyja brand we
-                        wanted to pay homage to the Earth. Our products are vegan and from
-                        organic and responsible agriculture. Inspired by Scandinavian culture,
-                        they have been designed to give you the best of what nature has to
-                        offer...
+                    At Sol Vend, our mission is to revolutionize everyday financial interactions by making cryptocurrency accessible, intuitive, and practical for everyone. We are dedicated to empowering individuals with seamless payment solutions built on the Solana blockchain, enabling fast, secure, and cost-effective transactions for both mainstream users and meme coin enthusiasts. By bridging the gap between cutting-edge blockchain technology and real-world usability, we strive to create a future where sending and receiving crypto payments is as simple and commonplace as using traditional money. Together, we’re building a more inclusive financial ecosystem—one transaction at a time.
                     </div>
                     <button className="read-more-button">READ MORE</button>
                 </div>
