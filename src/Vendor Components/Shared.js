@@ -164,3 +164,16 @@ export const updateExistingData = async (data) => {
     return error;
   }
 }
+
+export const fetchTokens = async (stateSetter) => {
+  try {
+    const response = await fetch('https://tokens.jup.ag/tokens?tags=verified');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    stateSetter(data);
+  } catch (error) {
+    console.error('Error fetching tokens:', error);
+  }
+};

@@ -189,8 +189,8 @@ const VendorApp = () => {
     } else {
         return (
             <div>
+                <HeaderWrapper />
                 <div className='vendor-interface'>
-                    <HeaderWrapper />
                     {!createAccount && (
                         <div className='vendor-login-wrapper'>
                             <div className='vendor-login-inputs'>
@@ -200,7 +200,6 @@ const VendorApp = () => {
                     )}
                     {createAccount && (
                         <div>
-                            <HeaderWrapper />
                             <ManualSignUp />
                         </div>
                     )}

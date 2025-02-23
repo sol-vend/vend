@@ -1,8 +1,14 @@
-/* General Body and Font Setup */
+
+.geist-geist-font {
+  font-family: "Geist", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  /* Primary and fallback fonts */
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;

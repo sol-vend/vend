@@ -5,7 +5,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-family: ui-monospace;
         color: white;
         background-color: black;
         padding: 0;
@@ -20,7 +19,7 @@
 
     .vendor-portal,
     .vendor-map,
-    .packages,
+    .buy,
     .store {
         width: 100% !important;
         margin-left: 0% !important;
@@ -30,7 +29,7 @@
 
     .vendor-portal,
     .vendor-map,
-    .packages,
+    .buy,
     .store {
         background-size: cover;
         background-position: center;
@@ -56,15 +55,11 @@
     .header {
         display: flex;
         justify-content: flex-start;
-        /* Align items to the start */
         align-items: center;
         background-color: black;
         color: white;
         padding: 10px;
         box-sizing: border-box;
-    }
-    .about-us-section{
-        margin-top: 15%;
     }
 }
 
@@ -72,7 +67,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: ui-monospace;
     color: white;
     background-color: black;
     margin: 0;
@@ -94,21 +88,18 @@
 
 .header {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     width: 100vw !important;
     align-items: center;
     background-color: black;
     color: white;
     padding: 10px;
     box-sizing: border-box;
-    height: 50px;
-    opacity: 90%;
-    transform-origin: 0px;
-    transform:scale(0.95);
-    transition: opacity ease-in-out transform ease-in-out;
+    height: 75px;
+    overflow: hidden;
 }
 
-.header:hover{
+.menu-icon:hover {
     cursor: pointer;
     opacity: 100%;
     transform: scale(1);
@@ -119,28 +110,43 @@
     font-size: 24px;
     margin-right: 10px;
     cursor: pointer;
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    transform-origin: 0px;
+    transform: scale(0.95);
+    transition: opacity ease-in-out transform ease-in-out;
+    z-index: 10;
+    opacity: 90%;
 }
 
 .logo {
     font-size: 20px;
     font-weight: bold;
+    overflow: hidden;
+    margin-top: 20px;
+    box-shadow: #3e2583 1px 1px 20px 20px;
 }
 
 @keyframes pictureSwell {
     0% {
         transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05); /* Slight movement to the right */
-      }
-      100% {
-        transform: scale(1); /* Return to the original position */
-      }
+    }
+
+    50% {
+        transform: scale(1.05);
+        /* Slight movement to the right */
+    }
+
+    100% {
+        transform: scale(1);
+        /* Return to the original position */
+    }
 }
 
 .vendor-portal,
 .vendor-map,
-.packages,
+.buy,
 .store {
     position: relative;
     background-size: cover;
@@ -164,20 +170,20 @@
 
 
 .vendor-portal,
-.packages {
+.vendor-map {
     margin-left: 15%;
 }
 
 .vendor-portal:hover::before,
 .vendor-map:hover::before,
-.packages:hover::before,
+.buy:hover::before,
 .store:hover::before {
     opacity: 1;
 }
 
 .vendor-portal,
 .vendor-map,
-.packages,
+.buy,
 .store {
     z-index: 1;
 }
@@ -218,7 +224,7 @@
 }
 
 
-.packages::before {
+.buy::before {
     background-image: url('../../public/apphome-3.jpg');
     content: "";
     position: absolute;
@@ -256,7 +262,7 @@
 
 .vendor-portal-text,
 .vendor-map-text,
-.packages-text,
+.buy-text,
 .store-text {
     font-size: 2em;
     font-weight: bold;
@@ -267,25 +273,26 @@
 
 .vendor-portal-subtext,
 .vendor-map-subtext,
-.packages-subtext,
+.buy-subtext,
 .store-subtext {
-    font-size: 24px;
+    font-size: 18px;
     color: white;
     background: linear-gradient(0deg, #0000004a, transparent);
     padding: 10px;
     border-radius: 10px;
     font-weight: bold;
+    font-style: oblique;
 }
 
-.sol-logo{
+.sol-logo {
     position: absolute;
-    right: 50px;
+    right: 75px;
     height: 49px;
     width: 30px;
     top: -3px;
 }
 
-.sol-logo svg{
+.sol-logo svg {
     fill: white;
     width: 75px;
     height: 50px;
@@ -360,4 +367,87 @@
 .fab {
     font-size: 30px;
     /* Adjust size as needed */
+}
+
+.menu-active-wrapper {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 15vw;
+    height: 100vh;
+    background: white;
+    z-index: 2;
+    border-right: solid #6c6c6c 2px;
+}
+
+.menu-active-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50%;
+}
+
+.menu-item {
+    cursor: pointer;
+    text-align: center;
+    padding-bottom: 10%;
+    border-bottom: solid #efefef 0.5px;
+}
+
+.menu-item:hover {
+    background: #ededed;
+}
+
+.menu-item:hover svg {
+    transform: scale(1.1)
+}
+
+.menu-item svg {
+    width: 2em;
+    height: 2em;
+}
+
+.token-ticker-animate {
+    animation-name: ticker;
+    animation-play-state: running;
+    /* Ensure animation plays when visible */
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+        /* Or a value that makes it loop seamlessly */
+    }
+}
+
+
+.emphasized-text {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1.2em;
+    animation: fadeInOut 10s infinite;
+    font-style: italic;
+}
+
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    30%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    70%{
+        opacity:0
+    }
+    100% {
+        opacity: 0;
+    }
 }
