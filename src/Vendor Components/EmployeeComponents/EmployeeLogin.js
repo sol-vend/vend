@@ -269,7 +269,7 @@ export const EmployeeLogin = () => {
                                 styles={{ left: '50%' }}
                             >
                                 <CustomCheckbox
-                                    label={!isEmployerLogin ? { title: "User Login", description: "Point of Sale Portal for Employees" } : { title: "Employer Login", description: "Manage Your Account" }}
+                                    label={!isEmployerLogin ? { title: "Employee Login", description: "Point of Sale Portal for Employees" } : { title: "Employer Login", description: "Manage Your Account" }}
                                     checked={isEmployerLogin}
                                     onChange={setIsEmployerLogin}
                                     name={'isEmployerLogin'}

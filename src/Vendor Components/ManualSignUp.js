@@ -616,7 +616,7 @@ const ManualSignUp = () => {
                         <div
                             className='vendor-input-group-styles'>
                             <CustomCheckbox
-                                label={{ title: "Location Services Preference:", description: "This will automatically let people know if you're open and how to find you." }}
+                                label={{ title: "Location:", description: "This will automatically let people know if you're open and how to find you." }}
                                 name="isLocationServicesEnabled"
                                 checked={formData.isLocationServicesEnabled}
                                 onChange={handleLocationServicesChange}

@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { passwordToggleBtnStyles, passwordToggleBtnHoverStyles } from './ManualSignUpStyles';
 import { API_URL } from '../Components/Shared';
-import {
-  formStyles,
-  passwordToggleBtnStyles,
-  passwordToggleBtnHoverStyles,
-  headingStyles
-} from './ManualSignUpStyles';
 import PaypalOptions from './PaypalOptions';
 import CustomDropdownInput from './CustomDropdownInput';
 import CustomRadioButton from './CustomRadioButton';
@@ -178,8 +173,8 @@ const PaymentInfoForm = ({ submitResponse, setSubmitResponse, formData, setReset
               }
             </div>
 
-            <div style={formStyles}>
-              <h3 style={headingStyles}>Set Up Your Payment Information</h3>
+            <div className='vendor-form-styles'>
+              <h3 className='vendor-header-styls'>Set Up Your Payment Information</h3>
               <form
                 onSubmit={handleSubmit}
               >

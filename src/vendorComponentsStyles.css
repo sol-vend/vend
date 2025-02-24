@@ -91,10 +91,6 @@ body {
         overflow: auto;
     }
 
-    .custom-checkbox-inner.checked {
-        transform: translateX(100%) !important;
-    }
-
     .custom-checkbox {
         width: 45px !important;
     }
@@ -194,7 +190,13 @@ body {
         animation: slideIndicator 1s ease-in-out 2;
       }
       
+      .vendor-form-header-wrapper{
+        width: 100%;
+      }
 
+      .vendor-form-header-wrapper > p {
+        width:100% !important;
+      }
 }
 
 .vendor-form-styles {
@@ -1046,11 +1048,23 @@ label {
     width: 95%;
 }
 
+.custom-checkbox-wrapper-wrapper{
+    display:flex;
+}
+
+.custom-checkbox-wrapper-wrapper >div{
+    display:flex;
+}
+
 .custom-checkbox-wrapper-paragraph-descriptor {
     color: #383636;
     font-size: 12px;
     font-style: italic;
-    margin-left: 10px;
+}
+
+.custom-checkbox-wrapper-paragraph-descriptor p {
+    width: 70%;
+    margin-left: auto;
 }
 
 .custom-checkbox-input {
@@ -1059,7 +1073,7 @@ label {
 }
 
 .custom-checkbox {
-    width: 40px;
+    width: 45px;
     height: 24px;
     background: linear-gradient(45deg, #383636, #000000ab);
     border-radius: 50px;
@@ -1077,10 +1091,6 @@ label {
     top: 3px;
     left: 3px;
     transition: transform 0.3s ease;
-}
-
-.custom-checkbox-inner.checked {
-    transform: translateX(16px);
 }
 
 .custom-checkbox-input:checked+.custom-checkbox {
@@ -1233,7 +1243,6 @@ div ::-webkit-scrollbar-thumb:hover {
     padding-block: 10px;
     border: solid rgb(197 195 195 / 76%) 0.5px;
     border-radius: 2px;
-    max-width: 20vw;
     box-shadow: rgba(240, 248, 255, 0.56) -4px -2px 18px 11px;
     margin-bottom: 10px;
 }
