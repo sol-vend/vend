@@ -1060,6 +1060,7 @@ label {
     color: #383636;
     font-size: 12px;
     font-style: italic;
+    margin-left: auto;
 }
 
 .custom-checkbox-wrapper-paragraph-descriptor p {
@@ -1099,6 +1100,7 @@ label {
 
 .checkbox-label {
     transition: color 0.3s ease;
+    padding-right:10px;
 }
 
 .custom-checkbox-input:checked+.custom-checkbox+.checkbox-label {
