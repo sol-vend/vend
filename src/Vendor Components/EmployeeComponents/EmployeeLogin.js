@@ -46,6 +46,10 @@ export const EmployeeLogin = () => {
         }
     }, [resetClicked])
 
+    useEffect(() => {
+        setLoading(false);
+    }, [isLoginSuccess])
+
     const handleResetClick = () => {
         setResetClicked(!resetClicked);
     };
@@ -95,7 +99,6 @@ export const EmployeeLogin = () => {
                 console.error('Error during login:', error.response ? error.response.data : error.message);
             }
         };
-        setLoading(false);
         setError('');
         postLoginData();
     };

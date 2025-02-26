@@ -5,7 +5,8 @@ import { getIpAddress, getLocationMetadataFromIp, fetchDataWithAuth } from './Sh
 import HeaderWrapper from './HeaderWrapper';
 import Home from './EmployerComponents/Home';
 
-const VendorApp = () => {
+const VendorApp = ({setSelectedRoute}) => {
+    console.log(setSelectedRoute);
     const [createAccount, setCreateAccount] = useState(false);
     const [userMetadata, setUserMetadata] = useState(false);
     const [isNightMode, setIsNightMode] = useState(null);
@@ -175,7 +176,7 @@ const VendorApp = () => {
         return (
             <div>
                 <HeaderWrapper />
-                <Home loginInfos={autoLogin} />
+                <Home loginInfos={autoLogin} setSelectedRoute={setSelectedRoute}/>
             </div>
         )
     }

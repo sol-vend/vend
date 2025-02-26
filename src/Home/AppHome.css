@@ -120,6 +120,11 @@
     opacity: 90%;
 }
 
+.menu-icon.absolute{
+    height:25px !important;
+    position: fixed !important;
+}
+
 .logo {
     font-size: 20px;
     font-weight: bold;
@@ -376,8 +381,10 @@
     width: 15vw;
     height: 100vh;
     background: white;
-    z-index: 2;
+    z-index: 100000 !important;
     border-right: solid #6c6c6c 2px;
+    pointer-events: auto;
+    isolation: isolate;
 }
 
 .menu-active-container {

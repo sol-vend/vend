@@ -34,7 +34,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={
                 <>
-                  <AppHome className='geist-geist-font'/>
+                  <AppHome/>
                 </>
               } />
               <Route path="/vend/*" element={
