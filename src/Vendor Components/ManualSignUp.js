@@ -11,7 +11,7 @@ import PasswordToggle from './PasswordToggle';
 import SolanaLogoSvg from './SolanaLogoSvg';
 import Tooltip from './Tooltip';
 
-const ManualSignUp = () => {
+const ManualSignUp = ({setSelectedRoute}) => {
 
     const [formData, setFormData] = useState({
         emailAddress: '',

@@ -37,6 +37,12 @@ const App = () => {
                   <AppHome/>
                 </>
               } />
+              <Route path="/*" element={
+                <>
+                {console.log('autoroute')}
+                  <AppHome autoRoute={true} />
+                </>
+              } />
               <Route path="/vend/*" element={
                 <ItemsProvider>
                   <div className="App">

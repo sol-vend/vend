@@ -61,6 +61,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
 
   const handleLogOut = () => {
     localStorage.setItem("authToken", "");
+    window.location.reload();
   };
 
   const userSettingsOptions = [

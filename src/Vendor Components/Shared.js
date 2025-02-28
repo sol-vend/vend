@@ -92,7 +92,7 @@ export const getLocationMetadataFromIp = async (ipAddress) => {
   }
 }
 
-const handleResponseRefreshToken = (response) => {
+export const handleResponseRefreshToken = (response) => {
   if (response.data.refreshToken) {
     const token = response.data.refreshToken;
     localStorage.setItem('authToken', token);
@@ -108,6 +108,7 @@ export const fetchDataWithAuth = async (setCallback) => {
       }
     });
     if (response.data) {
+      console.log(response);
       setCallback(response.data);
       handleResponseRefreshToken(response);
     }

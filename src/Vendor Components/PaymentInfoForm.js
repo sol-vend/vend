@@ -66,7 +66,7 @@ const PaymentInfoForm = ({
     if (walletAddress.length > 0) {
       if (selectedPaymentCurrency) {
         let now = new Date();
-        now.setMinutes(now.getMinutes() + 15);
+        now.setMinutes(now.getMinutes() + 60);
         const updatedFormData = {
           ...formData,
           vendorWalletAddress: walletAddress,

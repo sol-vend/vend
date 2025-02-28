@@ -140,6 +140,8 @@ const EmployeeInterface = () => {
         </div>
 
         <div className="pages">
+          {pageDatas.interfaceSetup && (
+            <>
           {pageDatas.interfaceSetup.map((group, groupIndex) => (
             <div key={groupIndex} className="page">
               <h3>{group.groupName || `Page ${groupIndex + 1}`}</h3>
@@ -183,6 +185,8 @@ const EmployeeInterface = () => {
               </ul>
             </div>
           ))}
+          </>
+        )}
         </div>
 
         <div className="miscellaneous">

@@ -7,7 +7,8 @@ import { FaHome, FaQuestionCircle, FaDollarSign } from "react-icons/fa";
 import TokenTicker from "./TokenTicker";
 import SideMenu from "./SideMenu";
 
-const AppHome = () => {
+const AppHome = ({ autoRoute = false }) => {
+  console.log(autoRoute);
   const [selectedRoute, setSelectedRoute] = useState(false);
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [fetchedTokens, setFetchedTokens] = useState(false);
@@ -48,8 +49,8 @@ const AppHome = () => {
   }, []);
 
   const handleMenuSelection = (key, index) => {
-    if (key === "Home"){
-        window.location.reload();
+    if (key === "Home") {
+      window.location.reload();
     }
     console.log(`Menu item ${key} was clicked!`);
   };
@@ -58,6 +59,27 @@ const AppHome = () => {
     return (
       <>
         {selectedRoute}
+        <div
+          onClick={toggleOptions}
+          className="menu-icon absolute"
+          ref={menuRef}
+          style={{ color: isMenuActive ? "black" : "white" }}
+        >
+          &#9776;
+        </div>
+        {isMenuActive && (
+          <SideMenu
+            menuItems={menuItems}
+            optionsRef={optionsRef}
+            handleMenuSelection={handleMenuSelection}
+          />
+        )}
+      </>
+    );
+  } else if (autoRoute) {
+    return (
+      <>
+        {<VendorApp setSelectedRoute={setSelectedRoute} />}
         <div
           onClick={toggleOptions}
           className="menu-icon absolute"
@@ -99,7 +121,11 @@ const AppHome = () => {
 
             <div
               className="vendor-portal"
-              onClick={() => setSelectedRoute(() => <VendorApp setSelectedRoute={setSelectedRoute}/>)}
+              onClick={() =>
+                setSelectedRoute(() => (
+                  <VendorApp setSelectedRoute={setSelectedRoute} />
+                ))
+              }
             >
               <div className="vendor-portal-text">VEND</div>
               <div className="vendor-portal-subtext">Log In Take Payments</div>
