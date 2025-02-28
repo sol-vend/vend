@@ -8,7 +8,7 @@ import SnapSlider from "./SnapSlider";
 import { retrieveExistingData, updateExistingData } from "../Shared";
 
 const EmployeeInterfaceDesigner = ({ }) => {
-  const debounceWaitTime = 30000;
+  const debounceWaitTime = 5000;
   const [groups, setGroups] = useState([
     {
       groupName: "",

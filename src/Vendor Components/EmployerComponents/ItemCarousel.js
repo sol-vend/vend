@@ -76,9 +76,16 @@ const ItemCarousel = ({
                   )}
                   {!isMobile && (
                     <div>
-                      {items[selectedIndex].name === ""
-                        ? "New Item"
-                        : items[selectedIndex].name}
+                      {items[selectedIndex] && // Check if the item at selectedIndex exists
+                      Object.keys(items[selectedIndex]).includes("name") ? (
+                        <>
+                          {items[selectedIndex].name === ""
+                            ? "New Item"
+                            : items[selectedIndex].name}
+                        </>
+                      ) : (
+                        <>New Item</>
+                      )}
                     </div>
                   )}
                   <button
@@ -108,7 +115,7 @@ const ItemCarousel = ({
                 <div
                   className="vendor-input-group-styles"
                   style={{
-                    display: isSelected ? 'flex' : 'none',
+                    display: isSelected ? "flex" : "none",
                   }}
                 >
                   <input

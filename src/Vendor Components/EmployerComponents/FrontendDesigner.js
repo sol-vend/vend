@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import debounce from "lodash.debounce";
 import "react-resizable/css/styles.css";
 import CustomCheckbox from "../CustomCheckbox";
@@ -7,7 +7,7 @@ import { retrieveExistingData, updateExistingData } from "../Shared";
 
 // Component to handle customization of each element
 const FrontendDesigner = ({ callback }) => {
-  const debounceWaitTime = 30000;
+  const debounceWaitTime = 5000;
   const [isStartup, setIsStartup] = useState(true);
   const [error, setError] = useState(false);
   const [interfacePreferences, setInterfacePreferences] = useState({
@@ -18,6 +18,8 @@ const FrontendDesigner = ({ callback }) => {
     isTipScreen: false,
   });
 
+  console.log(interfacePreferences);
+
   // useCallback for updateDatabaseWithGroups
   const updateDatabaseWithGroups = useCallback(
     debounce(async (prefs) => {
@@ -26,7 +28,6 @@ const FrontendDesigner = ({ callback }) => {
           customerSetup: prefs,
         };
         const response = await updateExistingData(data);
-        console.log("Database update response:", response);
         if (response && response.status === 500) {
           // Check to make sure the status property is returned and loaded
           setError(true);
@@ -46,7 +47,6 @@ const FrontendDesigner = ({ callback }) => {
       try {
         const customerSetup = ["customerSetup"];
         const currentGroups = await retrieveExistingData(customerSetup);
-        console.log("Retrieved data:", currentGroups);
 
         if (currentGroups.response?.customerSetup) {
           //Safely update to prevent "undefined"
@@ -73,17 +73,15 @@ const FrontendDesigner = ({ callback }) => {
   }, [interfacePreferences, updateDatabaseWithGroups, isStartup]);
 
   const handleTipChange = (e) => {
-    const { name, checked } = e.target;
-    console.log("Changing isTipScreen to:", checked);
+    const checked = e;
     setInterfacePreferences((prevVals) => ({
       ...prevVals,
-      [name]: checked, // Use checked for boolean value
+      'isTipScreen': checked, // Use checked for boolean value
     }));
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("Changing", name, "to:", value);
     setInterfacePreferences((prevVals) => ({
       ...prevVals,
       [name]: value,
@@ -136,7 +134,6 @@ const FrontendDesigner = ({ callback }) => {
               checked={interfacePreferences.isTipScreen}
               onChange={handleTipChange}
               name={"isTipScreen"}
-              index={0}
             ></CustomCheckbox>
           </div>
         </div>

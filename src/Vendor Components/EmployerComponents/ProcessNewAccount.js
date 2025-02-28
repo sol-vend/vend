@@ -23,7 +23,6 @@ const ProcessNewAccount = ({ children, hash, parentStateCallback }) => {
               "Content-Type": "application/json", // Set Content-Type to JSON if you're sending JSON data
             },
           });
-          console.log("Response:", response.data);
           setTokenInfos(response.data);
         } catch (error) {
           setError(error);
@@ -34,13 +33,12 @@ const ProcessNewAccount = ({ children, hash, parentStateCallback }) => {
   }, []);
 
   useEffect(() => {
-    console.log(tokenInfos);
     if (tokenInfos.authToken) {
-      parentStateCallback(tokenInfos.authToken);
+      parentStateCallback(tokenInfos.authToken); // Pass the token value
     }
   }, [tokenInfos]);
 
-  if (loading) {
+if (loading && !error) {
     return (
       <div
         className="modal-overlay"
@@ -58,13 +56,7 @@ const ProcessNewAccount = ({ children, hash, parentStateCallback }) => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <>
-        {error && <div>{error.error}</div>} {!error && <>{children}</>}
-      </>
-    );
-  }
+  } 
 };
 
 export default ProcessNewAccount;

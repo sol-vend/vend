@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ManualSignUp from "./ManualSignUp";
 import EmployeeLogin from "./EmployeeComponents/EmployeeLogin";
 import {
@@ -9,9 +9,9 @@ import {
 import HeaderWrapper from "./HeaderWrapper";
 import Home from "./EmployerComponents/Home";
 import ProcessNewAccount from "./EmployerComponents/ProcessNewAccount";
+import FirstTimeUserModal from "./EmployerComponents/FirstTimeUserModal";
 
 const VendorApp = ({ setSelectedRoute }) => {
-  console.log(setSelectedRoute);
   const [createAccount, setCreateAccount] = useState(false);
   const [userMetadata, setUserMetadata] = useState(false);
   const [isNightMode, setIsNightMode] = useState(null);
@@ -19,6 +19,7 @@ const VendorApp = ({ setSelectedRoute }) => {
   const [updateVendorWrapper, setUpdateVendorWrapper] = useState(false);
   const [authToken, setAuthToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [autoLogin, setAutoLogin] = useState({
     isLoggedIn: false,
     emailAddress: "",
@@ -28,6 +29,17 @@ const VendorApp = ({ setSelectedRoute }) => {
     sunrise: null,
     sunset: null,
   });
+
+  const handleAuthTokenUpdate = useCallback((newToken) => {
+    setAuthToken(newToken);  // Update the authToken state
+  }, []);
+  
+  useEffect(() => {
+    if (authToken) {
+      // Save the authToken to localStorage when it changes
+      localStorage.setItem("authToken", authToken);
+    }
+  }, [authToken]);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -44,7 +56,7 @@ const VendorApp = ({ setSelectedRoute }) => {
 
   useEffect(() => {
     //THIS IS GOING TO HAVE TO BE UPDATED WHEN WE FIGURE OUT HOW TO HANDLE EMPLOYEES (NON ACCOUNT OWNERS)
-    console.log(isAuthenticated);
+
     if (isAuthenticated.isLoggedIn) {
       setAutoLogin({
         isLoggedIn: true,
@@ -142,7 +154,6 @@ const VendorApp = ({ setSelectedRoute }) => {
     }
 
     if (isNightMode !== null) {
-      console.log("being changed...");
       if (loading) {
         setLoading(false);
       }
@@ -201,6 +212,7 @@ const VendorApp = ({ setSelectedRoute }) => {
     return (
       <div>
         <HeaderWrapper />
+        {containsVerificationHash() && <FirstTimeUserModal />}
         <Home loginInfos={autoLogin} setSelectedRoute={setSelectedRoute} />
       </div>
     );
@@ -209,7 +221,7 @@ const VendorApp = ({ setSelectedRoute }) => {
       <div>
         <ProcessNewAccount
           hash={containsVerificationHash()}
-          parentStateCallback={setAuthToken} // Pass as a prop
+          parentStateCallback={handleAuthTokenUpdate}
         />
         <HeaderWrapper />
         <EmployeeLogin setSelectedRoute={setSelectedRoute} />

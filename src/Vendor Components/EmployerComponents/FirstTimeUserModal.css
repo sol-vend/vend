@@ -1,0 +1,126 @@
+@media screen and (max-width: 768px) {
+    .modal-content{
+        max-width:340px !important;
+    }
+
+    .modal-content > div > h2 {
+        font-size: 0.85em !important;
+    }
+    .modal-content > div > p{
+        font-size: 0.8em !important;
+    }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.logo-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.logo-wrapper > img {
+  width: 75px;
+  border-radius: 7.5px;
+}
+
+.content-overlay {
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22100vw%22%20height%3D%22100vh%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22grad1%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%2250%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20style%3D%22stop-color%3Argb...%22%20opacity%3D%220.4%22%2F%3E%3C%2Fsvg%3E")
+    no-repeat center center;
+}
+.modal-content {
+  background: linear-gradient(45deg, rgb(183, 187, 183), rgb(247, 247, 247));
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 0 auto;
+  border: solid purple 4px;
+  position:relative;
+}
+
+.modal-content > div > h2 {
+  text-transform: uppercase;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.5rem;
+  width: 0;
+  animation: typing 2.5s forwards;
+}
+
+.modal-content > div > p{
+    width:60%;
+    margin:auto;
+}
+
+@keyframes typing {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-container button {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.skip-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 10px;
+  display: block; /* Ensure it takes full width */
+  text-align: center; /* Center the text */
+  margin-left: auto;
+  color:black
+}
+
+.icon {
+    position: absolute;
+    font-size: 50px;
+    animation: moveRandom 10s ease-in-out;
+    color:#08197a;
+  }
+  
+  @keyframes moveRandom {
+    0% {
+      transform: translate(0%, 0%) rotate(0deg) scale(1);
+    }
+    25% {
+      transform: translate(80%, 30%) rotate(45deg) scale(1.2);
+    }
+    50% {
+      transform: translate(30%, 70%) rotate(90deg) scale(0.9);
+    }
+    75% {
+      transform: translate(60%, 20%) rotate(135deg) scale(1.1);
+    }
+    100% {
+      transform: translate(50%, 50%) rotate(180deg) scale(1);
+    }
+  }
+  
+
+/* Add more styles as needed */
