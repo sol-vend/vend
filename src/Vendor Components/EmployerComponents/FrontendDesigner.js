@@ -11,8 +11,9 @@ const FrontendDesigner = ({ callback }) => {
   const [isStartup, setIsStartup] = useState(true);
   const [error, setError] = useState(false);
   const [showOrderDeets, setShowOrderDeets] = useState(false);
+  const [storedBusinessName, setStoredBusinessName] = useState("");
   const [interfacePreferences, setInterfacePreferences] = useState({
-    businessName: "Business Name",
+    businessName: "",
     bannerText: "Our Slogan",
     footerText: "Thanks for your business!",
     background: "",
@@ -93,18 +94,18 @@ const FrontendDesigner = ({ callback }) => {
     const unselectedStyles = {
       background: "white",
       color: "black",
-      cursor: 'pointer'
+      cursor: "pointer",
     };
     const selectedStyles = {
       background: "#000000a3",
       color: "white",
-      cursor: 'pointer'
+      cursor: "pointer",
     };
     console.log(id);
     options.map((option) =>
       id === option
-        ? (Object.assign(document.getElementById(option).style, selectedStyles))
-        : (Object.assign(document.getElementById(option).style, unselectedStyles))
+        ? Object.assign(document.getElementById(option).style, selectedStyles)
+        : Object.assign(document.getElementById(option).style, unselectedStyles)
     );
   };
 
@@ -124,15 +125,26 @@ const FrontendDesigner = ({ callback }) => {
       <div className="frontend-designer-wrapper">
         <div className="frontend-options-wrapper vendor-form-styles">
           <div className="vendor-input-group-styles">
-            <label className="frontend-designer-label">Business Name</label>
-            <input
-              type="text"
-              name="businessName"
-              value={interfacePreferences.businessName}
-              onChange={handleChange}
-              className="vendor-input-field-styles"
-              placeholder="Toly's Pie's"
-            />
+            <label className="frontend-designer-label">
+              Customization Options
+            </label>
+            <div style={{display:'flex'}}>
+              <input
+                type="radio"
+                name="customizationOptions"
+                onChange={() => null}
+                className="vendor-input-field-styles"
+              />
+              Customize
+              <br />
+              <input
+                type="radio"
+                name="customizationOptions"
+                onChange={() => null}
+                className="vendor-input-field-styles"
+              />
+              Quickstart
+            </div>
           </div>
           <div className="vendor-input-group-styles">
             <label className="frontend-designer-label">Banner Text</label>

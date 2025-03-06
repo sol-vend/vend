@@ -28,10 +28,8 @@ const MapComponent = () => {
   const [businesses, setBusinesses] = useState([]);
   const [expandDescription, setExpandDescription] = useState(false);
 
-  const solvendIcon = new L.DivIcon({
-    //iconUrl: "./Vend-Logo.png",
-    //className: "marker-icon",
-    html: "<div class='marker-icon'><img src='./Vend-Logo.png'/></div>",
+  const defaultIcon = new L.DivIcon({
+    html: "<div class='marker-icon'><img src='./pin.jpg'/></div>",
     iconSize: [50, 50],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
@@ -161,9 +159,11 @@ const MapComponent = () => {
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
       });
+    } else{
+      return defaultIcon;
     }
-  };
-  console.log(businesses);
+  }
+  
   const CreateBusinessPopup = ({ business }) => {
     return (
       <div className="popup-icon-rel">
@@ -266,11 +266,6 @@ const MapComponent = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {false && (
-              <Marker position={position} icon={solvendIcon}>
-                <Popup>Vend HQ</Popup>
-              </Marker>
-            )}
             <Circle center={position} radius={radius} />
             <MapEvents />
             {businesses.map((business) => (
