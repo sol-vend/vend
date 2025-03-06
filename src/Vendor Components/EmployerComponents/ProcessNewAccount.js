@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../Components/Shared";
-import { handleResponseRefreshToken } from "../../Vendor Components/Shared";
 
 const ProcessNewAccount = ({ children, hash, parentStateCallback }) => {
-    console.log(parentStateCallback);
+  console.log(parentStateCallback);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [tokenInfos, setTokenInfos] = useState(false);
@@ -33,12 +32,10 @@ const ProcessNewAccount = ({ children, hash, parentStateCallback }) => {
   }, []);
 
   useEffect(() => {
-    if (tokenInfos.authToken) {
-      parentStateCallback(tokenInfos.authToken); // Pass the token value
-    }
-  }, [tokenInfos]);
+      parentStateCallback();
+  }, []);
 
-if (loading && !error) {
+  if (loading && !error) {
     return (
       <div
         className="modal-overlay"
@@ -56,7 +53,7 @@ if (loading && !error) {
         </div>
       </div>
     );
-  } 
+  }
 };
 
 export default ProcessNewAccount;

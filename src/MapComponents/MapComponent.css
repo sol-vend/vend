@@ -1,0 +1,49 @@
+.marker-icon{
+    border-radius: 10px;
+    max-width: 50px;
+}
+
+.marker-icon > img {
+    width: 5vw !important;
+    border-radius: 10px;
+    border: solid white 1px;
+    box-shadow: gray 1px 1px 10px;
+    z-index: 0;
+}
+
+.marker-icon:active > img, .marker-icon:hover >img{
+    width:10vw !important;
+    z-index: 10 !important;
+    max-width: 125px;
+}
+
+.popup-icon-rel{
+    height:150px;
+    max-width: 150px !important;
+    width:150px !important;
+    overflow: auto;
+}
+g > .leaflet-interactive {
+    opacity: 0.3;
+}
+
+.overflow-control-p, .overflow-control-p.true{
+    overflow: hidden;
+}
+
+.overflow-control-p.false {
+    overflow:auto !important;
+}
+
+@media screen and (max-width: 768px) {
+    .marker-icon > img {
+        width: 20vw !important;
+        border-radius: 10px;
+        border: solid white 1px;
+        box-shadow: gray 1px 1px 10px;
+    }
+    
+    .marker-icon:active > img, .marker-icon:hover >img{
+        width:40vw !important;
+    }
+}

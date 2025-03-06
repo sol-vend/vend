@@ -7,7 +7,7 @@ import SwipeIndicator from "../SwipeIndicator";
 import SnapSlider from "./SnapSlider";
 import { retrieveExistingData, updateExistingData } from "../Shared";
 
-const EmployeeInterfaceDesigner = ({ }) => {
+const EmployeeInterfaceDesigner = ({}) => {
   const debounceWaitTime = 5000;
   const [groups, setGroups] = useState([
     {
@@ -21,9 +21,9 @@ const EmployeeInterfaceDesigner = ({ }) => {
     groupIndex: null,
     itemIndex: null,
   });
-    const [isMobileDevice, setIsMobileDevice] = useState(
-      window.innerWidth <= 768
-    );
+  const [isMobileDevice, setIsMobileDevice] = useState(
+    window.innerWidth <= 768
+  );
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [
     deleteButtonTranslationStartPosition,
@@ -90,20 +90,20 @@ const EmployeeInterfaceDesigner = ({ }) => {
     }
   }, [groups, updateDatabaseWithGroups, isStartup]);
 
-    useEffect(() => {
-      const handleResize = () => {
-        if (window.innerWidth <= 768) {
-          setIsMobileDevice(true);
-        } else {
-          setIsMobileDevice(false);
-        }
-      };
-      window.addEventListener("resize", handleResize);
-  
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobileDevice(true);
+      } else {
+        setIsMobileDevice(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleAddGroup = (e) => {
     e.preventDefault();
@@ -242,7 +242,7 @@ const EmployeeInterfaceDesigner = ({ }) => {
   };
 
   if (error) {
-    return window.location.reload();
+    console.log(error);
   } else {
     return (
       <div

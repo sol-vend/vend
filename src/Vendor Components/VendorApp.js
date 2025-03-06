@@ -30,13 +30,20 @@ const VendorApp = ({ setSelectedRoute }) => {
     sunset: null,
   });
 
-  const handleAuthTokenUpdate = useCallback((newToken) => {
-    setAuthToken(newToken);  // Update the authToken state
+  const handleAuthTokenUpdate = useCallback(() => {
+    const storageKeys = Object.keys(localStorage);
+    if (!storageKeys.includes("firstUse")) {  
+      localStorage.setItem("firstUse", true);  
+      setIsFirstTimeUser(true);
+    } else {
+      localStorage.setItem("firstUse", false); 
+      setIsFirstTimeUser(false);   
+    }
   }, []);
-  
+
+  /* 
   useEffect(() => {
     if (authToken) {
-      // Save the authToken to localStorage when it changes
       localStorage.setItem("authToken", authToken);
     }
   }, [authToken]);
@@ -47,12 +54,15 @@ const VendorApp = ({ setSelectedRoute }) => {
       setAuthToken(token);
     }
   }, []);
+*/
 
   useEffect(() => {
-    if (authToken !== null) {
-      fetchDataWithAuth(setIsAuthenticated);
-    }
-  }, [authToken]);
+    fetchDataWithAuth(setIsAuthenticated);
+  }, [isFirstTimeUser]);
+
+  useEffect(() => {
+    fetchDataWithAuth(setIsAuthenticated);
+  }, []);
 
   useEffect(() => {
     //THIS IS GOING TO HAVE TO BE UPDATED WHEN WE FIGURE OUT HOW TO HANDLE EMPLOYEES (NON ACCOUNT OWNERS)
@@ -212,7 +222,7 @@ const VendorApp = ({ setSelectedRoute }) => {
     return (
       <div>
         <HeaderWrapper />
-        {containsVerificationHash() && <FirstTimeUserModal />}
+        {containsVerificationHash() && isFirstTimeUser && <FirstTimeUserModal />}
         <Home loginInfos={autoLogin} setSelectedRoute={setSelectedRoute} />
       </div>
     );

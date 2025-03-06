@@ -11,6 +11,25 @@ body {
   background-size: cover;
 }
 
+@media screen and (max-height: 600px) {
+  .frontend-designer-wrapper .phone-outline{
+    margin-top: 40% !important;
+    position: absolute !important;
+  }
+
+  .frontend-options-wrapper + .mobile-demo-wrapper{
+    margin-top: -20%  !important;
+    overflow: hidden;
+  }
+
+  .mobile-demo-wrapper{
+    position: relative;
+  }
+  .home-home-center-header.carousel-controls{
+    z-index: 100;
+  }
+}
+
 @media screen and (max-width: 768px) {
   body {
   }
@@ -630,6 +649,20 @@ body {
   width: 80%;
   margin: auto;
   background: linear-gradient(45deg, white, whitesmoke);
+}
+
+.business-info-form-bottom-banner-warning-wrapper{
+  opacity: 0; 
+  transition: opacity 1s ease-in-out; 
+}
+
+.business-info-form-bottom-banner-warning-wrapper.fade-in {
+  opacity: 1; 
+}
+
+.business-info-form-bottom-banner-warning.fade-out {
+  opacity: 0; 
+  transition: opacity 0.3s ease-in-out; 
 }
 
 .payment-info-form-bottom-banner-warning {
@@ -1435,6 +1468,7 @@ div ::-webkit-scrollbar-thumb:hover {
   flex-grow: 1;
   padding: 20px;
   box-sizing: border-box;
+  height: 80vh;
 }
 
 .home-home-bottom-banner {
@@ -1536,8 +1570,9 @@ div ::-webkit-scrollbar-thumb:hover {
   position: absolute;
   width: 30vw;
   max-width: 250px;
+  min-width: 100px;
   height: 100vh;
-  max-height: 400px;
+  max-height: 425px;
   border-radius: 16px;
   border: solid black 4px;
   text-align: center;

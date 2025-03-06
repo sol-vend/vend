@@ -10,6 +10,7 @@ const FrontendDesigner = ({ callback }) => {
   const debounceWaitTime = 5000;
   const [isStartup, setIsStartup] = useState(true);
   const [error, setError] = useState(false);
+  const [showOrderDeets, setShowOrderDeets] = useState(false);
   const [interfacePreferences, setInterfacePreferences] = useState({
     businessName: "Business Name",
     bannerText: "Our Slogan",
@@ -17,6 +18,7 @@ const FrontendDesigner = ({ callback }) => {
     background: "",
     isTipScreen: false,
   });
+  const orderDeetsParentRef = useRef(null);
 
   console.log(interfacePreferences);
 
@@ -76,8 +78,34 @@ const FrontendDesigner = ({ callback }) => {
     const checked = e;
     setInterfacePreferences((prevVals) => ({
       ...prevVals,
-      'isTipScreen': checked, // Use checked for boolean value
+      isTipScreen: checked, // Use checked for boolean value
     }));
+  };
+
+  const handleTipSelectionDemo = (e) => {
+    const options = [
+      "tip-option-demo-1",
+      "tip-option-demo-2",
+      "tip-option-demo-3",
+      "tip-option-demo-4",
+    ];
+    const { id } = e.target;
+    const unselectedStyles = {
+      background: "white",
+      color: "black",
+      cursor: 'pointer'
+    };
+    const selectedStyles = {
+      background: "#000000a3",
+      color: "white",
+      cursor: 'pointer'
+    };
+    console.log(id);
+    options.map((option) =>
+      id === option
+        ? (Object.assign(document.getElementById(option).style, selectedStyles))
+        : (Object.assign(document.getElementById(option).style, unselectedStyles))
+    );
   };
 
   const handleChange = (e) => {
@@ -89,7 +117,7 @@ const FrontendDesigner = ({ callback }) => {
   };
 
   if (error) {
-    window.location.reload();
+    console.log(error);
     return null; // Prevent further rendering after reload
   } else {
     return (
@@ -145,10 +173,68 @@ const FrontendDesigner = ({ callback }) => {
           <div className="frontend-designer-slogan">
             {interfacePreferences.bannerText}
           </div>
+          <div style={{ fontSize: "8px", marginTop: "5%" }}>
+            <div
+              ref={orderDeetsParentRef}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p
+                style={{ fontSize: "8px" }}
+                className="vendor-add-button-styles"
+                onClick={() => setShowOrderDeets(!showOrderDeets)}
+              >
+                {!showOrderDeets ? "Show Order Details" : "Hide Order Details"}
+              </p>
+            </div>
+            <>
+              {showOrderDeets && (
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "75px",
+                    zIndex: "10",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "5%",
+                      background: "white",
+                      borderRadius: "5px",
+                      marginInline: "15%",
+                      border: "solid black 1px",
+                    }}
+                    className="phone-abs-order-details"
+                  >
+                    <div style={{ textAlign: "left" }}>
+                      <p>
+                        <strong>Order Summary:</strong>
+                      </p>
+                      <p>{"(1) This: $5.00"}</p>
+                      <p>{"(1) That: $7.00"}</p>
+                      <p>{"(1) The Other: $9.50"}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+            <p>
+              <strong>Total: $21.50</strong>
+            </p>
+          </div>
           <div className="mobile-demo-qr">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="50%"
+              width="30%"
               height="20%"
               viewBox="0 0 24 24"
             >
@@ -162,10 +248,34 @@ const FrontendDesigner = ({ callback }) => {
                 <p>Would you like to leave a tip?</p>
               </div>
               <div className="mobile-tip-option-span-wrapper">
-                <span>10%</span>
-                <span>15%</span>
-                <span>20%</span>
-                <span>25%</span>
+                <span
+                  id="tip-option-demo-1"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleTipSelectionDemo}
+                >
+                  10%
+                </span>
+                <span
+                  id="tip-option-demo-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleTipSelectionDemo}
+                >
+                  15%
+                </span>
+                <span
+                  id="tip-option-demo-3"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleTipSelectionDemo}
+                >
+                  20%
+                </span>
+                <span
+                  id="tip-option-demo-4"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleTipSelectionDemo}
+                >
+                  25%
+                </span>
               </div>
             </div>
           )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { retrieveExistingData } from "../Shared";
+import "./EmployeeInterface.css";
 
 const EmployeeInterface = () => {
   const [selectedItems, setSelectedItems] = useState({});
@@ -11,8 +12,9 @@ const EmployeeInterface = () => {
   const [orderTotal, setOrderTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [pageDatas, setPageDatas] = useState(false);
+  const [pageIndex, setPageIndex] = useState(0);
   const [error, setError] = useState(false);
-    const keysToQuery = [
+  const keysToQuery = [
     "businessId",
     "businessName",
     "vendorWalletAddress",
@@ -22,7 +24,7 @@ const EmployeeInterface = () => {
     "approvedReadOnlyEmployees",
     "emailAddress",
   ];
-
+  console.log(pageDatas);
   useEffect(() => {
     const getPageDatas = async () => {
       try {
@@ -50,27 +52,39 @@ const EmployeeInterface = () => {
     setLoading(false);
   }, [pageDatas]);
 
-  const handleItemSelect = (groupIndex, itemIndex) => {
+  const handleItemSelect = (groupIndex, itemIndex, e) => {
+    e.stopPropagation();
     const itemId = `${groupIndex}-${itemIndex}`;
+    console.log(selectedItems);
     setSelectedItems((prevItems) => {
       const newItems = { ...prevItems };
-      if (newItems[itemId]) {
-        delete newItems[itemId]; // Deselect
-      } else {
-        newItems[itemId] = 1; // Select with quantity 1
+      if (!newItems[itemId]) {
+        newItems[itemId] = 1;
       }
       return newItems;
     });
   };
 
-  const handleQuantityChange = (groupIndex, itemIndex, change) => {
+  const handleDeselectItem = (groupIndex, itemIndex) => {
+    const itemId = `${groupIndex}-${itemIndex}`;
+    setSelectedItems((prevItems) => {
+      const newItems = { ...prevItems };
+      if (newItems[itemId] === 0) {
+        delete newItems[itemId];
+      }
+      return newItems;
+    });
+  };
+
+  const handleQuantityChange = (groupIndex, itemIndex, change, e) => {
+    e.stopPropagation();
     const itemId = `${groupIndex}-${itemIndex}`;
     setSelectedItems((prevItems) => {
       const newItems = { ...prevItems };
       if (newItems[itemId]) {
         newItems[itemId] += change;
-        if (newItems[itemId] < 0) {
-          newItems[itemId] = 0; // Prevent negative quantities
+        if (newItems[itemId] <= 0) {
+          handleDeselectItem(groupIndex, itemIndex);
         }
       }
       return newItems;
@@ -134,59 +148,80 @@ const EmployeeInterface = () => {
     return (
       <div className="user-interface">
         <div className="header">
-          <h2>{pageDatas.businessId}</h2>
-          <p>Business ID: {pageDatas.businessId}</p>
+          <h2>{pageDatas.businessName}</h2>
           {pageDatas.logo && <img src={pageDatas.logo} alt="Business Logo" />}
+          <p>@{pageDatas.businessId}</p>
         </div>
 
         <div className="pages">
           {pageDatas.interfaceSetup && (
             <>
-          {pageDatas.interfaceSetup.map((group, groupIndex) => (
-            <div key={groupIndex} className="page">
-              <h3>{group.groupName || `Page ${groupIndex + 1}`}</h3>
-              <ul className="item-list">
-                {group.items.map((item, itemIndex) => {
-                  const itemId = `${groupIndex}-${itemIndex}`;
-                  const isSelected = selectedItems[itemId] !== undefined;
-
-                  return (
-                    <li
-                      key={itemIndex}
-                      className={`item ${isSelected ? "selected" : ""}`}
-                    >
-                      <button
-                        onClick={() => handleItemSelect(groupIndex, itemIndex)}
-                      >
-                        {item.name} - ${item.price}
-                      </button>
-                      {isSelected && (
-                        <div className="quantity-controls">
-                          <button
-                            onClick={() =>
-                              handleQuantityChange(groupIndex, itemIndex, -1)
+              <div key={pageIndex} className="page">
+                <h3>
+                  {pageDatas.interfaceSetup[pageIndex].groupName ||
+                    `Page ${pageIndex + 1}`}
+                </h3>
+                <ul className="item-list">
+                  {pageDatas.interfaceSetup[pageIndex].items.map(
+                    (item, itemIndex) => {
+                      const itemId = `${pageIndex}-${itemIndex}`;
+                      const isSelected = selectedItems[itemId] !== undefined;
+                      if (item.name && item.name.length > 0) {
+                        return (
+                          <li
+                            key={itemIndex}
+                            className={`interface-item ${
+                              isSelected ? "selected" : ""
+                            }`}
+                            onClick={(e) =>
+                              handleItemSelect(pageIndex, itemIndex, e)
                             }
                           >
-                            <FaMinus />
-                          </button>
-                          <span>{selectedItems[itemId]}</span>
-                          <button
-                            onClick={() =>
-                              handleQuantityChange(groupIndex, itemIndex, 1)
-                            }
-                          >
-                            <FaPlus />
-                          </button>
-                        </div>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-          </>
-        )}
+                            <div>
+                              {item.name} - ${item.price}
+                            </div>
+                            {isSelected && (
+                              <div className="quantity-controls">
+                                <div className="quantity-display">
+                                  <p>{selectedItems[itemId]}</p>
+                                </div>
+                                <div className="add-subtract-controls">
+                                  <div
+                                    onClick={(e) =>
+                                      handleQuantityChange(
+                                        pageIndex,
+                                        itemIndex,
+                                        1,
+                                        e
+                                      )
+                                    }
+                                  >
+                                    <FaPlus />
+                                  </div>
+                                  <div
+                                    onClick={(e) =>
+                                      handleQuantityChange(
+                                        pageIndex,
+                                        itemIndex,
+                                        -1,
+                                        e
+                                      )
+                                    }
+                                  >
+                                    <FaMinus />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </li>
+                        );
+                      }
+                    }
+                  )}
+                </ul>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="miscellaneous">

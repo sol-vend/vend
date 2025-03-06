@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const CustomCheckbox = ({ label, checked, onChange, name, index }) => {
-    console.log(checked);
     const [isChecked, setIsChecked] = useState(checked);
     const [translationDistance, setTranslationDistance] = useState(0);
     const [translationOffset, setTranslationOffset] = useState(0);
     const checkboxRef = useRef(null);
     const toggleRef = useRef(null);
     const [isMobile, setIsMobile] = useState(false);
-    console.log(isChecked)
 
     useEffect(() => {
         setIsChecked(checked); // Sync local state with prop

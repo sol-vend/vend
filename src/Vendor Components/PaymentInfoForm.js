@@ -29,6 +29,7 @@ const PaymentInfoForm = ({
   const [signupComplete, setSignupComplete] = useState(false);
   const [bottomBannerWarning, setBottomBannerWarning] = useState("");
   const [isRepeatSignup, setIsRepeatSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -65,6 +66,7 @@ const PaymentInfoForm = ({
   const handlePostResponse = () => {
     if (walletAddress.length > 0) {
       if (selectedPaymentCurrency) {
+        setLoading(true);
         let now = new Date();
         now.setMinutes(now.getMinutes() + 60);
         const updatedFormData = {
@@ -90,12 +92,15 @@ const PaymentInfoForm = ({
               const result = await response.json();
               if (result.status) {
                 if (result.status.doContinue) {
+                  setLoading(false);
                   setSignupComplete(true);
                 } else {
+                  setLoading(false);
                   setIsRepeatSignup(true);
                 }
               }
             } else {
+              setLoading(false);
               setSubmitResponse({
                 result: null,
                 doProceed: false,
@@ -105,6 +110,7 @@ const PaymentInfoForm = ({
               });
             }
           } catch (err) {
+            setLoading(false);
             setSubmitResponse({
               result: null,
               doProceed: false,
@@ -178,6 +184,24 @@ const PaymentInfoForm = ({
         </div>
       </div>
     );
+  } else if (loading) {
+    return (
+      <div
+        className="modal-overlay"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          background: "rgb(0 0 0 / 75%)",
+        }}
+      >
+        <div className="modal">
+          <div className="loading-dialog">
+            <p>Loading...</p>
+            <div className="spinner" style={{ marginLeft: "15%" }}></div>
+          </div>
+        </div>
+      </div>
+    );
   } else {
     return (
       <div>
@@ -195,7 +219,7 @@ const PaymentInfoForm = ({
               </h3>
               <form onSubmit={handleSubmit}>
                 <div className="vendor-input-field-styles">
-                <div>
+                  <div>
                     <CustomRadioButton
                       label="Venmo"
                       value="venmo"
@@ -222,7 +246,11 @@ const PaymentInfoForm = ({
                       checked={paymentMethod === "phantom"}
                       onChange={handlePaymentMethodChange}
                       color="#1c74bb" // Custom color
-                      imagePaths={["./phantom-logo.png", "./solflare-logo.jpg", "./backpack-logo.jpg"]}
+                      imagePaths={[
+                        "./phantom-logo.png",
+                        "./solflare-logo.jpg",
+                        "./backpack-logo.jpg",
+                      ]}
                     />
                   </div>
                 </div>

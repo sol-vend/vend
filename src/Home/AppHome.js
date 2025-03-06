@@ -6,6 +6,7 @@ import VendorApp from "../Vendor Components/VendorApp";
 import { FaHome, FaQuestionCircle, FaDollarSign } from "react-icons/fa";
 import TokenTicker from "./TokenTicker";
 import SideMenu from "./SideMenu";
+import MapComponent from "../MapComponents/MapComponent";
 
 const AppHome = ({ autoRoute = false }) => {
   console.log(autoRoute);
@@ -134,9 +135,14 @@ const AppHome = ({ autoRoute = false }) => {
             <div className="buy">
               <div className="buy-text">BUY</div>
               <div className="buy-subtext">Use Solana tokens for purchases</div>
-            </div>
-
-            <div className="vendor-map">
+            </div>              
+            <div className="vendor-map"
+             onClick={() =>
+              setSelectedRoute(() => (
+                <MapComponent setSelectedRoute={setSelectedRoute} />
+              ))
+            }
+            >
               <div className="vendor-map-text">MAP</div>
               <div className="vendor-map-subtext">
                 Find new places to pay with Solana

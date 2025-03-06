@@ -9,7 +9,7 @@ import Home from "../EmployerComponents/Home";
 import ManualSignUp from "../ManualSignUp";
 
 export const EmployeeLogin = ({ setSelectedRoute }) => {
-    console.log(setSelectedRoute);
+  console.log(setSelectedRoute);
   const [userDetails, setUserDetails] = useState({
     isSet: false,
     businessName: "",
@@ -26,6 +26,7 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
   const [password, setPassword] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [error, setError] = useState("");
+  const [loginError, setLoginError] = useState(false);
   const [resetClicked, setResetClicked] = useState(false);
   const [pinVisible, setPinVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -75,6 +76,11 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
       }
     }
     const postLoginData = async () => {
+      const loginErrorMessage = `There was a problem authenticating your account. ${
+        isEmployerLogin
+          ? "Confirm that your email and password are correct."
+          : "Confirm that your business ID, pin number and user ID is correct."
+      }`;
       try {
         const route = isEmployerLogin ? "login" : "employee_login";
         const postObject = isEmployerLogin
@@ -86,7 +92,13 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
             };
         const response = await axios.post(
           `${API_URL}/api/${route}`,
-          postObject
+          postObject,
+          {
+            headers: {
+              "Content-Type": "application/json", // Set Content-Type to JSON if you're sending JSON data
+            },
+            withCredentials: true, // This ensures cookies (like auth_token) are sent with the request
+          }
         );
         if (response.status >= 200 && response.status < 300) {
           if (response.data.authToken) {
@@ -94,22 +106,40 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
             localStorage.setItem("authToken", token);
             setIsLoginSuccess(true);
           } else {
-            console.log("Login failed:", response.data.message);
+            setLoginError(loginErrorMessage);
           }
         } else {
-          console.error("Unexpected status code:", response.status);
+          setLoginError(loginErrorMessage);
         }
       } catch (error) {
-        console.error(
-          "Error during login:",
-          error.response ? error.response.data : error.message
-        );
+        setLoginError(loginErrorMessage);
       }
     };
     setError("");
     postLoginData();
   };
-  if (loading) {
+  if (loginError) {
+    return (
+      <div
+        style={{
+          width: "60%",
+          marginLeft: "10%",
+          marginTop: "5%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "10%",
+          background: "linear-gradient(0deg, #ffffff9c, #ffffffab)",
+          borderRadius: "10px",
+          border: "solid #414141 1px",
+        }}
+      >
+        <h2>Authentication Error</h2>
+        <p style={{ color: "red", textAlign: "center" }}>{loginError}</p>
+      </div>
+    );
+  } else if (loading) {
     return (
       <div
         className="modal-overlay"
