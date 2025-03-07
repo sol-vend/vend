@@ -10,6 +10,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import VendorApp from "./Vendor Components/VendorApp";
 import AppHome from "./Home/AppHome";
+import FrontendDesigner from "./Vendor Components/EmployerComponents/FrontendDesigner";
 
 const App = () => {
   const network = "mainnet-beta";

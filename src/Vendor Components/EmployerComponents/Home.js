@@ -20,20 +20,24 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
   const [isMobileDevice, setIsMobileDevice] = useState(
     window.innerWidth <= 768
   );
-  const [selectedOptionCard, setSelectedOptionCard] = useState({
-    name: "editPos",
-    component: [<FrontendDesigner />, <EmployeeInterfaceDesigner />],
-    headerOpts: ["What My Customers See", "What My Employees Use"],
-    selectedIndex: 0,
-  });
   const optionsRef = useRef(null);
   const userRef = useRef(null);
+  const [isCustomizationSelected, setIsCustomizationSelected] = useState(false);
   const [loginInformation, setLoginInformation] = useState(false);
   const [bottomBannerMobileStyle, setBottomBannerMobileStyle] = useState("");
   const [scrollHeight, setScrollHeight] = useState(0);
   const [isLogout, setIsLogout] = useState(false);
   const elementRef = useRef(null);
   const navigate = useNavigate();
+  const [selectedOptionCard, setSelectedOptionCard] = useState({
+    name: "editPos",
+    component: [
+      <FrontendDesigner callback={setIsCustomizationSelected} />,
+      <EmployeeInterfaceDesigner />,
+    ],
+    headerOpts: ["Customer Payment Setup", "Employee Interface Setup"],
+    selectedIndex: 0,
+  });
 
   useEffect(() => {
     if (elementRef.current) {
@@ -55,6 +59,22 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
       hasOverflow ? "home-home-bottom-banner" : "home-home-bottom-banner abs"
     );
   }, [scrollHeight]);
+
+  useEffect(() => {
+    console.log(isCustomizationSelected);
+    setSelectedOptionCard((prevVals) => ({
+      ...prevVals,
+      headerOpts: isCustomizationSelected
+        ? ["Customer Payment Setup", "Employee Interface Setup"]
+        : ["Customer Payment Setup"],
+      component: isCustomizationSelected
+        ? [
+            <FrontendDesigner callback={setIsCustomizationSelected} />,
+            <EmployeeInterfaceDesigner />,
+          ]
+        : [<FrontendDesigner callback={setIsCustomizationSelected} />],
+    }));
+  }, [isCustomizationSelected]);
 
   const handleUserSettingsClick = () => {
     setUserSettingsDropdownClicked(true);
@@ -178,7 +198,13 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                             : "option-card"
                         }
                         name="editPos"
-                        onClick={() => alert("Edit POS Interface")}
+                        onClick={() =>
+                          setSelectedRoute(
+                            <FrontendDesigner
+                              callback={setIsCustomizationSelected}
+                            />
+                          )
+                        }
                       >
                         <Tooltip
                           message={

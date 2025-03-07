@@ -4,26 +4,28 @@ import "react-resizable/css/styles.css";
 import CustomCheckbox from "../CustomCheckbox";
 import Phone from "./Phone";
 import { retrieveExistingData, updateExistingData } from "../Shared";
+import "./FrontendDesigner.css";
+import Loading from "../../Loading";
 
 // Component to handle customization of each element
 const FrontendDesigner = ({ callback }) => {
-  const debounceWaitTime = 5000;
+  const debounceWaitTime = 2000;
+  const [loading, setLoading] = useState(true);
   const [isStartup, setIsStartup] = useState(true);
   const [error, setError] = useState(false);
   const [showOrderDeets, setShowOrderDeets] = useState(false);
-  const [storedBusinessName, setStoredBusinessName] = useState("");
+  const [showCustomizationDetails, setShowCustomizationDetails] =
+    useState(false);
   const [interfacePreferences, setInterfacePreferences] = useState({
     businessName: "",
     bannerText: "Our Slogan",
     footerText: "Thanks for your business!",
     background: "",
     isTipScreen: false,
+    isCustomized: false,
   });
   const orderDeetsParentRef = useRef(null);
 
-  console.log(interfacePreferences);
-
-  // useCallback for updateDatabaseWithGroups
   const updateDatabaseWithGroups = useCallback(
     debounce(async (prefs) => {
       try {
@@ -31,6 +33,7 @@ const FrontendDesigner = ({ callback }) => {
           customerSetup: prefs,
         };
         const response = await updateExistingData(data);
+
         if (response && response.status === 500) {
           // Check to make sure the status property is returned and loaded
           setError(true);
@@ -41,45 +44,53 @@ const FrontendDesigner = ({ callback }) => {
         console.error("Error updating database:", updateError);
       }
     }, debounceWaitTime),
-    [updateExistingData] // Dependencies that should trigger recreation
+    []
   );
 
   useEffect(() => {
-    // Load interface preferences from the database on startup
+    let isMounted = true; // flag to track if the component is mounted
     const getCurrentGroups = async () => {
       try {
         const customerSetup = ["customerSetup"];
         const currentGroups = await retrieveExistingData(customerSetup);
 
-        if (currentGroups.response?.customerSetup) {
-          //Safely update to prevent "undefined"
+        if (currentGroups.response?.customerSetup && isMounted) {
           setInterfacePreferences(currentGroups.response.customerSetup);
         } else if (currentGroups.status === 500) {
           setError(true);
           console.error("Error retrieving data.");
         }
       } catch (getDataError) {
-        setError(true);
+        if (isMounted) setError(true);
         console.error("Error retrieving data:", getDataError);
       }
     };
-
     getCurrentGroups();
     setIsStartup(false); // Set isStartup to false after the initial data load
+
+    return () => {
+      isMounted = false; // Cleanup the flag when component unmounts
+    };
   }, []);
 
-  // Use Effect that updates when it changes
   useEffect(() => {
     if (!isStartup) {
       updateDatabaseWithGroups(interfacePreferences);
     }
   }, [interfacePreferences, updateDatabaseWithGroups, isStartup]);
 
-  const handleTipChange = (e) => {
+  useEffect(() => {
+    if (interfacePreferences.businessName.length > 0 && loading) {
+      setLoading(false);
+    }
+    callback(interfacePreferences.isCustomized)
+  },[interfacePreferences])
+
+  const handleCheckChange = (e, name) => {
     const checked = e;
     setInterfacePreferences((prevVals) => ({
       ...prevVals,
-      isTipScreen: checked, // Use checked for boolean value
+      [name]: checked,
     }));
   };
 
@@ -117,33 +128,117 @@ const FrontendDesigner = ({ callback }) => {
     }));
   };
 
-  if (error) {
+  const handleCustomizationDetails = () => {
+    setShowCustomizationDetails(true);
+  };
+
+  const Modal = ({ onClose }) => {
+    return (
+      <div className="customization-details-modal-overlay-wrapper">
+        <div
+          className="customization-details-modal-overlay"
+          onClick={onClose}
+        ></div>
+        <div
+          className="customization-details-modal modal"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h3>{"Vend Customization"}</h3>
+          <p>
+            {
+              "In the section, you have the option to customize the interface with which your employees will interact. This can have a ton of benefits!"
+            }
+          </p>
+          <ol className="alternating-colors">
+            <li>
+              <strong>Error Prevention: </strong> A customized interface can
+              prevent errors caused by manually entering prices.
+            </li>
+            <li>
+              <strong>Traffic: </strong>Customization can be leveraged to help
+              drive more customers to your business by featuring popular items
+              in our map section.
+            </li>
+            <li>
+              <strong>Inventory: </strong> If your options are integrated, we
+              will automatically track inventory, sales and usage.
+            </li>
+            <li>
+              <strong>Suggestions: </strong> In the future, we can provide you
+              metrics and suggestions that may help further boost your business.
+            </li>
+          </ol>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              className="vendor-add-button-styles"
+              onClick={() => setShowCustomizationDetails(false)}
+            >
+              Close
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  } else if (error) {
     console.log(error);
     return null; // Prevent further rendering after reload
   } else {
     return (
       <div className="frontend-designer-wrapper">
+        {showCustomizationDetails && <Modal />}
         <div className="frontend-options-wrapper vendor-form-styles">
           <div className="vendor-input-group-styles">
             <label className="frontend-designer-label">
               Customization Options
             </label>
-            <div style={{display:'flex'}}>
-              <input
-                type="radio"
-                name="customizationOptions"
-                onChange={() => null}
-                className="vendor-input-field-styles"
-              />
-              Customize
-              <br />
-              <input
-                type="radio"
-                name="customizationOptions"
-                onChange={() => null}
-                className="vendor-input-field-styles"
-              />
-              Quickstart
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+              }}
+            >
+              <div className="custom-checkbox-wrapper frontend-designer">
+                <CustomCheckbox
+                  label={{
+                    title: !interfacePreferences.isCustomized
+                      ? "Quickstart"
+                      : "Customized",
+                  }}
+                  checked={interfacePreferences.isCustomized}
+                  onChange={(e) => handleCheckChange(e, "isCustomized")}
+                  name={"isCustomized"}
+                  includeName={true}
+                />
+                <p
+                  className={
+                    !interfacePreferences.isCustomized ? "" : "clickable"
+                  }
+                  onClick={
+                    !interfacePreferences.isCustomized
+                      ? () => null
+                      : handleCustomizationDetails
+                  }
+                >
+                  {!interfacePreferences.isCustomized
+                    ? "Let's get going!"
+                    : "Click for more details."}
+                </p>
+              </div>
             </div>
           </div>
           <div className="vendor-input-group-styles">
@@ -172,8 +267,9 @@ const FrontendDesigner = ({ callback }) => {
             <CustomCheckbox
               label={{ description: "Allow Tipping?" }}
               checked={interfacePreferences.isTipScreen}
-              onChange={handleTipChange}
+              onChange={(e) => handleCheckChange(e, "isTipScreen")}
               name={"isTipScreen"}
+              includeName={true}
             ></CustomCheckbox>
           </div>
         </div>

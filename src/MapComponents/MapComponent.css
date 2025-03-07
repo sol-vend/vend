@@ -35,6 +35,33 @@ g > .leaflet-interactive {
     overflow:auto !important;
 }
 
+.map-overlay{
+    z-index: 10000;
+    top: 10vh;
+    position: absolute;
+    width: 90vw !important;
+    cursor: default;
+    margin-left: 5vw;
+    box-shadow: 1px 1px 20px 20px gray;
+    border-radius: 6px;
+    font-family: system-ui;
+    font-size: 1.25em;
+    background: radial-gradient(#4306d175, black, #4306d175) !important;
+}
+
+.map-overlay > .modal {
+    background: linear-gradient(90deg, rgb(245, 245, 245), rgba(255, 255, 255, 0.85)) !important;
+}
+
+.leaflet-marker-icon, .marker-svg-wrapper{
+    background: transparent !important;
+    border: transparent !important;
+}
+
+.marker-icon.active{
+    z-index: 100000 !important;
+}
+
 @media screen and (max-width: 768px) {
     .marker-icon > img {
         width: 20vw !important;
