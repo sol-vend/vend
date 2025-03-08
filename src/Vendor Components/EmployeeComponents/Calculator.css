@@ -1,0 +1,80 @@
+/* General container for the calculator */
+.calculator-container {
+    width: 320px;            /* Adjust as needed */
+    margin: 20px auto;      /* Center the calculator */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 8px;      /* Slightly rounded corners */
+    overflow: hidden;       /* Prevent content from overflowing the container */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    background-color: #f9f9f9; /* Light background */
+  }
+  
+  /* Style for the display */
+  .calculator-display {
+    background-color: #444;       /* Dark background for contrast */
+    color: #fff;                 /* White text */
+    font-size: 2rem;             /* Larger font size */
+    text-align: right;           /* Right-align the text */
+    padding: 20px;               /* Add padding around the text */
+    font-family: monospace;      /* Monospace font for consistent spacing */
+    word-wrap: break-word;       /* Break long numbers into multiple lines */
+  }
+  
+  /* Keypad styles */
+  .calculator-keypad {
+    display: grid;               /* Use grid layout for the keypad */
+    grid-template-columns: repeat(4, 1fr); /* 4 columns, each taking equal space */
+    gap: 1px;                   /* Small gap between buttons */
+    background-color: #ddd;     /* Light gray background */
+  }
+  
+  /* Styles for individual buttons */
+  .calculator-button {
+    background-color: #f1f1f1;   /* Lighter button background */
+    border: none;                 /* Remove default border */
+    font-size: 1.5rem;           /* Large font */
+    padding: 15px;              /* Good touch area size */
+    text-align: center;           /* Center the text */
+    cursor: pointer;             /* Change cursor to pointer */
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+  }
+  
+  .calculator-button:hover {
+    background-color: #e0e0e0;   /* Slightly darker background on hover */
+  }
+  
+  .calculator-button:active {
+    background-color: #ccc;      /* Even darker background when pressed */
+  }
+  
+  /* Specific styles for number buttons */
+  .calculator-button.number {
+    background-color: #fff; /* White background for number buttons */
+  }
+  
+  /* Styles for operation buttons */
+  .calculator-button.operation {
+    background-color: #eee;       /* Different color for operation buttons */
+    color: #333;                /* Darker text */
+  }
+  
+  /* Styles for the clear button */
+  .calculator-button.clear {
+    background-color: #f44336;   /* Red background */
+    color: white;                /* White text */
+  }
+  
+  .calculator-button.clear:hover {
+      background-color: #d32f2f;
+  }
+  
+  /* Style for the equals button */
+  .calculator-button.equals {
+    background-color: #2196f3;   /* Blue background */
+    color: white;                /* White text */
+  }
+  
+  .calculator-button.equals:hover {
+      background-color: #1976d2;
+  }
+  

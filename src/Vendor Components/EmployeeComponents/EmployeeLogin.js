@@ -203,7 +203,9 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
           }
         >
           <div className="vendor-form-header-wrapper">
-            <h2 style={{ textAlign: "center" }}>Business Login</h2>
+            <h2 style={{ textAlign: "center" }}>
+              {isEmployerLogin ? "Management Login" : "Employee Login"}
+            </h2>
             <p>
               Powered by <SolanaLogoSvg />
             </p>
@@ -213,22 +215,6 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
             {!isEmployerLogin && (
               <div>
                 <div className="vendor-input-group-styles">
-                  <label htmlFor="username">Business ID:</label>
-                  <input
-                    className="vendor-input-field-styles"
-                    type="text"
-                    id="businessName"
-                    value={businessName}
-                    onChange={(e) => setBusinessName(e.target.value)}
-                    placeholder="Enter your business ID"
-                    required
-                  />
-                  <p className="custom-checkbox-wrapper-paragraph-descriptor">
-                    This is usually the business name but should have been
-                    provided by your employer.
-                  </p>
-                </div>
-                <div className="vendor-input-group-styles">
                   <label htmlFor="username">Username:</label>
                   <input
                     className="vendor-input-field-styles"
@@ -236,7 +222,7 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
                     id="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Enter your username"
+                    placeholder="satoshi@vend"
                     required
                   />
                 </div>
@@ -252,7 +238,7 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
                           id="pin"
                           value={pin}
                           onChange={(e) => handlePinChange(e)}
-                          placeholder="Enter your pin"
+                          placeholder="Enter Pin Number"
                           className="password-input-field-styles"
                           required
                         />
@@ -277,7 +263,7 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
                     id="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Enter your username"
+                    placeholder="satoshi@protonmail.com"
                     required
                   />
                 </div>
@@ -319,11 +305,11 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
                   label={
                     !isEmployerLogin
                       ? {
-                          title: "Employee Login",
+                          title: "Switch to Manager Login",
                           description: "Point of Sale Portal for Employees",
                         }
                       : {
-                          title: "Employer Login",
+                          title: "Switch to Employee Login",
                           description: "Manage Your Account",
                         }
                   }

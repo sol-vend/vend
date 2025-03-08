@@ -2,6 +2,28 @@ import React, { useState, useEffect } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { retrieveExistingData } from "../Shared";
 import "./EmployeeInterface.css";
+import Calculator from "./Calculator";
+
+const InterfaceHeader = ({ pageDatas }) => {
+  return (
+    <div className="header">
+      <h2>{pageDatas.businessName}</h2>
+      {pageDatas.logo && <img src={pageDatas.logo} alt="Business Logo" />}
+      <p>@{pageDatas.businessId}</p>
+    </div>
+  );
+};
+
+const DisplayTotal = ({ orderTotal }) => {
+  return (
+    <div className="order-total-wrapper-container">
+      <div className="order-total-wrapper">
+        <h2>Total Price:</h2>
+        <h2>{orderTotal}</h2>
+      </div>
+    </div>
+  );
+};
 
 const EmployeeInterface = () => {
   const [selectedItems, setSelectedItems] = useState({});
@@ -15,6 +37,7 @@ const EmployeeInterface = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [error, setError] = useState(false);
   const keysToQuery = [
+    "customerSetup",
     "businessId",
     "businessName",
     "vendorWalletAddress",
@@ -24,7 +47,11 @@ const EmployeeInterface = () => {
     "approvedReadOnlyEmployees",
     "emailAddress",
   ];
-  console.log(pageDatas);
+
+  const addTrailingZeroes = (inputValue) => {
+    return `$${inputValue.toFixed(2)}`
+  }
+
   useEffect(() => {
     const getPageDatas = async () => {
       try {
@@ -145,113 +172,118 @@ const EmployeeInterface = () => {
       </div>
     );
   } else {
-    return (
-      <div className="user-interface">
-        <div className="header">
-          <h2>{pageDatas.businessName}</h2>
-          {pageDatas.logo && <img src={pageDatas.logo} alt="Business Logo" />}
-          <p>@{pageDatas.businessId}</p>
-        </div>
-
-        <div className="pages">
-          {pageDatas.interfaceSetup && (
-            <>
-              <div key={pageIndex} className="page">
-                <h3>
-                  {pageDatas.interfaceSetup[pageIndex].groupName ||
-                    `Page ${pageIndex + 1}`}
-                </h3>
-                <ul className="item-list">
-                  {pageDatas.interfaceSetup[pageIndex].items.map(
-                    (item, itemIndex) => {
-                      const itemId = `${pageIndex}-${itemIndex}`;
-                      const isSelected = selectedItems[itemId] !== undefined;
-                      if (item.name && item.name.length > 0) {
-                        return (
-                          <li
-                            key={itemIndex}
-                            className={`interface-item ${
-                              isSelected ? "selected" : ""
-                            }`}
-                            onClick={(e) =>
-                              handleItemSelect(pageIndex, itemIndex, e)
-                            }
-                          >
-                            <div>
-                              {item.name} - ${item.price}
-                            </div>
-                            {isSelected && (
-                              <div className="quantity-controls">
-                                <div className="quantity-display">
-                                  <p>{selectedItems[itemId]}</p>
-                                </div>
-                                <div className="add-subtract-controls">
-                                  <div
-                                    onClick={(e) =>
-                                      handleQuantityChange(
-                                        pageIndex,
-                                        itemIndex,
-                                        1,
-                                        e
-                                      )
-                                    }
-                                  >
-                                    <FaPlus />
-                                  </div>
-                                  <div
-                                    onClick={(e) =>
-                                      handleQuantityChange(
-                                        pageIndex,
-                                        itemIndex,
-                                        -1,
-                                        e
-                                      )
-                                    }
-                                  >
-                                    <FaMinus />
-                                  </div>
-                                </div>
+    if (pageDatas.customSetup && pageDatas.customSetup.isCustomized) {
+      return (
+        <div className="user-interface">
+          <InterfaceHeader pageDatas={pageDatas} />
+          <div className="pages">
+            {pageDatas.interfaceSetup && (
+              <>
+                <div key={pageIndex} className="page">
+                  <h3>
+                    {pageDatas.interfaceSetup[pageIndex].groupName ||
+                      `Page ${pageIndex + 1}`}
+                  </h3>
+                  <ul className="item-list">
+                    {pageDatas.interfaceSetup[pageIndex].items.map(
+                      (item, itemIndex) => {
+                        const itemId = `${pageIndex}-${itemIndex}`;
+                        const isSelected = selectedItems[itemId] !== undefined;
+                        if (item.name && item.name.length > 0) {
+                          return (
+                            <li
+                              key={itemIndex}
+                              className={`interface-item ${
+                                isSelected ? "selected" : ""
+                              }`}
+                              onClick={(e) =>
+                                handleItemSelect(pageIndex, itemIndex, e)
+                              }
+                            >
+                              <div>
+                                {item.name} - ${item.price}
                               </div>
-                            )}
-                          </li>
-                        );
+                              {isSelected && (
+                                <div className="quantity-controls">
+                                  <div className="quantity-display">
+                                    <p>{selectedItems[itemId]}</p>
+                                  </div>
+                                  <div className="add-subtract-controls">
+                                    <div
+                                      onClick={(e) =>
+                                        handleQuantityChange(
+                                          pageIndex,
+                                          itemIndex,
+                                          1,
+                                          e
+                                        )
+                                      }
+                                    >
+                                      <FaPlus />
+                                    </div>
+                                    <div
+                                      onClick={(e) =>
+                                        handleQuantityChange(
+                                          pageIndex,
+                                          itemIndex,
+                                          -1,
+                                          e
+                                        )
+                                      }
+                                    >
+                                      <FaMinus />
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </li>
+                          );
+                        }
                       }
-                    }
-                  )}
-                </ul>
-              </div>
-            </>
-          )}
-        </div>
+                    )}
+                  </ul>
+                </div>
+              </>
+            )}
+          </div>
 
-        <div className="miscellaneous">
-          <h3>Miscellaneous Item</h3>
-          <input
-            type="text"
-            name="name"
-            placeholder="Item Name"
-            value={miscellaneousItem.name}
-            onChange={handleMiscellaneousChange}
-          />
-          <input
-            type="number"
-            name="price"
-            placeholder="Price"
-            value={miscellaneousItem.price}
-            onChange={handleMiscellaneousChange}
-          />
-          <button onClick={handleAddToOrder}>Add To Order</button>
-        </div>
+          <div className="miscellaneous">
+            <h3>Miscellaneous Item</h3>
+            <input
+              type="text"
+              name="name"
+              placeholder="Item Name"
+              value={miscellaneousItem.name}
+              onChange={handleMiscellaneousChange}
+            />
+            <input
+              type="number"
+              name="price"
+              placeholder="Price"
+              value={miscellaneousItem.price}
+              onChange={handleMiscellaneousChange}
+            />
+            <button onClick={handleAddToOrder}>Add To Order</button>
+          </div>
 
-        <button className="submit-order" onClick={handleSubmitOrder}>
-          Submit Order
-        </button>
+          <button className="submit-order" onClick={handleSubmitOrder}>
+            Submit Order
+          </button>
 
-        <div className="order-summary">
-          <h3>Order Total: ${orderTotal.toFixed(2)}</h3>
+          <div className="order-summary">
+            <h3>Order Total: ${orderTotal.toFixed(2)}</h3>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="user-interface">
+          <InterfaceHeader pageDatas={pageDatas} />
+          <Calculator setOrderTotal={setOrderTotal} />
+          <DisplayTotal orderTotal={addTrailingZeroes(orderTotal)} />
+        </div>
+      );
+    }
   }
 };
 

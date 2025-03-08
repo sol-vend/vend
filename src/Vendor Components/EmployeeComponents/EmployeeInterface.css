@@ -1,6 +1,15 @@
 .header {
   display: flex;
   justify-content: space-between;
+  width: 100vw !important;
+  align-items: center;
+  background-color: black;
+  color: white;
+  padding: 2.5em 2em 1.5em 2em;
+  box-sizing: border-box;
+  height: 85px;
+  overflow: hidden;
+  border-bottom: solid;
 }
 
 .header > h2 {
@@ -57,9 +66,9 @@
 
 .add-subtract-controls > div {
   padding: 5px;
-  border:solid black 1px;
-  margin-bottom:1px;
-  border-radius:3px;
+  border: solid black 1px;
+  margin-bottom: 1px;
+  border-radius: 3px;
 }
 
 .add-subtract-controls {
@@ -72,4 +81,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.order-total-wrapper-container {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+.order-total-wrapper {
+  padding: 1em;
+  border: solid white 1px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 35vw;
+  gap: 1em;
 }

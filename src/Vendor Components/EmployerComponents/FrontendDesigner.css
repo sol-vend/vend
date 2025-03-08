@@ -102,3 +102,7 @@ ol.alternating-colors {
   display: flex;
   flex-direction: column;
 }
+
+.frontend-options-wrapper div{
+    width: 100%;
+}
