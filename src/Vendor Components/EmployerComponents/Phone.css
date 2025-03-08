@@ -1,0 +1,211 @@
+@media screen and (max-height: 600px) {
+  .frontend-designer-wrapper .phone-outline {
+    margin-top: 40% !important;
+    position: absolute !important;
+  }
+
+  .frontend-options-wrapper + .mobile-demo-wrapper {
+    margin-top: -20% !important;
+    overflow: hidden;
+  }
+
+  .mobile-demo-wrapper {
+    position: relative;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .mobile-demo-wrapper {
+    position: relative;
+  }
+
+  .phone-outline {
+    height: 35vh !important;
+    width: 35vw !important;
+    margin-top: 25%;
+    margin-left: 5%;
+    margin-bottom: 60% !important;
+  }
+
+  @keyframes slideIndicator {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-5px); /* Slight movement to the right */
+    }
+    100% {
+      transform: translateX(0); /* Return to the original position */
+    }
+  }
+
+  .append-existing-phone-button.visible.mobile {
+    animation: slideIndicator 1s ease-in-out 2;
+  }
+}
+
+.phone-outline {
+  position: absolute;
+  width: 30vw;
+  max-width: 250px;
+  min-width: 100px;
+  height: 100vh;
+  max-height: 425px;
+  border-radius: 16px;
+  border: solid black 4px;
+  text-align: center;
+  border-top: solid black 6px;
+  margin-bottom: 10%;
+}
+
+.mobile-demo-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+.mobile-demo-wrapper > div {
+}
+
+.phone-menu-contents {
+  height: 100%;
+}
+
+.group-phone-contents {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 2px calc(15%);
+    margin-top: 1px;
+    overflow: auto;
+    height: 100%;
+    width: 95%;
+    padding-right: 15px;
+  }
+
+  .group-phone-display-button {
+    position: relative;
+    font-size: 10px;
+    border: solid #444444 1px;
+    padding: 5px;
+    border-radius: 6px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, #3e3e3e, #818181);
+    color: white;
+    overflow: hidden;
+  }
+
+  
+.group-phone-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    margin-top: 12px;
+    padding-bottom: 5px;
+    border-bottom: dashed #000000 0.25px;
+  }
+  
+  .append-existing-phone-button {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    right: -10px;
+    padding-right: 2.5px;
+    padding-left: 2.5px;
+    transition: right 0.5s ease-in-out;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: solid white 1px;
+  }
+  
+  .append-existing-phone-button.visible {
+    right: 0px;
+    opacity: 1;
+    visibility: visible;
+    left: 60%;
+    width: 150%;
+  }
+
+  .mobile-demo-qr {
+    margin-top: 15%;
+  }
+  
+  .mobile-tip-option-demo {
+    width: 100%;
+    height: 10px;
+    justify-content: center;
+    font-size: 1vw;
+  }
+  
+  .mobile-tip-option-demo span {
+    padding: 3px;
+    border-radius: 35%;
+    border: solid black 0.5px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+  }
+  
+  .mobile-tip-option-span-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 8px;
+  }
+
+  .speaker-outline {
+    position: absolute;
+    margin-left: 25%;
+    width: 50%;
+    height: 15px;
+    background: black;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+  
+  .power-on-button {
+    top: 50px;
+    right: -6px;
+    height: 20px;
+    width: 2px;
+    background: black;
+    position: absolute;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+  }
+  
+  .volume-up-button {
+    top: 40px;
+    left: -6px;
+    height: 20px;
+    width: 2px;
+    background: black;
+    position: absolute;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+  }
+  
+  .volume-down-button {
+    top: 75px;
+    left: -6px;
+    height: 20px;
+    width: 2px;
+    background: black;
+    position: absolute;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+  }
