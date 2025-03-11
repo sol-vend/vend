@@ -32,12 +32,12 @@ const VendorApp = ({ setSelectedRoute }) => {
 
   const handleAuthTokenUpdate = useCallback(() => {
     const storageKeys = Object.keys(localStorage);
-    if (!storageKeys.includes("firstUse")) {  
-      localStorage.setItem("firstUse", true);  
+    if (!storageKeys.includes("firstUse")) {
+      localStorage.setItem("firstUse", true);
       setIsFirstTimeUser(true);
     } else {
-      localStorage.setItem("firstUse", false); 
-      setIsFirstTimeUser(false);   
+      localStorage.setItem("firstUse", false);
+      setIsFirstTimeUser(false);
     }
   }, []);
 
@@ -140,26 +140,26 @@ const VendorApp = ({ setSelectedRoute }) => {
         ".vendor-title-wrapper"
       );
       if (vendorTitleWrapper) {
-        vendorTitleWrapper.style.filter = "invert(1)";
+        //vendorTitleWrapper.style.filter = "invert(1)";
       }
     } else {
       const vendorTitleWrapper = document.querySelector(
         ".vendor-title-wrapper"
       );
       if (vendorTitleWrapper) {
-        vendorTitleWrapper.style.filter = "invert(0)";
+        //vendorTitleWrapper.style.filter = "invert(0)";
       }
     }
   }, [updateVendorWrapper]);
 
   useEffect(() => {
     if (isNightMode) {
-      document.body.style.transition = "filter 0.5s ease-in-out";
-      document.body.style.filter = "invert(1)";
+      //document.body.style.transition = "filter 0.5s ease-in-out";
+      //document.body.style.filter = "invert(1)";
 
       setUpdateVendorWrapper(!updateVendorWrapper);
     } else {
-      document.body.style.filter = "invert(0)";
+      //document.body.style.filter = "invert(0)";
       setUpdateVendorWrapper(!updateVendorWrapper);
     }
 
@@ -222,7 +222,9 @@ const VendorApp = ({ setSelectedRoute }) => {
     return (
       <div>
         <HeaderWrapper />
-        {containsVerificationHash() && isFirstTimeUser && <FirstTimeUserModal />}
+        {containsVerificationHash() && isFirstTimeUser && (
+          <FirstTimeUserModal />
+        )}
         <Home loginInfos={autoLogin} setSelectedRoute={setSelectedRoute} />
       </div>
     );

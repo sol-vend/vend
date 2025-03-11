@@ -1,0 +1,27 @@
+@media screen and (max-width: 768px) {
+  .employee-interface-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .employee-interface-wrapper:first-child {
+    margin-left: 2.5px;
+  }
+
+  .employee-interface-wrapper:last-child {
+    margin-right: 2.5px;
+  }
+
+  .fow-wrapper {
+    width: 100% !important;
+  }
+
+  .frontend-designer-wrapper {
+    flex-direction: column !important;
+  }
+
+  .group {
+    width: 45vw !important;
+  }
+}

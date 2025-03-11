@@ -6,6 +6,7 @@ import ItemCarousel from "./ItemCarousel";
 import SwipeIndicator from "../SwipeIndicator";
 import SnapSlider from "./SnapSlider";
 import { retrieveExistingData, updateExistingData } from "../Shared";
+import './EmployeeInterfaceDesigner.css'
 
 const EmployeeInterfaceDesigner = ({}) => {
   const debounceWaitTime = 5000;
@@ -245,11 +246,8 @@ const EmployeeInterfaceDesigner = ({}) => {
     console.log(error);
   } else {
     return (
-      <div
-        className="frontend-designer-wrapper"
-        style={{ display: "flex", height: "100%" }}
-      >
-        <div style={{ width: "50%", marginLeft: "2%" }}>
+      <div className="frontend-designer-wrapper" style={{ display: "flex" }}>
+        <div className="employee-interface-wrapper">
           <div className="frontend-options-wrapper-two">
             <div className="fow-wrapper">
               <div className="carousel-controls header-carousel swipeable">
@@ -382,7 +380,7 @@ const EmployeeInterfaceDesigner = ({}) => {
             )}
         </div>
         {console.log(isMobileDevice)}
-        <Phone marginBottom={isMobileDevice ? 200 : 0}>
+        <Phone marginBottom={isMobileDevice ? 0 : 0}>
           <div
             style={{
               position: "absolute",
@@ -409,8 +407,12 @@ const EmployeeInterfaceDesigner = ({}) => {
                       {item.name !== "" && (
                         <div
                           className={
-                            isMobileDevice
-                              ? "group-phone-display-button"
+                            deletionSelectionItem.groupIndex ===
+                              currentGroupIndex &&
+                            deletionSelectionItem.itemIndex === itemIndex
+                              ? isMobileDevice
+                                ? "group-phone-display-button active"
+                                : "group-phone-display-button active"
                               : "group-phone-display-button"
                           }
                           style={{

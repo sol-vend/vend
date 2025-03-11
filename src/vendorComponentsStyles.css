@@ -12,8 +12,21 @@ body {
 }
 
 @media screen and (max-height: 600px) {
-  .home-home-center-header.carousel-controls{
+  .home-home-center-header.carousel-controls {
     z-index: 100;
+  }
+
+  .vendor-title-wrapper{
+    height: 0px !important;
+    opacity: 0;
+  }
+
+  .menu-icon.absolute{
+    background: black;
+    padding: 2px 10px 10px 10px;
+    border-radius: 10%;
+    left: 0;
+    top: 0;
   }
 }
 
@@ -25,30 +38,6 @@ body {
     margin-left: 2% !important;
     width: 50vw !important;
     height: 25vh !important;
-  }
-
-  .fow-wrapper{
-    width: 100% !important;
-  }
-
-  .frontend-designer-wrapper {
-    min-height: 67vh !important;
-  }
-
-  .group {
-    width: 50vw !important;
-  }
-  .frontend-options-wrapper.vendor-form-styles {
-    min-width: 150px !important;
-    height: 100% !important;
-  }
-
-  .frontend-options-wrapper .vendor-input-group-styles {
-    width: 40vw !important;
-  }
-
-  .frontend-options-wrapper .vendor-input-group-styles input {
-    width: 35vw !important;
   }
 
   .home-home-bottom-banner .option-card {
@@ -68,10 +57,6 @@ body {
 
   .home-home-center-content {
     padding: 0px !important;
-  }
-
-  .frontend-designer-bn {
-    padding-top: 25% !important;
   }
 
   .option-card h3 {
@@ -611,18 +596,18 @@ body {
   background: linear-gradient(45deg, white, whitesmoke);
 }
 
-.business-info-form-bottom-banner-warning-wrapper{
-  opacity: 0; 
-  transition: opacity 1s ease-in-out; 
+.business-info-form-bottom-banner-warning-wrapper {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 
 .business-info-form-bottom-banner-warning-wrapper.fade-in {
-  opacity: 1; 
+  opacity: 1;
 }
 
 .business-info-form-bottom-banner-warning.fade-out {
-  opacity: 0; 
-  transition: opacity 0.3s ease-in-out; 
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .payment-info-form-bottom-banner-warning {
@@ -696,8 +681,8 @@ body {
   height: 22px;
 }
 
-.home-home-center-header.carousel-controls.header-carousel .header-carousel-arrow{
-
+.home-home-center-header.carousel-controls.header-carousel
+  .header-carousel-arrow {
 }
 
 .custom-dropdown-option-list {
@@ -1053,6 +1038,7 @@ label {
 
 .custom-checkbox-wrapper-wrapper {
   display: flex;
+  width:100% !important;
 }
 
 .custom-checkbox-wrapper-wrapper > div {
@@ -1064,6 +1050,7 @@ label {
   font-size: 12px;
   font-style: italic;
   margin-left: auto;
+  width: 20% !important;
 }
 
 .custom-checkbox-wrapper-paragraph-descriptor p {
@@ -1416,7 +1403,6 @@ div ::-webkit-scrollbar-thumb:hover {
   flex-grow: 1;
   padding: 20px;
   box-sizing: border-box;
-  height: 80vh;
 }
 
 .home-home-bottom-banner {
@@ -1433,15 +1419,14 @@ div ::-webkit-scrollbar-thumb:hover {
   -webkit-transform: translateZ(0);
 }
 
-.image-deck-image{
+.image-deck-image {
   width: 30px;
-  padding-left:5px;
+  padding-left: 5px;
   padding-right: 5px;
 }
 
 .home-home-primary-content {
   display: flex;
-  height: calc(100% - 210px);
   overflow-y: auto;
 }
 
@@ -1452,6 +1437,7 @@ div ::-webkit-scrollbar-thumb:hover {
   direction: rtl;
   text-align: right;
   background: white;
+  z-index: 10000;
 }
 
 #user-settings-dropdown > div {
@@ -1523,58 +1509,6 @@ div ::-webkit-scrollbar-thumb:hover {
   width: 100vw !important;
 }
 
-.frontend-designer-wrapper {
-  display: flex;
-  flex-direction: row;
-  margin-top: 2%;
-}
-
-.frontend-options-wrapper {
-  height: 100%;
-  width: 100%;
-}
-
-.frontend-options-wrapper div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-}
-
-.frontend-options-wrapper input {
-  width: 14vw;
-}
-
-.screen-outline {
-  margin-bottom: 1%;
-  height: 100%;
-  background: white;
-  border-radius: 16px;
-}
-
-.frontend-designer-bn {
-  padding-top: 10%;
-  font-size: 2vw;
-  font-weight: bold;
-}
-
-.frontend-designer-slogan {
-  margin-top: 5%;
-  font-size: 1vw;
-}
-
-.frontend-designer-footer {
-  display: flex;
-  height: 25%;
-  max-height: 85px;
-  justify-content: center;
-  align-items: flex-end;
-  font-size: 1vw;
-  font-style: italic;
-}
-
-/* HeaderCarousel.css */
-
 .header-carousel {
   display: flex;
   align-items: center;
@@ -1592,7 +1526,6 @@ div ::-webkit-scrollbar-thumb:hover {
 }
 
 .header-carousel:active {
-
 }
 
 .header-carousel-content {

@@ -13,6 +13,7 @@ import SnapSlider from "./SnapSlider";
 import SwipeIndicator from "../SwipeIndicator";
 import EmployeeInterface from "../EmployeeComponents/EmployeeInterface";
 import AppHome from "../../Home/AppHome";
+import "./Home.css";
 
 const Home = ({ loginInfos, setSelectedRoute }) => {
   const [userSettingsDropdownClicked, setUserSettingsDropdownClicked] =
@@ -32,12 +33,30 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
   const [selectedOptionCard, setSelectedOptionCard] = useState({
     name: "editPos",
     component: [
-      <FrontendDesigner callback={setIsCustomizationSelected} />,
+      <FrontendDesigner
+        callback={setIsCustomizationSelected}
+        isMobileDevice={isMobileDevice}
+      />,
       <EmployeeInterfaceDesigner />,
     ],
     headerOpts: ["Customer Payment Setup", "Employee Interface Setup"],
     selectedIndex: 0,
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768){
+        setIsMobileDevice(true)
+      }
+      else{
+        setIsMobileDevice(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (elementRef.current) {
@@ -69,10 +88,18 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
         : ["Customer Payment Setup"],
       component: isCustomizationSelected
         ? [
-            <FrontendDesigner callback={setIsCustomizationSelected} />,
+            <FrontendDesigner
+              callback={setIsCustomizationSelected}
+              isMobileDevice={isMobileDevice}
+            />,
             <EmployeeInterfaceDesigner />,
           ]
-        : [<FrontendDesigner callback={setIsCustomizationSelected} />],
+        : [
+            <FrontendDesigner
+              callback={setIsCustomizationSelected}
+              isMobileDevice={isMobileDevice}
+            />,
+          ],
     }));
   }, [isCustomizationSelected]);
 
@@ -82,6 +109,79 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
 
   const handleLogOut = () => {
     handleUserLogout(setIsLogout);
+  };
+
+  const BottomBanner = () => {
+    return (
+      <div className={"home-home-bottom-banner"}>
+        <div
+          className={
+            selectedOptionCard.name === "editPos"
+              ? "option-card selected"
+              : "option-card"
+          }
+          name="editPos"
+          onClick={() => alert("Edit POS Interface")}
+        >
+          <Tooltip
+            message={"Modify POS system settings, layout, and products."}
+          >
+            <h3>Edit Point of Sale Interface</h3>
+          </Tooltip>
+        </div>
+        <div
+          className={
+            selectedOptionCard.name === "gotoPos"
+              ? "option-card selected"
+              : "option-card"
+          }
+          name="gotoPos"
+          onClick={() => alert("Go to POS Interface")}
+        >
+          <Tooltip message={"Access the live POS interface for transactions."}>
+            <h3>Go to Point of Sale Interface</h3>
+          </Tooltip>
+        </div>
+        <div
+          className={
+            selectedOptionCard.name === "manageEmployees"
+              ? "option-card selected"
+              : "option-card"
+          }
+          name="manageEmployees"
+        >
+          <Tooltip message={"Add or manage employee roles and permissions."}>
+            <h3>Manage Employees</h3>
+          </Tooltip>
+        </div>
+        <div
+          className={
+            selectedOptionCard.name === "viewMetrics"
+              ? "option-card selected"
+              : "option-card"
+          }
+          name="viewMetrics"
+          onClick={() => alert("View Infometrics")}
+        >
+          <Tooltip message={"View detailed analytics and sales data."}>
+            <h3>View Infometrics</h3>
+          </Tooltip>
+        </div>
+        <div
+          className={
+            selectedOptionCard.name === "configurePayment"
+              ? "option-card selected"
+              : "option-card"
+          }
+          name="configurePayment"
+          onClick={() => alert("Manage Payment Options")}
+        >
+          <Tooltip message={"Configure available payment methods."}>
+            <h3>Manage Payment Options</h3>
+          </Tooltip>
+        </div>
+      </div>
+    );
   };
 
   const userSettingsOptions = [
@@ -151,6 +251,11 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
   } else {
     return (
       <>
+        {isMobileDevice && (
+          <>
+            <BottomBanner />
+          </>
+        )}
         <div className="home-home-outer-wrapper" ref={elementRef}>
           <div
             className="user-settings-icon"
@@ -185,7 +290,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
               </p>
             )}
           </div>
-          <div style={{ position: "relative" }}>
+          <div className="home-primary-content-wrapper">
             <div className="home-home-primary-content">
               {!isMobileDevice && (
                 <div className="home-home-left-banner">
@@ -202,6 +307,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                           setSelectedRoute(
                             <FrontendDesigner
                               callback={setIsCustomizationSelected}
+                              isMobileDevice={isMobileDevice}
                             />
                           )
                         }
@@ -368,80 +474,6 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
             </div>
           </div>
         </div>
-        {isMobileDevice && (
-          <div className={bottomBannerMobileStyle}>
-            <div
-              className={
-                selectedOptionCard.name === "editPos"
-                  ? "option-card selected"
-                  : "option-card"
-              }
-              name="editPos"
-              onClick={() => alert("Edit POS Interface")}
-            >
-              <Tooltip
-                message={"Modify POS system settings, layout, and products."}
-              >
-                <h3>Edit Point of Sale Interface</h3>
-              </Tooltip>
-            </div>
-            <div
-              className={
-                selectedOptionCard.name === "gotoPos"
-                  ? "option-card selected"
-                  : "option-card"
-              }
-              name="gotoPos"
-              onClick={() => alert("Go to POS Interface")}
-            >
-              <Tooltip
-                message={"Access the live POS interface for transactions."}
-              >
-                <h3>Go to Point of Sale Interface</h3>
-              </Tooltip>
-            </div>
-            <div
-              className={
-                selectedOptionCard.name === "manageEmployees"
-                  ? "option-card selected"
-                  : "option-card"
-              }
-              name="manageEmployees"
-            >
-              <Tooltip
-                message={"Add or manage employee roles and permissions."}
-              >
-                <h3>Manage Employees</h3>
-              </Tooltip>
-            </div>
-            <div
-              className={
-                selectedOptionCard.name === "viewMetrics"
-                  ? "option-card selected"
-                  : "option-card"
-              }
-              name="viewMetrics"
-              onClick={() => alert("View Infometrics")}
-            >
-              <Tooltip message={"View detailed analytics and sales data."}>
-                <h3>View Infometrics</h3>
-              </Tooltip>
-            </div>
-            <div
-              className={
-                selectedOptionCard.name === "configurePayment"
-                  ? "option-card selected"
-                  : "option-card"
-              }
-              name="configurePayment"
-              onClick={() => alert("Manage Payment Options")}
-            >
-              <Tooltip message={"Configure available payment methods."}>
-                <h3>Manage Payment Options</h3>
-              </Tooltip>
-            </div>
-          </div>
-        )}
       </>
     );
   }

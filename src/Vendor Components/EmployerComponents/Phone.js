@@ -7,7 +7,7 @@ const Phone = ({ children, marginBottom = 0 }) => {
       className="mobile-demo-wrapper"
       style={{ marginBottom: `${marginBottom}px` }}
     >
-      <div className="phone-outline" style={{ position: "absolute" }}>
+      <div className="phone-outline">
         <div className="screen-outline">
           <div className="speaker-outline"></div>
           <div className="volume-up-button"></div>
