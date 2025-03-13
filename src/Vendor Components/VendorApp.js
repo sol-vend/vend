@@ -41,21 +41,6 @@ const VendorApp = ({ setSelectedRoute }) => {
     }
   }, []);
 
-  /* 
-  useEffect(() => {
-    if (authToken) {
-      localStorage.setItem("authToken", authToken);
-    }
-  }, [authToken]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setAuthToken(token);
-    }
-  }, []);
-*/
-
   useEffect(() => {
     fetchDataWithAuth(setIsAuthenticated);
   }, [isFirstTimeUser]);

@@ -206,10 +206,10 @@
   letter-spacing: -0.25px;
 }
 
-ol {
+.customization-details-modal.modal ol {
   padding-left: 50px;
 }
-li {
+.customization-details-modal.modal li {
   color: #4f4f4f;
   padding-left: 16px;
   margin-top: 24px;

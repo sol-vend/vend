@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa";
+import { FaPlus, FaMinus, FaCheckCircle } from "react-icons/fa";
 import { retrieveExistingData } from "../Shared";
 import "./EmployeeInterface.css";
 import Calculator from "./Calculator";
 
 const InterfaceHeader = ({ pageDatas }) => {
   return (
-    <div className="header">
+    <div className="employee-interface-header">
       <h2>{pageDatas.businessName}</h2>
       {pageDatas.logo && <img src={pageDatas.logo} alt="Business Logo" />}
       <p>@{pageDatas.businessId}</p>
@@ -18,8 +18,14 @@ const DisplayTotal = ({ orderTotal }) => {
   return (
     <div className="order-total-wrapper-container">
       <div className="order-total-wrapper">
-        <h2>Total Price:</h2>
-        <h2>{orderTotal}</h2>
+        <div className={orderTotal !== '$0.00' ? 'space-between' : 'center'}>
+        <h2></h2>
+          <h2>Total Price: {orderTotal}</h2>
+          <button className={orderTotal !== '$0.00' ? 'show-button' : ''}>
+            <span>Generate QR Code</span>
+            <FaCheckCircle />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -49,8 +55,8 @@ const EmployeeInterface = () => {
   ];
 
   const addTrailingZeroes = (inputValue) => {
-    return `$${inputValue.toFixed(2)}`
-  }
+    return `$${inputValue.toFixed(2)}`;
+  };
 
   useEffect(() => {
     const getPageDatas = async () => {

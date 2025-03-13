@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { WalletProvider } from "@solana/wallet-adapter-react";
 import WalletConnector from "./Components/WalletConnector";
@@ -10,12 +10,33 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import VendorApp from "./Vendor Components/VendorApp";
 import AppHome from "./Home/AppHome";
-import FrontendDesigner from "./Vendor Components/EmployerComponents/FrontendDesigner";
+import { fetchDataWithAuth } from "./Vendor Components/Shared";
 
 const App = () => {
   const network = "mainnet-beta";
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
+  const [checkAuthAfterLatent, setCheckAuthAfterLatent] = useState(true);
+
+  const handleVisibilityChange = () => {
+    console.log("Visibility Listener Triggered in App.js");
+    fetchDataWithAuth(setCheckAuthAfterLatent);
+  };
+
+  const handleFocus = () => {
+    console.log("Focus Listener Triggered in App.js");
+    fetchDataWithAuth(setCheckAuthAfterLatent);
+  };
+
+  useEffect(() => {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, []);
 
   window.addEventListener("load", () => {
     if (window.matchMedia("(display-mode: standalone)").matches) {
@@ -45,25 +66,6 @@ const App = () => {
                   <>
                     {console.log("autoroute")}
                     <AppHome autoRoute={true} />
-                  </>
-                }
-              />
-              <Route
-                path="/vend/*"
-                element={
-                  <ItemsProvider>
-                    <div className="App">
-                      <Items />
-                      <WalletConnector hash={window.location.hash} />
-                    </div>
-                  </ItemsProvider>
-                }
-              />
-              <Route
-                path="/vendor/*"
-                element={
-                  <>
-                    <VendorApp />
                   </>
                 }
               />
