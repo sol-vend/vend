@@ -177,7 +177,6 @@ export const tryGetGeolocationFromStreetAddress = async (address, setter) => {
 export const updateExistingData = async (data) => {
   try {
     const apiUrl = `${API_URL}/api/update_item`;
-    console.log(data);
     const postData = {
       updateItems: data,
     };

@@ -10,13 +10,9 @@ const Calculator = ({ setOrderTotal, setParentExpressions }) => {
   const [expressionLists, setExpressionLists] = useState([]);
   const [currentExpressionIndex, setCurrentExpressionIndex] = useState(0);
 
-  console.log(expressionLists);
-
   useEffect(() => {
-    console.log(currentExpressionIndex);
     setExpressionLists((prev) => {
       let current = prev;
-      console.log(expressionList);
       current.push(expressionList.slice(-2));
       return current;
     });
@@ -24,17 +20,19 @@ const Calculator = ({ setOrderTotal, setParentExpressions }) => {
   }, [currentExpressionIndex]);
 
   useEffect(() => {
-    console.log(expression);
     setExpressionList((prev) => [...prev, expression]);
   }, [expression]);
 
   useEffect(() => {
     setParentExpressions(
       expressionLists.map((list) => {
-        return processExpression(list);
+        if (list) {
+          let pex = processExpression(list);
+          return pex;
+        }
       })
     );
-  }, [expressionLists]);
+  }, [expressionList]);
 
   const handleClick = (value) => {
     if (display === "0" && value !== ".") {

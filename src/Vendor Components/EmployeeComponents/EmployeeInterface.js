@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, forwardRef } from "react";
-import { FaPlus, FaMinus, FaCheckCircle, FaBackspace } from "react-icons/fa";
+import { FaPlus, FaMinus, FaCheckCircle, FaBackspace, FaBackward, FaArrowLeft } from "react-icons/fa";
 import { retrieveExistingData } from "../Shared";
 import "./EmployeeInterface.css";
 import "./NumericKeypad.css";
@@ -23,6 +23,7 @@ const QRComponent = ({
   orderTotal,
   isOrderDetailsShow,
   setIsOrderDetailsShow,
+  setGoBack,
   parentExpressions = undefined,
 }) => {
   const [tipValue, setTipValue] = useState(0);
@@ -35,6 +36,7 @@ const QRComponent = ({
   const [finalQrData, setFinalQrData] = useState("");
   const qrWrapperRef = useRef(null);
   const animationRef = useRef(null);
+  console.log(parentExpressions);
   const deeplinkBase = "https://phantom.app/ul/browse/";
   const handleTipSelection = (index) => {
     const map = {
@@ -80,7 +82,7 @@ const QRComponent = ({
       destinationPublicKey: pageDatas.vendorWalletAddress,
       businessName: pageDatas.businessName,
       businessId: pageDatas.businessId,
-      saleInformation: parentExpressions[0] !== null ? parentExpressions : "",
+      saleInformation: parentExpressions || "",
     };
     console.log(pageDatas);
     console.log(datasToEncode);
@@ -171,6 +173,9 @@ const QRComponent = ({
         </div>
         <p>{`@${pageDatas?.businessId}` || "Business ID"}</p>
       </div>
+      <div className="customer-facing-back-button-wrapper">
+        <button onClick={()=> setGoBack((prev) => !prev)}><FaArrowLeft /></button>
+      </div>
       <div className="customer-facing-body-wrapper">
         <div className="customer-facing-wrapper-container">
           <div className="customer-facing-qr-header-wrapper">
@@ -184,8 +189,7 @@ const QRComponent = ({
               style={doMakeQr ? { opacity: "1" } : { opacity: "0" }}
             >
               {console.log(`${deeplinkBase}${encodeURIComponent(`https://solvend.fun/#/payment/#${finalQrData.hash}`)}?ref=${encodeURIComponent("https://solvend.fun")}`)}
-              {<CustomQRCode data={`${deeplinkBase}${encodeURIComponent(`https://solvend.fun/payment/#${finalQrData.hash}`)}?ref=${encodeURIComponent("https://solvend.fun")}`} parentRef={qrWrapperRef} />}
-            {/*<CustomQRCode data={`${deeplinkBase}${encodeURIComponent(`https://solvend.fun`)}`} parentRef={qrWrapperRef}/>*/}
+              {<CustomQRCode data={`${deeplinkBase}${encodeURIComponent(`https://solvend.fun/#/payment/#${finalQrData.hash}`)}?ref=${encodeURIComponent("https://solvend.fun")}`} parentRef={qrWrapperRef} />}
             </div>
           </div>
           <div className="customer-facing-order-details-wrapper">
@@ -206,11 +210,7 @@ const QRComponent = ({
                 }
               >
                 <ul>
-                  {[
-                    "1) Item 1 - $7.00",
-                    "2) Item 2 - $3.00",
-                    "3) Item 3 - $2.00",
-                  ].map((value) => {
+                  {parentExpressions.map((value) => {
                     return <li>{value}</li>;
                   })}
                 </ul>
@@ -273,7 +273,7 @@ const QRComponent = ({
             onClick={handleConfirmOrder}
             className="customer-facing-confirm-total-button"
           >
-            {!doMakeQr ? "Confirm Total" : "Go Back"}
+            {!doMakeQr ? "Confirm Total" : "Change Tip?"}
           </div>
         </div>
         <div className="customer-facing-salutation-wrapper">
@@ -475,7 +475,7 @@ const EmployeeInterface = () => {
               onClick={() => setGenerateQr(true)}
               className={orderTotal !== "$0.00" ? "show-button" : ""}
             >
-              <span>Generate QR Code</span>
+              <span>Ready for Customer Payment</span>
               <FaCheckCircle />
             </button>
           </div>
@@ -611,6 +611,7 @@ const EmployeeInterface = () => {
           orderTotal={orderTotal}
           isOrderDetailsShow={isOrderDetailsShow}
           setIsOrderDetailsShow={setIsOrderDetailsShow}
+          setGoBack={setGenerateQr}
           parentExpressions={parentExpressions}
         />
       );

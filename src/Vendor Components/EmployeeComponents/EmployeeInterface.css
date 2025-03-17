@@ -402,10 +402,21 @@
   justify-content: center;
   color: white;
   font-style: italic;
+  margin-bottom: 3em;
 }
 
 .customer-facing-wrapper {
   height: auto !important;
+}
+
+.customer-facing-back-button-wrapper > button{
+background: transparent;
+}
+
+.customer-facing-back-button-wrapper > svg{
+  color: white;
+  height: 2em;
+  width:2em;
 }
 
 @media screen and (max-width: 768px) {

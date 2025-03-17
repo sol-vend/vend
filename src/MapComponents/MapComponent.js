@@ -28,7 +28,6 @@ const MapComponent = () => {
   const [businesses, setBusinesses] = useState([]);
   const [expandDescription, setExpandDescription] = useState(false);
   const [activeBusinessId, setActiveBusinessId] = useState("");
-  const [zIndex, setZIndex] = useState(1000);
   const markerRefs = useRef([]);
 
   const PinSvg = () => {

@@ -3,8 +3,8 @@
 }
 
 .customer-facing-qr-code-container {
-  width: 250px;
-  height: 250px;
+  width: 275px;
+  height: 275px;
   margin: auto;
   background-color: rgba(255, 255, 255, 0.75);
   border-radius: 8px;
