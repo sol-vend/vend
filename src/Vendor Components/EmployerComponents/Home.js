@@ -136,7 +136,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
               : "option-card"
           }
           name="gotoPos"
-          onClick={() => alert("Go to POS Interface")}
+          onClick={() => setSelectedRoute(<EmployeeInterface />)}
         >
           <Tooltip message={"Access the live POS interface for transactions."}>
             <h3>Go to Point of Sale Interface</h3>

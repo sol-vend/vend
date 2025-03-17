@@ -12,17 +12,23 @@
   border-bottom: solid;
 }
 
+.employee-interface-header > img {
+  width: 100px;
+}
+
 .header > h2 {
   padding-left: 5%;
 }
 
-.user-interface {
+.user-interface,
+.customer-facing-wrapper {
   background-image: url("../../../public/apphome-4.png");
   background-size: cover;
   filter: opacity(0.95);
   margin-top: -2.5%;
   position: fixed !important;
-  height: 105vh !important;
+  min-height: 100vh !important;
+  width: 100vw;
 }
 
 .interface-item {
@@ -109,13 +115,13 @@
   justify-content: space-between;
 }
 
-.order-total-wrapper > div.space-between{
-  transform:translateX(0%);
+.order-total-wrapper > div.space-between {
+  transform: translateX(0%);
   transition: transform 1s ease-in-out;
 }
 
-.order-total-wrapper > div.center{
-  transform:translateX(25%);
+.order-total-wrapper > div.center {
+  transform: translateX(25%);
   transition: transform 1s ease-in-out;
 }
 
@@ -142,8 +148,9 @@
   transform: translateX(0); /* Move the button to its original position */
 }
 
-.order-total-wrapper-container > div > div > button.show-button:hover, .order-total-wrapper-container > div > div > button.show-button:active{
-  background:#00ffa3;
+.order-total-wrapper-container > div > div > button.show-button:hover,
+.order-total-wrapper-container > div > div > button.show-button:active {
+  background: #00ffa3;
   color: black;
 }
 
@@ -158,20 +165,263 @@
   font-size: 14px;
 }
 
+.customer-facing-wrapper-header {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: solid black 1px;
+  background: rgb(0 0 0 / 80%);
+  height: 150px;
+  color: white;
+  align-content: center;
+  align-items: center;
+}
+
+.customer-facing-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 150px);
+}
+
+.customer-facing-qr-header {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid rgb(255, 255, 255); /* This creates the cursor */
+  animation: typing 1s steps(11, end) forwards,
+    cursor-blink 0.75s step-end infinite;
+  width: 0;
+  color: white;
+}
+
+.customer-facing-qr-header-still {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid rgb(255, 255, 255); /* This creates the cursor */
+  animation: cursor-blink 0.75s step-end infinite;
+  width: 100%;
+  color: white;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes cursor-blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: rgb(255, 255, 255);
+  }
+}
+
+.customer-facing-wrapper-header > img {
+  padding: 5px;
+  height: 140px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.customer-facing-wrapper-header > div {
+  text-align: center;
+}
+
+.customer-facing-wrapper-header > div > h1 {
+  color: white;
+  margin: 0.67em 0.67em 0em;
+}
+
+.customer-facing-wrapper-header > div > p {
+  font-style: oblique;
+}
+
+.customer-facing-order-details-wrapper {
+  padding: 20px;
+}
+
+.customer-facing-wrapper-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 2.5%;
+}
+
+.customer-facing-order-details-container,
+.tip-option-wrapper,
+.customer-facing-confirm-total-button {
+  background: linear-gradient(20deg, #000000, #292929e8);
+  color: #51bfac;
+  font-size: 1.25em;
+  font-weight: bold;
+  border: solid rgb(255, 255, 255) 2px;
+  padding: 15px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.customer-facing-price-confirmation-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.customer-facing-confirm-total-button {
+  background: linear-gradient(120deg, #00ffa3, rgb(26, 26, 26));
+  color:rgb(45, 44, 44);
+  display: flex;
+  justify-content: center;
+}
+
+.customer-facing-order-details-container:hover,
+.tip-option-wrapper:hover,
+.customer-facing-order-details-container:active,
+.tip-option-wrapper:active,
+.customer-facing-confirm-total-button:active,
+.customer-facing-confirm-total-button:hover {
+  background: linear-gradient(20deg, #51bfac, white);
+  color: rgb(0, 0, 0);
+  border: solid black 2px;
+}
+
+.tip-option-wrapper > p {
+  margin-block: 0px;
+}
+
+.tip-option-wrapper {
+  padding: 5px;
+}
+
+.custom-tip-option-wrapper {
+  position: absolute;
+  top: 20%;
+  z-index: 100;
+}
+
+@keyframes promptOrderDetailsDisplay {
+  0% {
+    transform: translateY(-100%);
+  }
+  30% {
+    transform: translateY(-100%);
+  }
+  45% {
+    transform: translateY(-50%); /* Slight move down */
+  }
+  50% {
+    transform: translateY(-75%);
+  }
+  55% {
+    transform: translateY(-50%);
+  }
+  60% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(-100%); /* Return to original position */
+  }
+}
+
+.customer-facing-order-details-rel {
+  height: 250px;
+  width: 250px;
+  overflow: hidden;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  left: calc(50vw - 125px);
+}
+
+.customer-facing-order-details-rel > div {
+  border-radius: 15px;
+  padding: 5px;
+  position: absolute;
+  background: linear-gradient(20deg, #51bfac, white);
+  color: rgb(0, 0, 0);
+  border: solid black 2px;
+}
+
+.customer-facing-order-details-abs-startup {
+  animation: promptOrderDetailsDisplay 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.customer-facing-order-details-abs {
+  will-change: transform;
+  transform: translateY(-101%);
+  transition: transform 1s ease-in-out;
+}
+
+.customer-facing-order-details-abs-show {
+  transform: translateY(0%);
+}
+
+.customer-facing-order-details-rel > div > ul {
+  transform: translateX(-12.5%);
+}
+
+.customer-facing-order-details-rel > div > ul > li {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(0, 0, 0);
+  list-style-type: decimal;
+}
+
+.customer-facing-footer-wrapper {
+  color: white;
+}
+
+.customer-facing-tip-options-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.customer-facing-tip-options-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 1.5em;
+}
+
+.customer-facing-salutation-wrapper {
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-style: italic;
+}
+
+.customer-facing-wrapper {
+  height: auto !important;
+}
+
 @media screen and (max-width: 768px) {
   .order-total-wrapper {
     width: 75vw;
     margin-top: 5%;
   }
 
-  .order-total-wrapper > div.space-between{
-    transform:translateX(5%);
+  .order-total-wrapper > div.space-between {
+    transform: translateX(5%);
     transition: transform 1s ease-in-out;
     text-align: center;
   }
-  
-  .order-total-wrapper > div.center{
-    transform:translateX(25%);
+
+  .order-total-wrapper > div.center {
+    transform: translateX(25%);
     transition: transform 1s ease-in-out;
     text-align: center;
   }

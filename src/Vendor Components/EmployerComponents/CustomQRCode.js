@@ -1,56 +1,16 @@
-import QRCodeStyling from "qr-code-styling";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import QRCode from "react-qr-code"; // Import react-qr-code library
+import './CustomQRCode.css'
 
-function CustomQRCode({ data, parentRef }) {
-  const qrCodeRef = useRef(null);
-  const [isGenerated, setIsGenerated] = useState(false);
-  console.log(isGenerated);
+// CustomQRCode component using react-qr-code library
+const CustomQRCode = ({ data }) => {
 
-  useEffect(() => {
-    if (!isGenerated) {
-      setIsGenerated(true);
-      if (parentRef.current) {
-        parentRef.current.innerHTML = ""; // Clear the wrapper element
-      }
-
-      // Create a new QR code instance
-      const qrCode = new QRCodeStyling({
-        width: 150,
-        height: 150,
-        data: data,
-        image: "vend_qr.png", // Use the imageUrl prop for dynamic image if needed
-        dotsOptions: {
-          color: "white",
-          type: "rounded",
-        },
-        backgroundOptions: {
-          color: "black",
-        },
-        imageOptions: {
-          crossOrigin: "anonymous",
-          size: 100, // You can adjust this value to make the logo size bigger/smaller
-        },
-      });
-
-      // Append the QR code to the ref element
-      qrCode.append(qrCodeRef.current);
-
-      // Also append the qrCodeRef's div to the parent wrapper
-      if (parentRef.current) {
-        parentRef.current.appendChild(qrCodeRef.current);
-      }
-
-      // Cleanup on component unmount
-      return () => {
-        if (parentRef.current) {
-          parentRef.current.innerHTML = ""; // Cleanup the parent wrapper
-        }
-      };
-    }
-  }, [data]); // Recreate the QR code whenever 'data' or 'imageUrl' changes
-  if (parentRef.current === null) {
-    return <div ref={qrCodeRef} />;
-  }
-}
+  return (
+    <div className="customer-facing-qr-code-container">
+      <QRCode value={data} size={250} fgColor="white" bgColor="black" level="H"/>
+        <img src={"/vend_qr.png"} alt="logo" className="centered-qr-logo-image" />
+    </div>
+  );
+};
 
 export default CustomQRCode;

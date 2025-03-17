@@ -1,0 +1,42 @@
+:root {
+  --gradient-fill: linear-gradient(45deg, #ff0000, #0000ff);
+}
+
+.customer-facing-qr-code-container {
+  width: 250px;
+  height: 250px;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  display: block;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;
+  padding: 5px;
+  position: relative;
+}
+
+.customer-facing-qr-code-container svg{
+    border-radius: 10px;
+    border: solid rgba(128, 0, 128, 0.123) 0.5px;
+}
+
+.customer-facing-qr-code-container svg path:first-of-type {
+  fill: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='gradient' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23000000'/%3E%3Cstop offset='100%25' stop-color='%2354549c'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E#gradient");
+}
+
+.customer-facing-qr-code-container svg path:last-of-type {
+  fill: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='gradient' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23f8f6f6'/%3E%3Cstop offset='100%25' stop-color='%23ffffff'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E#gradient");
+}
+
+.centered-qr-logo-image {
+    position: absolute;
+    top: 37.5%;
+    left: 37.5%;
+    width: 25%;
+    height: 25%;
+    object-fit: contain;
+    z-index: 1;
+    border-radius: 20px;
+    box-shadow: rgb(0 0 0 / 25%) -2px 2px 20px 5px;
+    perspective: 10000px;
+    perspective-origin: center;
+}

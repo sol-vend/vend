@@ -3,7 +3,7 @@ import "./Calculator.css";
 
 const ListExpressions = () => {};
 
-const Calculator = ({ setOrderTotal }) => {
+const Calculator = ({ setOrderTotal, setParentExpressions }) => {
   const [display, setDisplay] = useState("0");
   const [expression, setExpression] = useState("");
   const [expressionList, setExpressionList] = useState([]);
@@ -27,6 +27,14 @@ const Calculator = ({ setOrderTotal }) => {
     console.log(expression);
     setExpressionList((prev) => [...prev, expression]);
   }, [expression]);
+
+  useEffect(() => {
+    setParentExpressions(
+      expressionLists.map((list) => {
+        return processExpression(list);
+      })
+    );
+  }, [expressionLists]);
 
   const handleClick = (value) => {
     if (display === "0" && value !== ".") {
