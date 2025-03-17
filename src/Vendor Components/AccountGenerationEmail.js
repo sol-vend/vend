@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ReactDOMServer from "react-dom/server"; // Import the ReactDOMServer module
 import { API_URL } from "../Components/Shared";
-import LogoSvg from "./LogoSvg";
 
 const AccountGenerationEmail = ({
   userEmailAddress,
@@ -60,7 +58,7 @@ const AccountGenerationEmail = ({
         <div style="padding: 20px;">
             <p style="margin: 0;">Congratulations! Your account has been created!</p>
             <p style="margin: 0;">Click the link below to log-in and finish setting up your account.</p>
-            <p style="margin: 0; text-align:center;"><a href="https://www.solvend.fun/#HASH_KEY" style="display: inline-block; padding: 10px 20px; background-color: #663399; color: #fff; text-decoration: none; border-radius: 5px;">Continue to VEND</a></p>
+            <p style="margin: 0; text-align:center;"><a href="https://www.solvend.fun/#/welcome/#HASH_KEY" style="display: inline-block; padding: 10px 20px; background-color: #663399; color: #fff; text-decoration: none; border-radius: 5px;">Continue to VEND</a></p>
         </div>
         <div style="text-align: center; padding: 20px; border-top: 1px solid #eee; color: #777;">
             <p style="margin: 0;">Thank you for joining us!</p>

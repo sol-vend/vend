@@ -23,6 +23,7 @@ const QRComponent = ({
   orderTotal,
   isOrderDetailsShow,
   setIsOrderDetailsShow,
+  parentExpressions = undefined,
 }) => {
   const [tipValue, setTipValue] = useState(0);
   const [doMakeQr, setDoMakeQr] = useState(false);
@@ -34,6 +35,7 @@ const QRComponent = ({
   const [finalQrData, setFinalQrData] = useState("");
   const qrWrapperRef = useRef(null);
   const animationRef = useRef(null);
+  const deeplinkBase = "https://phantom.app/ul/browse/";
   const handleTipSelection = (index) => {
     const map = {
       0: 0.1,
@@ -73,18 +75,18 @@ const QRComponent = ({
   };
 
   const buildQrDeeplink = async (pageDatas) => {
-    const urlBase = "https://phantom.app/ul/browse/";
     const datasToEncode = {
-      baseLink: urlBase,
       totalPrice: finalTotalPrice,
-      destinationPublicKey: pageDatas.vendorWalletAddess,
+      destinationPublicKey: pageDatas.vendorWalletAddress,
       businessName: pageDatas.businessName,
-      saleInformation: "",
+      businessId: pageDatas.businessId,
+      saleInformation: parentExpressions[0] !== null ? parentExpressions : "",
     };
-
+    console.log(pageDatas);
+    console.log(datasToEncode);
     try {
       const response = await axios.post(
-        `${API_URL}/api/get_url_safe_link`,
+        `${API_URL}/api/get_url_safe_link_encode`,
         datasToEncode,
         {
           headers: {
@@ -101,7 +103,7 @@ const QRComponent = ({
   };
 
   const getQrDatas = () => {
-    //const urlBase = "phantom.app/"
+    //const deeplinkBase = "phantom.app/"
     //This is where it will get complicated.
     //I see the user scanning the qr code
     //1) Try to open in Phantom browser
@@ -149,8 +151,15 @@ const QRComponent = ({
   };
 
   const handleConfirmOrder = () => {
-    setDoMakeQr(!doMakeQr);
+    buildQrDeeplink(pageDatas);
   };
+
+  useEffect(() => {
+    if (finalQrData) {
+      console.log(finalQrData);
+      setDoMakeQr(!doMakeQr);
+    }
+  }, [finalQrData]);
 
   return (
     <div className="customer-facing-wrapper">
@@ -174,10 +183,9 @@ const QRComponent = ({
               ref={qrWrapperRef}
               style={doMakeQr ? { opacity: "1" } : { opacity: "0" }}
             >
-              <CustomQRCode
-                data={`www.solvend.fun/${finalTotalPrice}`}
-                parentRef={qrWrapperRef}
-              />
+              {console.log(`${deeplinkBase}${encodeURIComponent(`https://solvend.fun/#/payment/#${finalQrData.hash}`)}?ref=${encodeURIComponent("https://solvend.fun")}`)}
+              {<CustomQRCode data={`${deeplinkBase}${encodeURIComponent(`https://solvend.fun/payment/#${finalQrData.hash}`)}?ref=${encodeURIComponent("https://solvend.fun")}`} parentRef={qrWrapperRef} />}
+            {/*<CustomQRCode data={`${deeplinkBase}${encodeURIComponent(`https://solvend.fun`)}`} parentRef={qrWrapperRef}/>*/}
             </div>
           </div>
           <div className="customer-facing-order-details-wrapper">
@@ -603,6 +611,7 @@ const EmployeeInterface = () => {
           orderTotal={orderTotal}
           isOrderDetailsShow={isOrderDetailsShow}
           setIsOrderDetailsShow={setIsOrderDetailsShow}
+          parentExpressions={parentExpressions}
         />
       );
     } else if (pageDatas.customSetup && pageDatas.customSetup.isCustomized) {
