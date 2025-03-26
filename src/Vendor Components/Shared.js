@@ -1,5 +1,7 @@
 import { API_URL } from "../Components/Shared";
+import React from "react";
 import axios from "axios";
+import SessionExpiredModal from "./SessionExpiredModal";
 
 export const socialPlatforms = [
   {
@@ -111,10 +113,12 @@ export const fetchDataWithAuth = async (setCallback) => {
     if (response.data) {
       console.log(response);
       setCallback(response.data);
+      return false;
     }
   } catch (error) {
     console.error("Error fetching data:", error);
     setCallback({ error: error.message, doContinue: false });
+    return <SessionExpiredModal />;
   }
 };
 
@@ -221,60 +225,16 @@ export const fetchTokens = async (stateSetter) => {
   }
 };
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-  return null;
-}
-
-function setCookie(name, value, options = {}) {
-  let updatedCookie = `${name}=${value}`;
-
-  // Set options for cookie
-  if (options.expires) {
-    updatedCookie += `; expires=${options.expires.toUTCString()}`;
-  }
-
-  if (options.path) {
-    updatedCookie += `; path=${options.path}`;
-  }
-
-  if (options.domain) {
-    updatedCookie += `; domain=${options.domain}`;
-  }
-
-  if (options.secure) {
-    updatedCookie += `; secure`;
-  }
-
-  if (options.sameSite) {
-    updatedCookie += `; SameSite=${options.sameSite}`;
-  }
-
-  document.cookie = updatedCookie;
-}
-
-export function modifyCookieExpiration(cookieName, newExpirationDate) {
-  // Get the value of the cookie
-  const cookieValue = getCookie(cookieName);
-
-  if (!cookieValue) {
-    console.log(`Cookie with name ${cookieName} not found.`);
-    return;
-  }
-
-  // Retrieve other attributes (path, domain, secure, sameSite) by parsing the cookie
-  const cookieAttributes = document.cookie
-    .split("; ")
-    .find((cookie) => cookie.startsWith(cookieName))
-    ?.split(";")[0]
-    .split("=")[0]; // Extracts only the cookie name
-
-  // Set the new expiration date, keeping all other attributes the same
-  setCookie(cookieName, cookieValue, {
-    expires: newExpirationDate,
-    path: "/", // Default path
-    // Add any other attributes such as domain, secure, sameSite here if needed
-  });
-}
+export const GenericMessaging = ({ children, isError = false }) => {
+  return (
+    <div
+      className={
+        !isError
+          ? "generic-messaging-wrapper"
+          : "generic-messaging-wrapper error"
+      }
+    >
+      {children}
+    </div>
+  );
+};

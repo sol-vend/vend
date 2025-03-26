@@ -10,21 +10,24 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import AppHome from "./Home/AppHome";
 import { fetchDataWithAuth } from "./Vendor Components/Shared";
+import PasswordResetFull from "./Vendor Components/EmployeeComponents/PasswordResetFull";
+import HeaderWrapper from "./Vendor Components/HeaderWrapper";
 
 const App = () => {
   const network = "mainnet-beta";
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
   const [checkAuthAfterLatent, setCheckAuthAfterLatent] = useState(true);
+  const [doPromptLogin, setDoPromptLogin] = useState(false);
 
   const handleVisibilityChange = () => {
     console.log("Visibility Listener Triggered in App.js");
-    fetchDataWithAuth(setCheckAuthAfterLatent);
+    setDoPromptLogin(fetchDataWithAuth(setCheckAuthAfterLatent));
   };
 
   const handleFocus = () => {
     console.log("Focus Listener Triggered in App.js");
-    fetchDataWithAuth(setCheckAuthAfterLatent);
+    setDoPromptLogin(fetchDataWithAuth(setCheckAuthAfterLatent));
   };
 
   useEffect(() => {
@@ -45,43 +48,66 @@ const App = () => {
     }
   });
 
-  return (
-    <Router>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <>
-                    <AppHome />
-                  </>
-                }
-              />
-              <Route
-                path="/welcome/*"
-                element={
-                  <>
-                    {console.log("autoroute")}
-                    <AppHome autoRoute={true} />
-                  </>
-                }
-              />
-              <Route
-                path="/payment/*"
-                element={
-                  <>
-                    <div>work in progress...</div>
-                  </>
-                }
-              />
-            </Routes>
-          </WalletModalProvider>
-        </WalletProvider>
-      </ConnectionProvider>
-    </Router>
-  );
-};
+  console.log(doPromptLogin);
+//  if (doPromptLogin) {
+//    return { doPromptLogin };
+//  } else {
+    return (
+      <Router>
+        <ConnectionProvider endpoint={endpoint}>
+          <WalletProvider wallets={wallets} autoConnect>
+            <WalletModalProvider>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <AppHome />
+                    </>
+                  }
+                />
+                <Route
+                  path="/welcome/*"
+                  element={
+                    <>
+                      {console.log("autoroute")}
+                      <AppHome autoRoute={true} />
+                    </>
+                  }
+                />
+                <Route
+                  path="/password_reset/*"
+                  element={
+                    <>
+                    <HeaderWrapper/>
+                      <PasswordResetFull hash={window.location.hash.split('#').slice(-1)[0]} isEmployerReset={true} />
+                    </>
+                  }
+                />
+                <Route
+                  path="/employee_password_reset/*"
+                  element={
+                    <>
+                    <HeaderWrapper/>
+                      <PasswordResetFull hash={window.location.hash.split('#').slice(-1)[0]} isEmployerReset={false} />
+                    </>
+                  }
+                />
+                <Route
+                  path="/payment/*"
+                  element={
+                    <>
+                      <div>work in progress...</div>
+                    </>
+                  }
+                />
+              </Routes>
+            </WalletModalProvider>
+          </WalletProvider>
+        </ConnectionProvider>
+      </Router>
+    );
+  }
+//};
 
 export default App;

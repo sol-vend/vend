@@ -8,18 +8,21 @@ import {
 } from "./Shared";
 import HeaderWrapper from "./HeaderWrapper";
 import Home from "./EmployerComponents/Home";
-import ProcessNewAccount from "./EmployerComponents/ProcessNewAccount";
 import FirstTimeUserModal from "./EmployerComponents/FirstTimeUserModal";
+import axios from 'axios';
+import { API_URL } from "../Components/Shared";
 
 const VendorApp = ({ setSelectedRoute }) => {
   const [createAccount, setCreateAccount] = useState(false);
   const [userMetadata, setUserMetadata] = useState(false);
   const [isNightMode, setIsNightMode] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [updateVendorWrapper, setUpdateVendorWrapper] = useState(false);
   const [authToken, setAuthToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
+  const [initializationResponse, setInitializationResponse] = useState(false);
   const [autoLogin, setAutoLogin] = useState({
     isLoggedIn: false,
     emailAddress: "",
@@ -173,9 +176,47 @@ const VendorApp = ({ setSelectedRoute }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const hash = containsVerificationHash();
+    if (hash) {
+      setIsFirstLogin(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isFirstLogin) {
+      const hash = containsVerificationHash();
+      setLoading(true);
+      const confirmAccount = async () => {
+        try {
+          const apiUrl = `${API_URL}/api/verify_account`;
+          const postData = {
+            accountVerificationHash: hash,
+          };
+          const response = await axios.post(apiUrl, postData, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          });
+          setInitializationResponse(response);
+        } catch (error) {
+          //setError(error);
+        }
+      };
+      confirmAccount();
+    }
+  }, [isFirstLogin]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [initializationResponse])
+
   const containsVerificationHash = () => {
     const hash = window.location.hash;
-    const cleanHash = hash.startsWith("#") ? hash.slice(1) : hash;
+    const cleanHash = hash.startsWith("#")
+      ? hash.split("#").slice(-1)[0]
+      : hash;
     const regex = /^[a-fA-F0-9]{64}$/;
 
     if (regex.test(cleanHash)) {
@@ -203,25 +244,12 @@ const VendorApp = ({ setSelectedRoute }) => {
         </div>
       </div>
     );
-  } else if (autoLogin.isLoggedIn) {
+  } else if (isFirstLogin) {
     return (
       <div>
         <HeaderWrapper />
-        {containsVerificationHash() && isFirstTimeUser && (
-          <FirstTimeUserModal />
-        )}
+        <FirstTimeUserModal />
         <Home loginInfos={autoLogin} setSelectedRoute={setSelectedRoute} />
-      </div>
-    );
-  } else if (containsVerificationHash()) {
-    return (
-      <div>
-        <ProcessNewAccount
-          hash={containsVerificationHash()}
-          parentStateCallback={handleAuthTokenUpdate}
-        />
-        <HeaderWrapper />
-        <EmployeeLogin setSelectedRoute={setSelectedRoute} />
       </div>
     );
   } else {

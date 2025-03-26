@@ -51,10 +51,13 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
     let isMounted = true; // flag to track if the component is mounted
     const getCurrentGroups = async () => {
       try {
-        const customerSetup = ["customerSetup"];
+        const customerSetup = ["customerSetup", "businessName"];
         const currentGroups = await retrieveExistingData(customerSetup);
-
         if (currentGroups.response?.customerSetup && isMounted) {
+          if (currentGroups.response?.customerSetup?.businessName === "") {
+            currentGroups.response.customerSetup.businessName =
+              currentGroups.response.businessName;
+          }
           setInterfacePreferences(currentGroups.response.customerSetup);
         } else if (currentGroups.status === 500) {
           setError(true);
@@ -80,11 +83,42 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
   }, [interfacePreferences, updateDatabaseWithGroups, isStartup]);
 
   useEffect(() => {
+    console.log(interfacePreferences);
     if (interfacePreferences.businessName.length > 0 && loading) {
       setLoading(false);
     }
     callback(interfacePreferences.isCustomized);
   }, [interfacePreferences]);
+
+  useEffect(() => {
+    if (interfacePreferences.isCustomized) {
+      const classToSelect = ".header-carousel-arrow.header-carousel-left-arrow.right";
+      console.log(document.querySelector(classToSelect))
+      if (document.querySelector(classToSelect)) {
+        const addRemoveClass = () => {
+          if (
+            document
+              .querySelector(classToSelect)
+              .classList.contains("customizable")
+          ) {
+            document
+              .querySelector(classToSelect)
+              .classList.remove("customizable");
+          } else {
+            document.querySelector(classToSelect).classList.add("customizable");
+            setTimeout(
+              () =>
+                document
+                  .querySelector(".header-carousel-arrow.header-carousel-left-arrow.right")
+                  .classList.remove("customizable"),
+              5000
+            );
+          }
+        };
+        addRemoveClass();
+      }
+    }
+  }, [interfacePreferences.isCustomized]);
 
   const handleCheckChange = (e, name) => {
     const checked = e;
@@ -307,18 +341,15 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
       </Phone>
     );
   };
-
+  console.log(interfacePreferences);
   if (loading) {
     return (
       <>
         <Loading />
       </>
     );
-  } else if (error) {
-    console.log(error);
-    return null; // Prevent further rendering after reload
   } else {
-    console.log('isMobileDevice', isMobileDevice);
+    console.log("isMobileDevice", isMobileDevice);
     return (
       <div
         className={

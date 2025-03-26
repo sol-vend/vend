@@ -1,0 +1,43 @@
+/* SessionExpiredModal.css */
+
+/* Modal backdrop (overlay) */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal window */
+  .modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+  }
+  
+  /* Close button */
+  .close-button {
+    margin-top: 10px;
+    background-color: #FF6347;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  /* Link to reload page */
+  .link {
+    color: #007BFF;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  

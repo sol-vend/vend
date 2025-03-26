@@ -293,3 +293,23 @@ ol.alternating-colors {
   opacity: 0;
   visibility: collapse;
 }
+
+.customizable{
+  animation: breathe 5s forwards;
+  border-radius: 50%;
+}
+
+@keyframes breathe {
+  0%{
+    scale:1;
+    background-color: transparent;
+  }
+  50%{
+    scale:1.5;
+    background-color: rgba(218, 255, 213, 0.33);
+  }
+  100%{
+    scale:1;
+    background-color: transparent;
+  }
+}

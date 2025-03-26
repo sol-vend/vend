@@ -416,7 +416,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                           }
                         </h3>
                         <button
-                          className="header-carousel-arrow header-carousel-left-arrow"
+                          className="header-carousel-arrow header-carousel-left-arrow right"
                           onClick={handleSelectionIncrement}
                         >
                           <SwipeIndicator

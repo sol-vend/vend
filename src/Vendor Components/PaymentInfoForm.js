@@ -10,6 +10,7 @@ import CustomRadioButton from "./CustomRadioButton";
 import TutorialModal from "./TutorialModal";
 import AccountGenerationEmail from "./AccountGenerationEmail";
 import ImageDeck from "./ImageDeck";
+import { FaArrowLeft, FaBackward } from "react-icons/fa";
 
 const PaymentInfoForm = ({
   submitResponse,
@@ -63,6 +64,17 @@ const PaymentInfoForm = ({
     }
   }, [availableTokens]);
 
+  const filterEmptyObjectsFromFormData = (data) => {
+  data.businessSocials = data.businessSocials.filter(item => {
+    return item.url && item.url.trim() !== '';
+  });
+  data.approvedReadOnlyEmployees = data.approvedReadOnlyEmployees.filter(employee => {
+    return employee.name && employee.name.trim() !== '' && employee.role && employee.role.trim() !== '' && employee.userId && employee.userId.trim() !== ''; 
+  });
+
+  return data;
+  }
+
   const handlePostResponse = () => {
     if (walletAddress.length > 0) {
       if (selectedPaymentCurrency) {
@@ -70,7 +82,7 @@ const PaymentInfoForm = ({
         let now = new Date();
         now.setMinutes(now.getMinutes() + 60);
         const updatedFormData = {
-          ...formData,
+          ...filterEmptyObjectsFromFormData(formData),
           vendorWalletAddress: walletAddress,
           vendorPaymentNetwork: "Solana",
           selectedPaymentMethod: selectedPaymentCurrency,
@@ -355,7 +367,7 @@ const PaymentInfoForm = ({
                   className="payment-info-back-button"
                   onClick={updateSubmitProceedResponseFalse}
                 >
-                  {"<---"}
+                  <FaArrowLeft />
                 </div>
               )}
             </div>

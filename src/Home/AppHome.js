@@ -9,7 +9,6 @@ import SideMenu from "./SideMenu";
 import MapComponent from "../MapComponents/MapComponent";
 
 const AppHome = ({ autoRoute = false }) => {
-  console.log(autoRoute);
   const [selectedRoute, setSelectedRoute] = useState(false);
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [fetchedTokens, setFetchedTokens] = useState(false);

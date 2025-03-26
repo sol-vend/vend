@@ -7,6 +7,8 @@ import Tooltip from "../Tooltip";
 import SolanaLogoSvg from "../SolanaLogoSvg";
 import Home from "../EmployerComponents/Home";
 import ManualSignUp from "../ManualSignUp";
+import PasswordReset from "./PasswordReset";
+import HeaderWrapper from "../HeaderWrapper";
 
 export const EmployeeLogin = ({ setSelectedRoute }) => {
   console.log(setSelectedRoute);
@@ -36,7 +38,7 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const [isSignupClick, setIsSignupClick] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  console.log(loading);
   useEffect(() => {
     if (resetClicked) {
       if (isEmployerLogin) {
@@ -118,28 +120,7 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
     setError("");
     postLoginData();
   };
-  if (loginError) {
-    return (
-      <div
-        style={{
-          width: "60%",
-          marginLeft: "10%",
-          marginTop: "5%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "10%",
-          background: "linear-gradient(0deg, #ffffff9c, #ffffffab)",
-          borderRadius: "10px",
-          border: "solid #414141 1px",
-        }}
-      >
-        <h2>Authentication Error</h2>
-        <p style={{ color: "red", textAlign: "center" }}>{loginError}</p>
-      </div>
-    );
-  } else if (loading) {
+  if (loading) {
     return (
       <div
         className="modal-overlay"
@@ -167,7 +148,12 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
     return <ManualSignUp setSelectedRoute={setSelectedRoute} />;
   } else if (resetClicked) {
     if (isEmployerLogin) {
-      return <div>Password Reset Protocol</div>;
+      return (
+        <>
+          <HeaderWrapper />
+          <PasswordReset isEmployerReset={isEmployerLogin} />
+        </>
+      );
     } else {
       return <div>Pin Reset Protocol</div>;
     }
@@ -185,7 +171,7 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
           >
             <div className="modal">
               <div className="loading-dialog">
-                <p>Loading...</p>
+                <p>Loading......</p>
                 <div className="spinner" style={{ marginLeft: "15%" }}></div>
               </div>
             </div>
@@ -289,6 +275,13 @@ export const EmployeeLogin = ({ setSelectedRoute }) => {
                       </div>
                     </div>
                   </div>
+                  <>
+                    {loginError && (
+                      <div>
+                        <p>{loginError}</p>
+                      </div>
+                    )}
+                  </>
                 </div>
               </div>
             )}

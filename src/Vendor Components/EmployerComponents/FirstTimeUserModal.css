@@ -61,8 +61,13 @@
 }
 
 .modal-content > div > p{
-    width:60%;
-    margin:auto;
+  width: 60%;
+  margin: auto;
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(45deg, #ffffff, #ececec);
+  padding: 5px;
+  border-radius: 5px;
 }
 
 @keyframes typing {
@@ -100,7 +105,7 @@
 .icon {
     position: absolute;
     font-size: 50px;
-    animation: moveRandom 10s ease-in-out;
+    animation: moveRandom 15s ease-in-out;
     color:#08197a;
   }
   

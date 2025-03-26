@@ -17,7 +17,7 @@ import SolanaLogoSvg from "./SolanaLogoSvg";
 import AddressInput from "./AddressInput";
 import Tooltip from "./Tooltip";
 import BusinessNameModal from "./BusinessNameModal";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaCheckCircle } from "react-icons/fa";
 
 const ManualSignUp = ({ setSelectedRoute }) => {
   const [formData, setFormData] = useState({
@@ -31,7 +31,7 @@ const ManualSignUp = ({ setSelectedRoute }) => {
     businessHours: {},
     businessPhone: "",
     businessSocials: [{ platform: "", url: "" }],
-    businessReviews: "",
+    businessReviews: {},
     businessLocation: "",
     isLocationServicesEnabled: false,
     exactLocation: {},
@@ -39,10 +39,11 @@ const ManualSignUp = ({ setSelectedRoute }) => {
       {
         name: "",
         role: "",
-        isLocked: false,
         pin: "",
         contactInfo: "",
         contactPreference: "email",
+        userId: "",
+        resetRequest: {},
       },
     ],
     ipAddress: "",
@@ -334,10 +335,31 @@ const ManualSignUp = ({ setSelectedRoute }) => {
     }
   }, [exactLocation]);
 
+  console.log(formData);
+
+  const handleUserIdInitialization = (currentName) => {
+    const matchingNames = formData.approvedReadOnlyEmployees.filter(
+      (item) => item.name.toLowerCase() === currentName
+    );
+    console.log(matchingNames);
+    if (matchingNames.length === 0) {
+      return `${currentName}@${formData.businessId}`;
+    } else {
+      return `${currentName}-${matchingNames.length}@${formData.businessId}`;
+    }
+  };
+
   const handleEmployeeChange = (index, e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     const newEmployees = [...formData.approvedReadOnlyEmployees];
     let assignValue = value;
+
+    if (name === "name") {
+      newEmployees[index].userId = handleUserIdInitialization(
+        value.toLowerCase()
+      );
+    }
 
     const updateEmployeeEmailStatus = (updateVal) => {
       setEmployeeEmailFormattingIssue((prevList) =>
@@ -379,7 +401,15 @@ const ManualSignUp = ({ setSelectedRoute }) => {
       ...prevState,
       approvedReadOnlyEmployees: [
         ...prevState.approvedReadOnlyEmployees,
-        { name: "", role: "", isLocked: false, pin: "" },
+        {
+          name: "",
+          role: "",
+          pin: "",
+          contactInfo: "",
+          contactPreference: "email",
+          userId: "",
+          resetRequest: {},
+        },
       ],
     }));
     setEmployeeEmailFormattingIssue((prevState) => [
@@ -526,7 +556,7 @@ const ManualSignUp = ({ setSelectedRoute }) => {
                       Reset your password?
                     </p>
                   </div>
-                  )}
+                )}
               </div>
               <div className="vendor-input-group-styles">
                 <div>
@@ -827,207 +857,9 @@ const ManualSignUp = ({ setSelectedRoute }) => {
                   </div>
                 </div>
               )}
-              {!showAddEmployees && (
-                <div className="vendor-expansion-wrapper-styles">
-                  <DivExpandButton
-                    onClick={(e) => setShowAddEmployees(!showAddEmployees)}
-                    children={
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          paddingInline: "5px",
-                          width: "100px",
-                        }}
-                      >
-                        Add Employees
-                        <span>+</span>
-                      </div>
-                    }
-                  ></DivExpandButton>
-                </div>
-              )}
-              {showAddEmployees && (
-                <div className="vendor-input-group-styles vendor-expansion-wrapper-styles">
-                  <p>Add Your Employees:</p>
-                  <p className="custom-checkbox-wrapper-paragraph-descriptor">
-                    Be sure to share the generated pin number so your employee
-                    can login.
-                  </p>
-                  {formData.approvedReadOnlyEmployees.map((employee, index) => (
-                    <div
-                      style={{
-                        display: "flex",
-                        paddingBottom: "5px",
-                        alignItems: "center",
-                        gap: "5vw",
-                      }}
-                    >
-                      <div
-                        key={index}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          paddingBottom: "5px",
-                        }}
-                      >
-                        <input
-                          type="text"
-                          name="name"
-                          value={employee.name}
-                          onChange={(e) => handleEmployeeChange(index, e)}
-                          className="vendor-input-field-styles"
-                          style={{
-                            ...{
-                              maxWidth: "40vw",
-                              color: employee.isLocked ? "gray" : "",
-                              backgroundColor: employee.isLocked
-                                ? "whitesmoke"
-                                : "",
-                            },
-                          }}
-                          placeholder="Employee Name"
-                          readOnly={employee.isLocked}
-                        />
-                        <input
-                          type="text"
-                          name="role"
-                          value={employee.role}
-                          onChange={(e) => handleEmployeeChange(index, e)}
-                          className="vendor-input-field-styles"
-                          style={{
-                            ...{
-                              maxWidth: "40vw",
-                              color: employee.isLocked ? "gray" : "",
-                              backgroundColor: employee.isLocked
-                                ? "whitesmoke"
-                                : "",
-                            },
-                          }}
-                          placeholder="Role / Job Description"
-                          readOnly={employee.isLocked}
-                        />
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "3vw",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <div>
-                            <Tooltip
-                              message={"Quickly share PIN with your employee."}
-                            >
-                              <input
-                                type={
-                                  employee.contactInfo === "email"
-                                    ? "email"
-                                    : "tel"
-                                }
-                                name="contactInfo"
-                                value={employee.contactInfo}
-                                onChange={(e) => handleEmployeeChange(index, e)}
-                                className={"vendor-input-field-styles"}
-                                style={{
-                                  ...{
-                                    maxWidth: "40vw",
-                                    color: employee.isLocked ? "gray" : "",
-                                    backgroundColor: employee.isLocked
-                                      ? "whitesmoke"
-                                      : "",
-                                    borderColor:
-                                      employeeEmailFormattingIssue[index]
-                                        .isError &&
-                                      employee.contactPreference === "email"
-                                        ? "red"
-                                        : "",
-                                  },
-                                }}
-                                placeholder={
-                                  employee.contactPreference === "email"
-                                    ? "Email"
-                                    : "(XXX) XXX-XXXX"
-                                }
-                                readOnly={employee.isLocked}
-                              />
-                            </Tooltip>
-                            {employeeEmailFormattingIssue[index].isError &&
-                              employee.contactPreference === "email" && (
-                                <p
-                                  style={{ fontSize: "12px" }}
-                                  className="payment-info-form-bottom-banner-warning"
-                                >
-                                  There may be a problem with this email
-                                  address...
-                                </p>
-                              )}
-                          </div>
-                          <div>
-                            <CustomCheckbox
-                              label={{
-                                title: "",
-                                description: `Switch to ${
-                                  employee.contactPreference === "email"
-                                    ? "text"
-                                    : "email"
-                                }?`,
-                              }}
-                              checked={employee.contactPreference === "text"}
-                              onChange={handleEmployeeChange}
-                              name={"contactPreference"}
-                              index={index}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        className={
-                          employee.isLocked ? "vendor-employee-pin-wrapper" : ""
-                        }
-                      >
-                        {employee.isLocked && (
-                          <div
-                            style={{
-                              textAlign: "end",
-                              fontSize: "14px",
-                            }}
-                          >
-                            <p>
-                              Employee Login Pin:{" "}
-                              <strong>{employee.pin}</strong>
-                            </p>
-                          </div>
-                        )}
-                        <button
-                          name="isLocked"
-                          className="vendor-add-button-styles"
-                          disabled={employee.name ? false : true}
-                          style={{
-                            ...{
-                              marginLeft: "auto",
-                              maxHeight: "10vh",
-                            },
-                          }}
-                          onClick={(e) => handleEmployeeChange(index, e)}
-                        >
-                          {!employee.name
-                            ? "Enter Name"
-                            : employee.isLocked
-                            ? "Edit Employee Details"
-                            : "Generate Login Pin"}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={handleAddEmployee}
-                    className={"vendor-add-button-styles"}
-                  >
-                    +
-                  </button>
-                  <div style={{ boxShadow: "#cbcbcbc2 0px -0.5px 0px 0px" }}>
+              {formData.businessId &&
+                (!showAddEmployees ? (
+                  <div className="vendor-expansion-wrapper-styles">
                     <DivExpandButton
                       onClick={(e) => setShowAddEmployees(!showAddEmployees)}
                       children={
@@ -1039,13 +871,200 @@ const ManualSignUp = ({ setSelectedRoute }) => {
                             width: "100px",
                           }}
                         >
-                          Add Employees <span>-</span>
+                          Add Employees
+                          <span>+</span>
                         </div>
                       }
                     ></DivExpandButton>
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="vendor-input-group-styles vendor-expansion-wrapper-styles">
+                    <p>Add Your Employees:</p>
+                    <p className="custom-checkbox-wrapper-paragraph-descriptor">
+                      Just add your employee's name, job description and contact
+                      info and we'll have him or her complete the rest!
+                    </p>
+                    {formData.approvedReadOnlyEmployees.map(
+                      (employee, index) => (
+                        <div
+                          style={{
+                            display: "flex",
+                            paddingBottom: "5px",
+                            alignItems: "center",
+                            gap: "5vw",
+                          }}
+                        >
+                          <div
+                            key={index}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              paddingBottom: "5px",
+                            }}
+                          >
+                            <input
+                              type="text"
+                              name="name"
+                              value={employee.name}
+                              onChange={(e) => handleEmployeeChange(index, e)}
+                              className="vendor-input-field-styles"
+                              style={{
+                                ...{
+                                  maxWidth: "40vw",
+                                },
+                              }}
+                              placeholder="Employee Name"
+                            />
+                            <input
+                              type="text"
+                              name="role"
+                              value={employee.role}
+                              onChange={(e) => handleEmployeeChange(index, e)}
+                              className="vendor-input-field-styles"
+                              style={{
+                                ...{
+                                  maxWidth: "40vw",
+                                },
+                              }}
+                              placeholder="Role / Job Description"
+                            />
+                            <div
+                              style={{
+                                display: "flex",
+                                gap: "3vw",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <div>
+                                <Tooltip
+                                  message={
+                                    "This allows your employee to finish setting up his or her account."
+                                  }
+                                >
+                                  <input
+                                    type={
+                                      employee.contactInfo === "email"
+                                        ? "email"
+                                        : "tel"
+                                    }
+                                    name="contactInfo"
+                                    value={employee.contactInfo}
+                                    onChange={(e) =>
+                                      handleEmployeeChange(index, e)
+                                    }
+                                    className={"vendor-input-field-styles"}
+                                    style={{
+                                      ...{
+                                        maxWidth: "40vw",
+                                        borderColor:
+                                          employeeEmailFormattingIssue[index]
+                                            .isError &&
+                                          employee.contactPreference === "email"
+                                            ? "red"
+                                            : "",
+                                      },
+                                    }}
+                                    placeholder={
+                                      employee.contactPreference === "email"
+                                        ? "Email"
+                                        : "(XXX) XXX-XXXX"
+                                    }
+                                  />
+                                </Tooltip>
+                                {employeeEmailFormattingIssue[index].isError &&
+                                  employee.contactPreference === "email" && (
+                                    <p
+                                      style={{ fontSize: "12px" }}
+                                      className="payment-info-form-bottom-banner-warning"
+                                    >
+                                      There may be a problem with this email
+                                      address...
+                                    </p>
+                                  )}
+                              </div>
+                              <div>
+                                <CustomCheckbox
+                                  label={{
+                                    title: "",
+                                    description: `Switch to ${
+                                      employee.contactPreference === "email"
+                                        ? "text"
+                                        : "email"
+                                    }?`,
+                                  }}
+                                  checked={
+                                    employee.contactPreference === "text"
+                                  }
+                                  onChange={handleEmployeeChange}
+                                  name={"contactPreference"}
+                                  index={index}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <p
+                              name="notifyEmployee"
+                              className={
+                                employee.contactInfo &&
+                                !employeeEmailFormattingIssue[index].isError
+                                  ? "vendor-employee-info-wrapper complete"
+                                  : "vendor-employee-info-wrapper"
+                              }
+                              style={{
+                                ...{
+                                  marginLeft: "auto",
+                                  maxHeight: "10vh",
+                                  padding: "4px",
+                                },
+                              }}
+                            >
+                              {employee.contactInfo &&
+                              !employeeEmailFormattingIssue[index].isError ? (
+                                <>
+                                  <FaCheckCircle color="green" size="2em" />
+                                  <span>
+                                    Employee will be notified upon signup!
+                                  </span>
+                                </>
+                              ) : (
+                                <span>
+                                  Add employee contact info to enable him/her to
+                                  create account.
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleAddEmployee}
+                      className={"vendor-add-button-styles"}
+                    >
+                      +
+                    </button>
+                    <div style={{ boxShadow: "#cbcbcbc2 0px -0.5px 0px 0px" }}>
+                      <DivExpandButton
+                        onClick={(e) => setShowAddEmployees(!showAddEmployees)}
+                        children={
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              paddingInline: "5px",
+                              width: "100px",
+                            }}
+                          >
+                            Add Employees <span>-</span>
+                          </div>
+                        }
+                      ></DivExpandButton>
+                    </div>
+                  </div>
+                ))}
               {!submitResponse.isApproved && (
                 <div>
                   <button type="submit" className="vendor-submit-button-styles">
