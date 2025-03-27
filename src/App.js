@@ -12,6 +12,7 @@ import AppHome from "./Home/AppHome";
 import { fetchDataWithAuth } from "./Vendor Components/Shared";
 import PasswordResetFull from "./Vendor Components/EmployeeComponents/PasswordResetFull";
 import HeaderWrapper from "./Vendor Components/HeaderWrapper";
+import InitializePin from "./Vendor Components/EmployeeComponents/InitializePin";
 
 const App = () => {
   const network = "mainnet-beta";
@@ -72,6 +73,15 @@ const App = () => {
                     <>
                       {console.log("autoroute")}
                       <AppHome autoRoute={true} />
+                    </>
+                  }
+                />
+                <Route
+                  path="/complete_signup/*"
+                  element={
+                    <>
+                    <HeaderWrapper />
+                      <InitializePin hash={window.location.hash.split('#').slice(-1)[0]} isEmployerReset={false} />
                     </>
                   }
                 />

@@ -83,7 +83,6 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
   }, [interfacePreferences, updateDatabaseWithGroups, isStartup]);
 
   useEffect(() => {
-    console.log(interfacePreferences);
     if (interfacePreferences.businessName.length > 0 && loading) {
       setLoading(false);
     }
@@ -91,9 +90,16 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
   }, [interfacePreferences]);
 
   useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  });
+
+  useEffect(() => {
     if (interfacePreferences.isCustomized) {
-      const classToSelect = ".header-carousel-arrow.header-carousel-left-arrow.right";
-      console.log(document.querySelector(classToSelect))
+      const classToSelect =
+        ".header-carousel-arrow.header-carousel-left-arrow.right";
+      console.log(document.querySelector(classToSelect));
       if (document.querySelector(classToSelect)) {
         const addRemoveClass = () => {
           if (
@@ -109,7 +115,9 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
             setTimeout(
               () =>
                 document
-                  .querySelector(".header-carousel-arrow.header-carousel-left-arrow.right")
+                  .querySelector(
+                    ".header-carousel-arrow.header-carousel-left-arrow.right"
+                  )
                   .classList.remove("customizable"),
               5000
             );

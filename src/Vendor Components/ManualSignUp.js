@@ -39,7 +39,8 @@ const ManualSignUp = ({ setSelectedRoute }) => {
       {
         name: "",
         role: "",
-        pin: "",
+        password: "",
+        salt:"",
         contactInfo: "",
         contactPreference: "email",
         userId: "",

@@ -50,7 +50,7 @@ const AppHome = ({ autoRoute = false }) => {
 
   const handleMenuSelection = (key, index) => {
     if (key === "Home") {
-      window.location.reload();
+      window.location.href = "https://solvend.fun";
     }
     console.log(`Menu item ${key} was clicked!`);
   };

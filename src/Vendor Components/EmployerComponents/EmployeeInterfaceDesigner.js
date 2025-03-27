@@ -12,7 +12,7 @@ const EmployeeInterfaceDesigner = ({}) => {
   const debounceWaitTime = 5000;
   const [groups, setGroups] = useState([
     {
-      groupName: "",
+      groupName: "Set Page Title",
       items: [{ name: "", price: "" }],
     },
   ]);
@@ -111,7 +111,7 @@ const EmployeeInterfaceDesigner = ({}) => {
     setGroups([
       ...groups,
       {
-        groupName: "",
+        groupName: "Set Page Title",
         items: [{ name: "", price: "" }],
       },
     ]);
@@ -148,6 +148,9 @@ const EmployeeInterfaceDesigner = ({}) => {
     updatedGroups[groupIndex].items = updatedGroups[groupIndex].items.filter(
       (_, index) => index !== itemIndex
     );
+    if (updatedGroups[groupIndex].items.length === 0){
+      handleAddItem(groupIndex);
+    }
     setGroups(updatedGroups);
   };
 
@@ -228,10 +231,12 @@ const EmployeeInterfaceDesigner = ({}) => {
   };
 
   const handleDeletionSelection = (groupIndex, itemIndex) => {
+    console.log(deletionSelectionItem.groupIndex, deletionSelectionItem.itemIndex, groupIndex, itemIndex)
     if (
       deletionSelectionItem.groupIndex === groupIndex &&
       deletionSelectionItem.itemIndex === itemIndex
     ) {
+      handleRemoveItem(groupIndex, itemIndex)
       setDeletionSelectionItem({ groupIndex: null, itemIndex: null });
     } else {
       setDeletionSelectionItem({
@@ -422,11 +427,12 @@ const EmployeeInterfaceDesigner = ({}) => {
                             cursor: "pointer",
                             width: "100%",
                           }}
-                          onClick={() =>
+                          onClick={() =>{
+                            console.log('getting delete infos')
                             handleDeletionSelection(
                               currentGroupIndex,
                               itemIndex
-                            )
+                            )}
                           }
                         >
                           <p>{item.name}</p>
