@@ -54,6 +54,22 @@ const EmployeeInterface = () => {
   });
   const [childCalculatorOrderTotal, setChildCalculatorOrderTotal] = useState(0);
 
+  const handleOrderRestart = () => {
+    setPageIndex(0);
+    setSelectedItems({});
+    setShowCalculator(false);
+    setOrderTotal(0);
+    setGenerateQr(false);
+    setIsOrderDetailsShow(false);
+    setParentExpressions({
+      receipt: [],
+      miscellaneous: [],
+    });
+    setChildCalculatorOrderTotal(0);
+    setReceiptDetails({});
+    setLastSelectedItemId(null);
+  };
+
   const addTrailingZeroes = (inputValue) => {
     return `$${inputValue.toFixed(2)}`;
   };
@@ -406,13 +422,20 @@ const EmployeeInterface = () => {
                 <div className="order-summary">
                   <h3>Order Total: ${orderTotal.toFixed(2)}</h3>
                 </div>
-                <button className="submit-order clear">Restart Order</button>
+                <button
+                  onClick={handleOrderRestart}
+                  className="submit-order clear"
+                >
+                  Restart Order
+                </button>
               </div>
-              <div className="interface-order-summary-wrapper receipt">
-                {Object.keys(receiptDetails).map((itemAddress) => {
-                  return <p>{receiptDetails[itemAddress]}</p>;
-                })}
-              </div>
+              {Object.keys(receiptDetails).length > 0 && (
+                <div className="interface-order-summary-wrapper receipt">
+                  {Object.keys(receiptDetails).map((itemAddress) => {
+                    return <p>{receiptDetails[itemAddress]}</p>;
+                  })}
+                </div>
+              )}
             </div>
           </nav>
         </div>

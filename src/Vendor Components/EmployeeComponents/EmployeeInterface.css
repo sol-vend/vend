@@ -90,10 +90,27 @@
 }
 
 .add-subtract-controls > div {
-  padding: 5px;
+  padding: 1em;
   border: solid black 1px;
   margin-bottom: 1px;
   border-radius: 3px;
+}
+
+.add-subtract-controls > div:focus, .add-subtract-controls > div:active{
+  animation: addSubtractFadeBack 3s 1;
+}
+
+@keyframes addSubtractFadeBack {
+  0%{
+    background: #000000;
+  }
+  100%{
+    background: transparent;
+  }
+}
+
+.add-subtract-controls > div:hover {
+  background: #000000;
 }
 
 .add-subtract-controls {
