@@ -175,8 +175,6 @@ body {
   background: linear-gradient(45deg, #ffffff, #ffffff0b);
   margin-bottom: 20px;
   margin-top: 20px;
-  max-height: 100vh;
-  overflow: auto;
 }
 
 .vendor-input-group-styles {

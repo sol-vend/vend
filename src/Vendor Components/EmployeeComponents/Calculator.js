@@ -1,41 +1,43 @@
 import React, { useState, useEffect } from "react";
 import "./Calculator.css";
 
-const ListExpressions = () => {};
-
-const Calculator = ({ setOrderTotal, setParentExpressions }) => {
-  const [display, setDisplay] = useState("0");
+const Calculator = ({
+  setOrderTotal,
+  setParentExpressions,
+  startOrderTotal = 0,
+  isChild = false,
+}) => {
+  const [display, setDisplay] = useState(startOrderTotal);
   const [expression, setExpression] = useState("");
   const [expressionList, setExpressionList] = useState([]);
   const [expressionLists, setExpressionLists] = useState([]);
-  const [currentExpressionIndex, setCurrentExpressionIndex] = useState(0);
 
   useEffect(() => {
-    setExpressionLists((prev) => {
-      let current = prev;
-      current.push(expressionList.slice(-2));
-      return current;
-    });
-    setExpressionList([]);
-  }, [currentExpressionIndex]);
-
-  useEffect(() => {
-    setExpressionList((prev) => [...prev, expression]);
-  }, [expression]);
-
-  useEffect(() => {
-    setParentExpressions(
-      expressionLists.map((list) => {
-        if (list) {
-          let pex = processExpression(list);
-          return pex;
-        }
-      })
-    );
+    // Whenever expressionList changes, we update expressionLists.
+    if (expressionList.length > 0) {
+      setExpressionLists((prev) => [...prev, expressionList]);
+      setExpressionList([]); // Reset expression list after it's added to the full history
+    }
   }, [expressionList]);
+  console.log(expressionLists);
+  useEffect(() => {
+    // Send the updated expressionLists to the parent when it changes
+    setParentExpressions((prev) => ({
+      ...prev,
+      miscellaneous: expressionLists.map((list) => processExpression(list)),
+    }));
+  }, [expressionLists, setParentExpressions]);
+
+  useEffect(() => {
+    setExpressionList([]);
+    setDisplay(startOrderTotal);
+  }, [startOrderTotal]);
 
   const handleClick = (value) => {
     if (display === "0" && value !== ".") {
+      setDisplay(value);
+      setExpression(value);
+    } else if (display == "0" || display == 0) {
       setDisplay(value);
       setExpression(value);
     } else {
@@ -51,53 +53,33 @@ const Calculator = ({ setOrderTotal, setParentExpressions }) => {
 
   const calculateResult = () => {
     try {
-      const result = eval(expression);
-      setDisplay(result.toString());
+      const result = eval(expression); // Eval to calculate the expression
+      setDisplay(result);
       setExpression(result.toString());
-      setOrderTotal(result);
-      setExpressionList((prev) => [...prev, result.toString()]);
-      setCurrentExpressionIndex((index) => index + 1);
+      setOrderTotal(result); // Save to the parent state as the total
+      // Add this calculation to the expressionList
+      setExpressionList((prev) => [...prev, `${expression} = ${result}`]);
     } catch (error) {
       setDisplay("Error");
     }
   };
 
   const clearDisplay = () => {
-    setDisplay("0");
+    setDisplay(0);
     setExpression("");
     setExpressionList([]);
   };
 
   const processExpression = (expressionLine) => {
-    if (expressionLine.length > 1) {
-      return expressionLine.join(" = ");
-    } else {
-      return null;
-    }
-  };
-
-  const hasNonEmptyString = (array) => {
-    try {
-      for (let i = 0; i < array.length; i++) {
-        for (let j = 0; j < array[i].length; j++) {
-          if (typeof array[i][j] === "string" && array[i][j].length > 0) {
-            return true; // Return true if a non-empty string is found
-          }
-        }
-      }
-      return false; // Return false if no non-empty string is found
-    } catch {
-      return false;
-    }
+    return expressionLine.join(" "); // For readability, join the expressions
   };
 
   const handleClearAll = () => {
-    setDisplay("0");
+    setDisplay(startOrderTotal);
     setExpressionList([]);
     setExpressionLists([]);
     setExpression("");
-    setOrderTotal(0);
-    setCurrentExpressionIndex(0);
+    setOrderTotal(startOrderTotal);
   };
 
   return (
@@ -192,10 +174,7 @@ const Calculator = ({ setOrderTotal, setParentExpressions }) => {
           >
             .
           </button>
-          <button
-            className="calculator-button equals"
-            onClick={calculateResult}
-          >
+          <button className="calculator-button equals" onClick={calculateResult}>
             =
           </button>
           <button
@@ -213,15 +192,19 @@ const Calculator = ({ setOrderTotal, setParentExpressions }) => {
       </div>
       <div
         style={{
-          height: hasNonEmptyString(expressionLists) ? "100%" : "0px",
+          height: expressionLists.length > 0 ? "100%" : "0px",
         }}
         className="expression-list-wrapper"
       >
         <div className="expression-wrapper">
           <ul className="expression-wrapper-list-container">
-            {expressionLists?.map((expression, index) => {
+            {expressionLists.map((expression, index) => {
               let expressionValue = processExpression(expression);
-              if (expressionValue) return <li>{expressionValue}</li>;
+              return (
+                <li key={index}>
+                  {expressionValue}
+                </li>
+              );
             })}
           </ul>
         </div>

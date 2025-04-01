@@ -99,32 +99,35 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
     if (interfacePreferences.isCustomized) {
       const classToSelect =
         ".header-carousel-arrow.header-carousel-left-arrow.right";
-      console.log(document.querySelector(classToSelect));
-      if (document.querySelector(classToSelect)) {
-        const addRemoveClass = () => {
-          if (
-            document
-              .querySelector(classToSelect)
-              .classList.contains("customizable")
-          ) {
-            document
-              .querySelector(classToSelect)
-              .classList.remove("customizable");
-          } else {
-            document.querySelector(classToSelect).classList.add("customizable");
-            setTimeout(
-              () =>
-                document
-                  .querySelector(
-                    ".header-carousel-arrow.header-carousel-left-arrow.right"
-                  )
-                  .classList.remove("customizable"),
-              5000
-            );
-          }
-        };
-        addRemoveClass();
-      }
+      try {
+        if (document.querySelector(classToSelect)) {
+          const addRemoveClass = () => {
+            if (
+              document
+                .querySelector(classToSelect)
+                .classList.contains("customizable")
+            ) {
+              document
+                .querySelector(classToSelect)
+                .classList.remove("customizable");
+            } else {
+              document
+                .querySelector(classToSelect)
+                .classList.add("customizable");
+              setTimeout(
+                () =>
+                  document
+                    .querySelector(
+                      ".header-carousel-arrow.header-carousel-left-arrow.right"
+                    )
+                    .classList.remove("customizable"),
+                5000
+              );
+            }
+          };
+          addRemoveClass();
+        }
+      } catch (error) {}
     }
   }, [interfacePreferences.isCustomized]);
 

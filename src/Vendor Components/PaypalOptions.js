@@ -90,9 +90,8 @@ const PaypalOptions = ({ parentSetWalletAddress }) => {
                         Invalid wallet address. Please <strong>paste</strong> your address.
                     </p>
                 )}
-                <p style={{ fontSize: '12px', color: '#f00', marginTop: '10px' }}>
-                    <strong>Warning:</strong> Be sure this wallet address is correct.
-                    Transactions on the blockchain are <strong>irreversible</strong>.
+                <p style={{ fontSize: '12px', color: 'orange', marginTop: '10px', fontStyle:'italic' }}>
+                    Be sure to paste your wallet address.
                 </p>
             </div>
         </div>

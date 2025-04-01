@@ -9,7 +9,7 @@ import {
 import HeaderWrapper from "./HeaderWrapper";
 import Home from "./EmployerComponents/Home";
 import FirstTimeUserModal from "./EmployerComponents/FirstTimeUserModal";
-import axios from 'axios';
+import axios from "axios";
 import { API_URL } from "../Components/Shared";
 
 const VendorApp = ({ setSelectedRoute }) => {
@@ -21,6 +21,7 @@ const VendorApp = ({ setSelectedRoute }) => {
   const [updateVendorWrapper, setUpdateVendorWrapper] = useState(false);
   const [authToken, setAuthToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [sessionExpired, setSessionExpired] = useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const [initializationResponse, setInitializationResponse] = useState(false);
   const [autoLogin, setAutoLogin] = useState({
@@ -33,28 +34,19 @@ const VendorApp = ({ setSelectedRoute }) => {
     sunset: null,
   });
 
-  const handleAuthTokenUpdate = useCallback(() => {
-    const storageKeys = Object.keys(localStorage);
-    if (!storageKeys.includes("firstUse")) {
-      localStorage.setItem("firstUse", true);
-      setIsFirstTimeUser(true);
-    } else {
-      localStorage.setItem("firstUse", false);
-      setIsFirstTimeUser(false);
-    }
-  }, []);
+  console.log(isAuthenticated);
 
   useEffect(() => {
-    fetchDataWithAuth(setIsAuthenticated);
+    fetchDataWithAuth(setIsAuthenticated, setSessionExpired);
   }, [isFirstTimeUser]);
 
   useEffect(() => {
-    fetchDataWithAuth(setIsAuthenticated);
+    fetchDataWithAuth(setIsAuthenticated, setSessionExpired);
   }, []);
 
   useEffect(() => {
     //THIS IS GOING TO HAVE TO BE UPDATED WHEN WE FIGURE OUT HOW TO HANDLE EMPLOYEES (NON ACCOUNT OWNERS)
-
+    console.log(isAuthenticated);
     if (isAuthenticated.isLoggedIn) {
       setAutoLogin({
         isLoggedIn: true,
@@ -210,7 +202,7 @@ const VendorApp = ({ setSelectedRoute }) => {
 
   useEffect(() => {
     setLoading(false);
-  }, [initializationResponse])
+  }, [initializationResponse]);
 
   const containsVerificationHash = () => {
     const hash = window.location.hash;
@@ -244,11 +236,11 @@ const VendorApp = ({ setSelectedRoute }) => {
         </div>
       </div>
     );
-  } else if (isFirstLogin) {
+  } else if (autoLogin && autoLogin.isLoggedIn) {
     return (
       <div>
         <HeaderWrapper />
-        <FirstTimeUserModal />
+        {isFirstLogin && <FirstTimeUserModal />}
         <Home loginInfos={autoLogin} setSelectedRoute={setSelectedRoute} />
       </div>
     );

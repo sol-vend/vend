@@ -25,16 +25,19 @@
   background-image: url("../../../public/apphome-4.png");
   background-size: cover;
   filter: opacity(0.95);
-  margin-top: -2.5%;
-  position: fixed !important;
   min-height: 100vh !important;
   width: 100vw;
 }
 
+.item-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-block-start: 0em;
+  padding-inline-start: 0px;
+}
+
 .interface-item {
-  background: white;
   color: black;
-  width: 25%;
   border: solid black 1px;
   padding: 5px;
   margin: 5px;
@@ -45,11 +48,27 @@
   border-radius: 5px;
 }
 
+.interface-item > p {
+  font-size: clamp(16px, 5vw, 48px);
+}
+
 .interface-item.selected,
 .interface-item:active {
+  position: relative;
   background: rgb(71, 71, 71);
   border: solid rgb(255, 255, 255) 1px;
   color: white;
+  width: 50vw;
+  z-index: 100;
+}
+
+.employee-interface-increment-decrement{
+  color:white;
+} 
+
+.employee-interface-increment-decrement.disabled{
+  z-index: -1000;
+  opacity:0;
 }
 
 .quantity-controls {
@@ -58,11 +77,12 @@
 }
 
 .quantity-display {
-  padding-right: 10px;
+  padding-right: 1em;
+  font-size: 0.75em;
 }
 
 .quantity-display > p {
-  font-size: 1.5em;
+  font-size: 2em;
   margin-block-start: 0px;
   margin-block-end: 0px;
   padding-top: 0px;
@@ -182,6 +202,9 @@
   justify-content: space-between;
   min-height: calc(100vh - 150px);
 }
+.order-total-wrapper > .space-between h2 {
+  text-align: center;
+}
 
 .customer-facing-qr-header {
   display: inline-block;
@@ -276,7 +299,7 @@
 
 .customer-facing-confirm-total-button {
   background: linear-gradient(120deg, #00ffa3, rgb(26, 26, 26));
-  color:rgb(45, 44, 44);
+  color: rgb(45, 44, 44);
   display: flex;
   justify-content: center;
 }
@@ -409,15 +432,111 @@
   height: auto !important;
 }
 
-.customer-facing-back-button-wrapper > button{
-background: transparent;
+.customer-facing-back-button-wrapper > button {
+  background: linear-gradient(135deg, #8f00ff, #9000ffb7);
+  padding: 5px 15px;
+  border-radius: 10px;
+  border: solid black 1px;
+  margin-left: 2.5px;
 }
 
-.customer-facing-back-button-wrapper > svg{
+.customer-facing-back-button-wrapper > button:hover {
+  background: linear-gradient(135deg, #8f00ff, #9000ff41);
+  padding: 6px 16px;
+}
+
+.customer-facing-back-button-wrapper > button svg {
+  color: white;
+}
+
+.customer-facing-back-button-wrapper > svg {
   color: white;
   height: 2em;
-  width:2em;
+  width: 2em;
 }
+
+.pages > .page > .page-header-wrapper > h3 {
+  color: white;
+  text-align: center;
+  font-size: 2em;
+}
+
+.pages > .page > .page-header-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  position:relative;
+}
+
+.order-summary h3 {
+  color: white;
+}
+
+.interface-order-summary-wrapper-fixed{
+  width:100vw;
+  position:fixed;
+  bottom:5vh;
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7.5px
+}
+
+.interface-order-summary-wrapper{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  width:50%;
+  padding:15px;
+  border: solid rgba(255, 255, 255, 0.5) 1px;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 5px;
+  margin-left:5px;
+}
+.interface-order-summary-wrapper.receipt{
+  max-height: 10em;
+  overflow-y: auto;
+  margin-right:7.5px;
+}
+
+.interface-order-summary-wrapper.receipt > p {
+  color:white;
+}
+
+.interface-order-summary-wrapper > .submit-order {
+  background: linear-gradient(45deg, #8B56FF, #5820B0); /* Solana purple gradient */
+  color: white; /* White text */
+  font-size: 18px;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 50px; /* Rounded corners */
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.interface-order-summary-wrapper > .submit-order.clear{
+  background: linear-gradient(45deg, #ff5656, #b02220);
+}
+
+/* Hover effect */
+.interface-order-summary-wrapper > .submit-order:hover {
+  transform: translateY(-4px); /* Slight lift on hover */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+}
+
+/* Focus effect */
+.interface-order-summary-wrapper > .submit-order:focus {
+  outline: none;
+  box-shadow: 0 0 8px 2px rgba(139, 86, 255, 0.6); /* Glowing effect */
+}
+
+/* Active effect */
+.interface-order-summary-wrapper > .submit-order:active {
+  transform: translateY(2px); /* Button 'pressed' effect */
+}
+
 
 @media screen and (max-width: 768px) {
   .order-total-wrapper {

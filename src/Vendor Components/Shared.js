@@ -104,23 +104,35 @@ export const handleResponseRefreshToken = (response) => {
 }
 */
 
-export const fetchDataWithAuth = async (setCallback) => {
+
+export const fetchDataWithAuth = async (setCallback, setSessionExpired) => {
   try {
+    // Wait for the axios request to complete
     const response = await axios.get(`${API_URL}/api/check_login`, {
       withCredentials: true,
     });
 
     if (response.data) {
-      console.log(response);
+      console.log('API Response:', response);
+
+      // Update state with the response data only after the request completes
       setCallback(response.data);
-      return false;
+    } else {
+      // Handle case when there is no data (if necessary)
+      console.log('No data returned from API');
+      setCallback({ error: 'No data returned', doContinue: false });
     }
   } catch (error) {
     console.error("Error fetching data:", error);
+
+    // Trigger session expired state in the parent component
+    //setSessionExpired(() => null); // This will trigger the modal
+
+    // Set the callback state with error message after catching the error
     setCallback({ error: error.message, doContinue: false });
-    return <SessionExpiredModal />;
   }
 };
+
 
 export const retrieveExistingData = async (keys) => {
   try {
