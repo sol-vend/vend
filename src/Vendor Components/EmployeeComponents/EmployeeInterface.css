@@ -478,6 +478,12 @@
   font-size: 2em;
 }
 
+.user-interface-page-container-wrapper{
+  height: 65vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .pages > .page > .page-header-wrapper {
   display: flex;
   flex-direction: row;

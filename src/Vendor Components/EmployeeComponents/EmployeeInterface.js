@@ -291,128 +291,140 @@ const EmployeeInterface = () => {
       pageDatas.customerSetup.isCustomized
     ) {
       return (
-        <div className="user-interface">
-          <InterfaceHeader pageDatas={pageDatas} />
-          <nav className="user-interface-page-container">
-            <div className="pages">
-              {pageDatas.interfaceSetup && (
-                <>
-                  <div key={pageIndex} className="page">
-                    <div className="page-header-wrapper">
-                      <div
-                        onClick={handlePageDecrement}
-                        className={`employee-interface-increment-decrement${
-                          pageIndex === 0 ? " disabled" : ""
-                        }`}
-                        style={pageIndex > 0 ? { opacity: 1 } : { opacity: 0 }}
-                      >
-                        <FaArrowLeft size={"2em"} color="white" />
-                      </div>
-
-                      <h3>
-                        {!showCalculator
-                          ? pageDatas.interfaceSetup[pageIndex].groupName ||
-                            `Page ${pageIndex + 1}`
-                          : "Miscellaneous"}
-                      </h3>
-                      <div
-                        onClick={handlePageIncrement}
-                        className={`employee-interface-increment-decrement${
-                          showCalculator ? " disabled" : ""
-                        }`}
-                      >
-                        {pageIndex < pageDatas.interfaceSetup.length - 1 ? (
-                          <FaArrowRight
-                            size={"2em"}
-                            color="white"
+        <>
+          <div className="user-interface">
+            <InterfaceHeader pageDatas={pageDatas} />
+            <div className="user-interface-page-container-wrapper">
+              <nav className="user-interface-page-container">
+                <div className="pages">
+                  {pageDatas.interfaceSetup && (
+                    <>
+                      <div key={pageIndex} className="page">
+                        <div className="page-header-wrapper">
+                          <div
+                            onClick={handlePageDecrement}
+                            className={`employee-interface-increment-decrement${
+                              pageIndex === 0 ? " disabled" : ""
+                            }`}
                             style={
-                              pageIndex < pageDatas.interfaceSetup.length - 1
-                                ? { opacity: 1 }
-                                : { opacity: 0 }
+                              pageIndex > 0 ? { opacity: 1 } : { opacity: 0 }
                             }
-                          />
-                        ) : (
-                          <FaCalculator
-                            size={"2em"}
-                            color="white"
-                            style={{ opacity: 1 }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                    {!showCalculator ? (
-                      <div className="item-list">
-                        {pageDatas.interfaceSetup[pageIndex].items.map(
-                          (item, itemIndex) => {
-                            const itemId = `${pageIndex}-${itemIndex}`;
-                            const isSelected = lastSelectedItemId === itemId;
-                            const quantity = selectedItems[itemId] || 0;
+                          >
+                            <FaArrowLeft size={"2em"} color="white" />
+                          </div>
 
-                            if (item.name && item.name.length > 0) {
-                              return (
-                                <div
-                                  key={itemIndex}
-                                  className={`interface-item group-phone-display-button ${
-                                    isSelected ? "selected" : ""
-                                  }`}
-                                  onClick={(e) =>
-                                    handleItemSelect(pageIndex, itemIndex, e)
-                                  }
-                                >
-                                  <p>{item.name}</p>
-                                  {isSelected && (
-                                    <div className="quantity-controls">
-                                      <div className="quantity-display">
-                                        <p>{quantity}</p>
-                                      </div>
-                                      <div className="add-subtract-controls">
-                                        <div
-                                          onClick={(e) =>
-                                            handleQuantityChange(
-                                              pageIndex,
-                                              itemIndex,
-                                              1,
-                                              e
-                                            )
-                                          }
-                                        >
-                                          <FaPlus />
+                          <h3>
+                            {!showCalculator
+                              ? pageDatas.interfaceSetup[pageIndex].groupName ||
+                                `Page ${pageIndex + 1}`
+                              : "Miscellaneous"}
+                          </h3>
+                          <div
+                            onClick={handlePageIncrement}
+                            className={`employee-interface-increment-decrement${
+                              showCalculator ? " disabled" : ""
+                            }`}
+                          >
+                            {pageIndex < pageDatas.interfaceSetup.length - 1 ? (
+                              <FaArrowRight
+                                size={"2em"}
+                                color="white"
+                                style={
+                                  pageIndex <
+                                  pageDatas.interfaceSetup.length - 1
+                                    ? { opacity: 1 }
+                                    : { opacity: 0 }
+                                }
+                              />
+                            ) : (
+                              <FaCalculator
+                                size={"2em"}
+                                color="white"
+                                style={{ opacity: 1 }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                        {!showCalculator ? (
+                          <div className="item-list">
+                            {pageDatas.interfaceSetup[pageIndex].items.map(
+                              (item, itemIndex) => {
+                                const itemId = `${pageIndex}-${itemIndex}`;
+                                const isSelected =
+                                  lastSelectedItemId === itemId;
+                                const quantity = selectedItems[itemId] || 0;
+
+                                if (item.name && item.name.length > 0) {
+                                  return (
+                                    <div
+                                      key={itemIndex}
+                                      className={`interface-item group-phone-display-button ${
+                                        isSelected ? "selected" : ""
+                                      }`}
+                                      onClick={(e) =>
+                                        handleItemSelect(
+                                          pageIndex,
+                                          itemIndex,
+                                          e
+                                        )
+                                      }
+                                    >
+                                      <p>{item.name}</p>
+                                      {isSelected && (
+                                        <div className="quantity-controls">
+                                          <div className="quantity-display">
+                                            <p>{quantity}</p>
+                                          </div>
+                                          <div className="add-subtract-controls">
+                                            <div
+                                              onClick={(e) =>
+                                                handleQuantityChange(
+                                                  pageIndex,
+                                                  itemIndex,
+                                                  1,
+                                                  e
+                                                )
+                                              }
+                                            >
+                                              <FaPlus />
+                                            </div>
+                                            <div
+                                              onClick={(e) =>
+                                                handleQuantityChange(
+                                                  pageIndex,
+                                                  itemIndex,
+                                                  -1,
+                                                  e
+                                                )
+                                              }
+                                            >
+                                              <FaMinus />
+                                            </div>
+                                          </div>
                                         </div>
-                                        <div
-                                          onClick={(e) =>
-                                            handleQuantityChange(
-                                              pageIndex,
-                                              itemIndex,
-                                              -1,
-                                              e
-                                            )
-                                          }
-                                        >
-                                          <FaMinus />
-                                        </div>
-                                      </div>
+                                      )}
                                     </div>
-                                  )}
-                                </div>
-                              );
-                            }
-                          }
+                                  );
+                                }
+                              }
+                            )}
+                          </div>
+                        ) : (
+                          <div className="user-interface">
+                            <Calculator
+                              setOrderTotal={setChildCalculatorOrderTotal}
+                              setParentExpressions={setParentExpressions}
+                              startOrderTotal={childCalculatorOrderTotal}
+                              isChild={true}
+                            />
+                            <DisplayTotal orderTotal={0} isChild={true} />{" "}
+                          </div>
                         )}
                       </div>
-                    ) : (
-                      <div className="user-interface">
-                        <Calculator
-                          setOrderTotal={setChildCalculatorOrderTotal}
-                          setParentExpressions={setParentExpressions}
-                          startOrderTotal={childCalculatorOrderTotal}
-                          isChild={true}
-                        />
-                        <DisplayTotal orderTotal={0} isChild={true} />{" "}
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
+                    </>
+                  )}
+                </div>
+              </nav>
             </div>
             <div className="interface-order-summary-wrapper-fixed">
               <div className="interface-order-summary-wrapper">
@@ -437,8 +449,8 @@ const EmployeeInterface = () => {
                 </div>
               )}
             </div>
-          </nav>
-        </div>
+          </div>
+        </>
       );
     } else {
       return (
