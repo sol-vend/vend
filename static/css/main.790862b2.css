@@ -3626,16 +3626,14 @@ ol.alternating-colors {
 
 .user-interface,
 .customer-facing-wrapper {
+  position: absolute;
   background-image: url(/static/media/apphome-4.e7a9290066bd29fe8897.png);
   background-size: cover;
   filter: opacity(0.95);
   height: 94vh !important;
-  width: 100vw;
-}
-
-.desktop {
-  position: absolute;
-  width: 60vw !important;
+  width: 60vw;
+  margin-left: 10%;
+  margin-top: 1%;
 }
 
 .item-list {
@@ -3669,7 +3667,7 @@ ol.alternating-colors {
   background: rgb(71, 71, 71);
   border: solid rgb(255, 255, 255) 1px;
   color: white;
-  width: 100%;
+  width: 30vw;
   z-index: 100;
   transform: scale(1.0125);
 }
@@ -4209,12 +4207,19 @@ ol.alternating-colors {
     width: 100vw !important;
   }
 
+  .user-interface,
+  .customer-facing-wrapper {
+    margin-top: 0%;
+    margin-left: 0%;
+    width: 94vw;
+  }
+
   .desktop {
     width: 100vw !important;
     position: static !important;
     position: initial !important;
   }
-  
+
   .interface-item.selected,
   .interface-item:active {
     width: 50vw;
@@ -4521,7 +4526,7 @@ ol.alternating-colors {
 }
 
 .customer-facing-qr-code-container svg path:last-of-type {
-  fill: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cdefs%3E%3ClinearGradient id=%27gradient%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%270%25%27%3E%3Cstop offset=%270%25%27 stop-color=%27%23f8f6f6%27/%3E%3Cstop offset=%27100%25%27 stop-color=%27%23ffffff%27/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E#gradient");
+  fill: white;
 }
 
 .centered-qr-logo-image {
@@ -5394,4 +5399,4 @@ g > .leaflet-interactive {
     }
 }
 
-/*# sourceMappingURL=main.207e3efa.css.map*/
+/*# sourceMappingURL=main.790862b2.css.map*/
