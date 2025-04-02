@@ -1,7 +1,7 @@
 .employee-interface-header {
   display: flex;
   justify-content: space-between;
-  width: 100vw !important;
+  width: 100%;
   align-items: center;
   background-color: black;
   color: white;
@@ -22,11 +22,14 @@
 
 .user-interface,
 .customer-facing-wrapper {
+  position: absolute;
   background-image: url("../../../public/apphome-4.png");
   background-size: cover;
   filter: opacity(0.95);
   height: 94vh !important;
-  width: 100vw;
+  width: 60vw;
+  margin-left: 10%;
+  margin-top: 1%;
 }
 
 .item-list {
@@ -49,7 +52,7 @@
 }
 
 .interface-item > p {
-  font-size: clamp(16px, 5vw, 48px);
+  font-size: clamp(16px, 5vw, 16px);
 }
 
 .interface-item.selected,
@@ -58,17 +61,18 @@
   background: rgb(71, 71, 71);
   border: solid rgb(255, 255, 255) 1px;
   color: white;
-  width: 50vw;
+  width: 30vw;
   z-index: 100;
+  transform: scale(1.0125);
 }
 
-.employee-interface-increment-decrement{
-  color:white;
-} 
+.employee-interface-increment-decrement {
+  color: white;
+}
 
-.employee-interface-increment-decrement.disabled{
+.employee-interface-increment-decrement.disabled {
   z-index: -1000;
-  opacity:0;
+  opacity: 0;
 }
 
 .quantity-controls {
@@ -96,15 +100,16 @@
   border-radius: 3px;
 }
 
-.add-subtract-controls > div:focus, .add-subtract-controls > div:active{
+.add-subtract-controls > div:focus,
+.add-subtract-controls > div:active {
   animation: addSubtractFadeBack 3s 1;
 }
 
 @keyframes addSubtractFadeBack {
-  0%{
+  0% {
     background: #000000;
   }
-  100%{
+  100% {
     background: transparent;
   }
 }
@@ -478,7 +483,7 @@
   font-size: 2em;
 }
 
-.user-interface-page-container-wrapper{
+.user-interface-page-container-wrapper {
   height: 65vh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -489,46 +494,50 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  position:relative;
+  position: relative;
 }
 
 .order-summary h3 {
   color: white;
 }
 
-.interface-order-summary-wrapper-fixed{
-  width:100vw;
-  position:fixed;
-  bottom:5vh;
-  display:flex;
+.interface-order-summary-wrapper-fixed {
+  width: 60vw;
+  position: fixed;
+  bottom: 5vh;
+  display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 7.5px
+  gap: 7.5px;
 }
 
-.interface-order-summary-wrapper{
-  display:flex;
+.interface-order-summary-wrapper {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  width:50%;
-  padding:15px;
+  width: 50%;
+  padding: 15px;
   border: solid rgba(255, 255, 255, 0.5) 1px;
   background: rgba(0, 0, 0, 0.85);
   border-radius: 5px;
-  margin-left:5px;
+  margin-left: 5px;
 }
-.interface-order-summary-wrapper.receipt{
+.interface-order-summary-wrapper.receipt {
   max-height: 10em;
   overflow-y: auto;
-  margin-right:7.5px;
+  margin-right: 7.5px;
 }
 
 .interface-order-summary-wrapper.receipt > p {
-  color:white;
+  color: white;
 }
 
 .interface-order-summary-wrapper > .submit-order {
-  background: linear-gradient(45deg, #8B56FF, #5820B0); /* Solana purple gradient */
+  background: linear-gradient(
+    45deg,
+    #8b56ff,
+    #5820b0
+  ); /* Solana purple gradient */
   color: white; /* White text */
   font-size: 18px;
   padding: 12px 30px;
@@ -539,7 +548,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-.interface-order-summary-wrapper > .submit-order.clear{
+.interface-order-summary-wrapper > .submit-order.clear {
   background: linear-gradient(45deg, #ff5656, #b02220);
 }
 
@@ -560,7 +569,6 @@
   transform: translateY(2px); /* Button 'pressed' effect */
 }
 
-
 @media screen and (max-width: 768px) {
   .order-total-wrapper {
     width: 75vw;
@@ -577,5 +585,34 @@
     transform: translateX(25%);
     transition: transform 1s ease-in-out;
     text-align: center;
+  }
+
+  .employee-interface-header {
+    width: 100vw !important;
+  }
+
+  .interface-item > p {
+    font-size: clamp(16px, 5vw, 48px);
+  }
+
+  .interface-order-summary-wrapper-fixed {
+    width: 100vw !important;
+  }
+
+  .user-interface,
+  .customer-facing-wrapper {
+    margin-top: 0%;
+    margin-left: 0%;
+    width: 100vw;
+  }
+
+  .desktop {
+    width: 100vw !important;
+    position: unset !important;
+  }
+
+  .interface-item.selected,
+  .interface-item:active {
+    width: 50vw;
   }
 }

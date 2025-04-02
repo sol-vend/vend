@@ -24,7 +24,7 @@ const InterfaceHeader = ({ pageDatas }) => {
   );
 };
 
-const EmployeeInterface = () => {
+const EmployeeInterface = ({ isMobile = true }) => {
   const [selectedItems, setSelectedItems] = useState({});
   const [receiptDetails, setReceiptDetails] = useState({});
   const [lastSelectedItemId, setLastSelectedItemId] = useState(null);
@@ -138,6 +138,7 @@ const EmployeeInterface = () => {
 
   useEffect(() => {
     if (pageDatas && pageDatas.businessId) {
+      console.log(pageDatas);
       setLoading(false);
     }
   }, [pageDatas]);
@@ -287,16 +288,17 @@ const EmployeeInterface = () => {
         />
       );
     } else if (
-      pageDatas.customerSetup &&
-      pageDatas.customerSetup.isCustomized
+      (pageDatas.customerSetup && pageDatas.customerSetup.isCustomized) ||
+      pageDatas.interfaceSetup.length > 0
     ) {
       return (
         <>
-          <div className="user-interface">
+          <div className={isMobile ? "user-interface" : "user-interface"}>
             <InterfaceHeader pageDatas={pageDatas} />
             <div className="user-interface-page-container-wrapper">
               <nav className="user-interface-page-container">
                 <div className="pages">
+                  {console.log(pageDatas.interfaceSetup)}
                   {pageDatas.interfaceSetup && (
                     <>
                       <div key={pageIndex} className="page">

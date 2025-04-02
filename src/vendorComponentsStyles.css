@@ -34,6 +34,14 @@ body {
   body {
   }
 
+  .option-card.selected,
+  .option-card:hover {
+    color: #10ff38 !important;
+    border-color: white !important;
+    background: linear-gradient(0deg, rgb(90 47 169), #00000000) !important;
+    transform: scale(1) !important;
+  }
+
   .frontend-options-wrapper {
     margin-left: 2% !important;
     width: 50vw !important;

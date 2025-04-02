@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  FaCashRegister,
   FaDollarSign,
   FaEdit,
   FaMoneyBillAlt,
+  FaPeopleCarry,
   FaPersonBooth,
   FaUser,
 } from "react-icons/fa";
@@ -117,7 +119,9 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
     handleUserLogout(setIsLogout);
   };
 
-  const BottomBanner = () => {
+  const BottomBanner = ({ isMobileDevice }) => {
+    console.log(setIsCustomizationSelected);
+
     return (
       <div className={"home-home-bottom-banner"}>
         <div
@@ -142,7 +146,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                 "Employee Interface Setup",
               ],
               selectedIndex: 0,
-              isHeader: true
+              isHeader: true,
             })
           }
         >
@@ -154,6 +158,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
             </h3>
           </Tooltip>
         </div>
+
         <div
           className={
             selectedOptionCard.name === "gotoPos"
@@ -166,22 +171,27 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
               name: "gotoPos",
               component: [
                 <>
-                  <EmployeeInterface />
-                  <BottomBanner />
+                  <EmployeeInterface isMobile={isMobileDevice} />
+                  {isMobileDevice && (
+                    <BottomBanner
+                      isMobileDevice={isMobileDevice}
+                    />
+                  )}
                 </>,
               ],
               headerOpts: ["Point of Sale"],
               selectedIndex: 0,
-              isHeader: false
+              isHeader: false,
             })
           }
         >
           <Tooltip message={"Access the live POS interface for transactions."}>
             <h3>
-              <FaMoneyBillAlt />
+              <FaCashRegister />
             </h3>
           </Tooltip>
         </div>
+
         <div
           className={
             selectedOptionCard.name === "manageEmployees"
@@ -192,25 +202,11 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
         >
           <Tooltip message={"Add or manage employee roles and permissions."}>
             <h3>
-              <FaPersonBooth />
+              <FaPeopleCarry />
             </h3>
           </Tooltip>
         </div>
-        {/*
-        <div
-          className={
-            selectedOptionCard.name === "viewMetrics"
-              ? "option-card selected"
-              : "option-card"
-          }
-          name="viewMetrics"
-          onClick={() => alert("View Infometrics")}
-        >
-          <Tooltip message={"View detailed analytics and sales data."}>
-            <h3>View Infometrics</h3>
-          </Tooltip>
-        </div>
-  */}
+
         <div
           className={
             selectedOptionCard.name === "configurePayment"
@@ -364,7 +360,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                               "Employee Interface Setup",
                             ],
                             selectedIndex: 0,
-                            isHeader:true,
+                            isHeader: true,
                           })
                         }
                       >
@@ -388,8 +384,12 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                             name: "gotoPos",
                             component: [
                               <>
-                                <EmployeeInterface />
-                                <BottomBanner />
+                                <EmployeeInterface isMobile={isMobileDevice} />
+                                {isMobileDevice && (
+                                  <BottomBanner
+                                    isMobileDevice={isMobileDevice}
+                                  />
+                                )}
                               </>,
                             ],
                             headerOpts: ["Point of Sale"],
@@ -465,7 +465,8 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                   }
                   style={{ overflowX: "hidden" }}
                 >
-                  {!isMobileDevice && selectedOptionCard.isHeader &&
+                  {!isMobileDevice &&
+                    selectedOptionCard.isHeader &&
                     document.querySelector(".home-home-center-header") && (
                       <>
                         <button
@@ -479,13 +480,13 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                             minIndex={selectedOptionCard.selectedIndex === 0}
                           />
                         </button>
-                          <h3 style={{ width: "250px" }}>
-                            {
-                              selectedOptionCard.headerOpts[
-                                selectedOptionCard.selectedIndex
-                              ]
-                            }
-                          </h3>
+                        <h3 style={{ width: "250px" }}>
+                          {
+                            selectedOptionCard.headerOpts[
+                              selectedOptionCard.selectedIndex
+                            ]
+                          }
+                        </h3>
                         <button
                           className="header-carousel-arrow header-carousel-left-arrow right"
                           onClick={handleSelectionIncrement}
