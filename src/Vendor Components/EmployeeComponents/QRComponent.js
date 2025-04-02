@@ -198,7 +198,9 @@ const QRComponent = ({
                     Object.keys(parentExpressions.receipt).map((key) => {
                       return <li>{parentExpressions.receipt[key]}</li>;
                     })}
+                  {parentExpressions.miscellaneous && parentExpressions.miscellaneous.length > 0 && (
                     <span>Miscellaneous:</span>
+                  )}
                   {parentExpressions.miscellaneous &&
                     Object.keys(parentExpressions.miscellaneous).map((key) => {
                       return <li>{parentExpressions.miscellaneous[key]}</li>;

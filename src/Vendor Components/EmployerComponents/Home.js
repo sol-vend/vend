@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUser } from "react-icons/fa";
+import {
+  FaDollarSign,
+  FaEdit,
+  FaMoneyBillAlt,
+  FaPersonBooth,
+  FaUser,
+} from "react-icons/fa";
 import Tooltip from "../Tooltip";
 import FrontendDesigner from "./FrontendDesigner";
 import EmployeeInterfaceDesigner from "./EmployeeInterfaceDesigner";
@@ -41,20 +47,20 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
     ],
     headerOpts: ["Customer Payment Setup", "Employee Interface Setup"],
     selectedIndex: 0,
+    isHeader: true,
   });
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768){
-        setIsMobileDevice(true)
-      }
-      else{
+      if (window.innerWidth <= 768) {
+        setIsMobileDevice(true);
+      } else {
         setIsMobileDevice(false);
       }
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -121,12 +127,31 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
               : "option-card"
           }
           name="editPos"
-          onClick={() => alert("Edit POS Interface")}
+          onClick={() =>
+            setSelectedOptionCard({
+              name: "editPos",
+              component: [
+                <FrontendDesigner
+                  callback={setIsCustomizationSelected}
+                  isMobileDevice={isMobileDevice}
+                />,
+                <EmployeeInterfaceDesigner />,
+              ],
+              headerOpts: [
+                "Customer Payment Setup",
+                "Employee Interface Setup",
+              ],
+              selectedIndex: 0,
+              isHeader: true
+            })
+          }
         >
           <Tooltip
             message={"Modify POS system settings, layout, and products."}
           >
-            <h3>Edit Point of Sale Interface</h3>
+            <h3>
+              <FaEdit />
+            </h3>
           </Tooltip>
         </div>
         <div
@@ -136,10 +161,25 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
               : "option-card"
           }
           name="gotoPos"
-          onClick={() => setSelectedRoute(<EmployeeInterface />)}
+          onClick={() =>
+            setSelectedOptionCard({
+              name: "gotoPos",
+              component: [
+                <>
+                  <EmployeeInterface />
+                  <BottomBanner />
+                </>,
+              ],
+              headerOpts: ["Point of Sale"],
+              selectedIndex: 0,
+              isHeader: false
+            })
+          }
         >
           <Tooltip message={"Access the live POS interface for transactions."}>
-            <h3>Go to Point of Sale Interface</h3>
+            <h3>
+              <FaMoneyBillAlt />
+            </h3>
           </Tooltip>
         </div>
         <div
@@ -151,9 +191,12 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
           name="manageEmployees"
         >
           <Tooltip message={"Add or manage employee roles and permissions."}>
-            <h3>Manage Employees</h3>
+            <h3>
+              <FaPersonBooth />
+            </h3>
           </Tooltip>
         </div>
+        {/*
         <div
           className={
             selectedOptionCard.name === "viewMetrics"
@@ -167,6 +210,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
             <h3>View Infometrics</h3>
           </Tooltip>
         </div>
+  */}
         <div
           className={
             selectedOptionCard.name === "configurePayment"
@@ -177,7 +221,9 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
           onClick={() => alert("Manage Payment Options")}
         >
           <Tooltip message={"Configure available payment methods."}>
-            <h3>Manage Payment Options</h3>
+            <h3>
+              <FaDollarSign />
+            </h3>
           </Tooltip>
         </div>
       </div>
@@ -304,12 +350,22 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                         }
                         name="editPos"
                         onClick={() =>
-                          setSelectedRoute(
-                            <FrontendDesigner
-                              callback={setIsCustomizationSelected}
-                              isMobileDevice={isMobileDevice}
-                            />
-                          )
+                          setSelectedOptionCard({
+                            name: "editPos",
+                            component: [
+                              <FrontendDesigner
+                                callback={setIsCustomizationSelected}
+                                isMobileDevice={isMobileDevice}
+                              />,
+                              <EmployeeInterfaceDesigner />,
+                            ],
+                            headerOpts: [
+                              "Customer Payment Setup",
+                              "Employee Interface Setup",
+                            ],
+                            selectedIndex: 0,
+                            isHeader:true,
+                          })
                         }
                       >
                         <Tooltip
@@ -327,7 +383,20 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                             : "option-card"
                         }
                         name="gotoPos"
-                        onClick={() => setSelectedRoute(<EmployeeInterface />)}
+                        onClick={() =>
+                          setSelectedOptionCard({
+                            name: "gotoPos",
+                            component: [
+                              <>
+                                <EmployeeInterface />
+                                <BottomBanner />
+                              </>,
+                            ],
+                            headerOpts: ["Point of Sale"],
+                            selectedIndex: 0,
+                            isHeader: false,
+                          })
+                        }
                       >
                         <Tooltip
                           message={
@@ -353,6 +422,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                           <h3>Manage Employees</h3>
                         </Tooltip>
                       </div>
+                      {/*
                       <div
                         className={
                           selectedOptionCard.name === "viewMetrics"
@@ -368,6 +438,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                           <h3>View Infometrics</h3>
                         </Tooltip>
                       </div>
+  */}
                       <div
                         className={
                           selectedOptionCard.name === "configurePayment"
@@ -394,7 +465,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                   }
                   style={{ overflowX: "hidden" }}
                 >
-                  {!isMobileDevice &&
+                  {!isMobileDevice && selectedOptionCard.isHeader &&
                     document.querySelector(".home-home-center-header") && (
                       <>
                         <button
@@ -408,13 +479,13 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                             minIndex={selectedOptionCard.selectedIndex === 0}
                           />
                         </button>
-                        <h3 style={{ width: "250px" }}>
-                          {
-                            selectedOptionCard.headerOpts[
-                              selectedOptionCard.selectedIndex
-                            ]
-                          }
-                        </h3>
+                          <h3 style={{ width: "250px" }}>
+                            {
+                              selectedOptionCard.headerOpts[
+                                selectedOptionCard.selectedIndex
+                              ]
+                            }
+                          </h3>
                         <button
                           className="header-carousel-arrow header-carousel-left-arrow right"
                           onClick={handleSelectionIncrement}
@@ -431,7 +502,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                         </button>
                       </>
                     )}
-                  {isMobileDevice && (
+                  {isMobileDevice && selectedOptionCard.isHeader && (
                     <>
                       <button
                         className="header-carousel-arrow header-carousel-left-arrow"

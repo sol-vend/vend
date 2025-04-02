@@ -45,7 +45,7 @@
     }
 
     .menu-icon.absolute{
-        position: fixed !important;
+        position: absolute !important;
     }
     /* Top Section Styling */
     .top-section {

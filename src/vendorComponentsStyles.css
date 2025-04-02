@@ -60,7 +60,12 @@ body {
   }
 
   .option-card h3 {
-    font-size: 2.5vw !important;
+    margin-block-start: 10px;
+    display: flex;
+    font-size: 8vw !important;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
   }
 
   .vendor-form-styles {
@@ -313,7 +318,6 @@ body {
 .vendor-employee-info-wrapper > span {
   text-align: center;
 }
-
 
 .vendor-add-button-styles:hover {
   color: white;
@@ -1437,6 +1441,7 @@ div ::-webkit-scrollbar-thumb:hover {
   bottom: 0;
   transition: transform 0.3s ease-in-out;
   -webkit-transform: translateZ(0);
+  height: 6vh !important;
 }
 
 .image-deck-image {
