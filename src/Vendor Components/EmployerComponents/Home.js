@@ -20,6 +20,7 @@ import SwipeIndicator from "../SwipeIndicator";
 import EmployeeInterface from "../EmployeeComponents/EmployeeInterface";
 import AppHome from "../../Home/AppHome";
 import "./Home.css";
+import ManageEmployees from "../EmployeeComponents/ManageEmployees";
 
 const Home = ({ loginInfos, setSelectedRoute }) => {
   const [userSettingsDropdownClicked, setUserSettingsDropdownClicked] =
@@ -195,6 +196,22 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
               : "option-card"
           }
           name="manageEmployees"
+          onClick={() =>
+            setSelectedOptionCard({
+              name: "manageEmployees",
+              component: [
+                <>
+                  <ManageEmployees isMobile={isMobileDevice} />
+                  {isMobileDevice && (
+                    <BottomBanner isMobileDevice={isMobileDevice} />
+                  )}
+                </>,
+              ],
+              headerOpts: ["Employee Management"],
+              selectedIndex: 0,
+              isHeader: true,
+            })
+          }
         >
           <Tooltip message={"Add or manage employee roles and permissions."}>
             <h3>

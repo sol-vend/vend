@@ -7,7 +7,7 @@ import { retrieveExistingData, updateExistingData } from "../Shared";
 import "./FrontendDesigner.css";
 import Loading from "../../Loading";
 
-const FrontendDesigner = ({ callback, isMobileDevice }) => {
+const FrontendDesigner = ({ callback }) => {
   const debounceWaitTime = 2000;
   const [loading, setLoading] = useState(true);
   const [isStartup, setIsStartup] = useState(true);
@@ -15,6 +15,9 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
   const [showOrderDeets, setShowOrderDeets] = useState(false);
   const [showCustomizationDetails, setShowCustomizationDetails] =
     useState(false);
+      const [isMobileDevice, setIsMobileDevice] = useState(
+        window.innerWidth <= 768
+      );
   const [interfacePreferences, setInterfacePreferences] = useState({
     businessName: "",
     bannerText: "Our Slogan",
@@ -46,6 +49,20 @@ const FrontendDesigner = ({ callback, isMobileDevice }) => {
     }, debounceWaitTime),
     []
   );
+
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth <= 768) {
+          setIsMobileDevice(true);
+        } else {
+          setIsMobileDevice(false);
+        }
+      };
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
 
   useEffect(() => {
     let isMounted = true; // flag to track if the component is mounted

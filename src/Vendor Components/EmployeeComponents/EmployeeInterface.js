@@ -3,7 +3,6 @@ import {
   FaPlus,
   FaMinus,
   FaCheckCircle,
-  FaSyncAlt,
   FaArrowLeft,
   FaArrowRight,
   FaCalculator,
@@ -150,16 +149,12 @@ const EmployeeInterface = ({ isMobile = true }) => {
   const handleItemSelect = (groupIndex, itemIndex, e) => {
     e.stopPropagation();
     const itemId = `${groupIndex}-${itemIndex}`;
-
-    // If a different item was previously selected, reset its selection state
     if (lastSelectedItemId && lastSelectedItemId !== itemId) {
       setLastSelectedItemId(itemId);
     } else {
-      // If clicking the same item, toggle its selection
       setLastSelectedItemId(itemId);
     }
 
-    // Ensure quantity is maintained or initialized
     setSelectedItems((prevItems) => {
       const newItems = { ...prevItems };
       if (!newItems[itemId]) {
