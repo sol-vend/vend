@@ -4,9 +4,7 @@ import {
   FaCashRegister,
   FaDollarSign,
   FaEdit,
-  FaMoneyBillAlt,
   FaPeopleCarry,
-  FaPersonBooth,
   FaUser,
 } from "react-icons/fa";
 import Tooltip from "../Tooltip";
@@ -173,9 +171,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                 <>
                   <EmployeeInterface isMobile={isMobileDevice} />
                   {isMobileDevice && (
-                    <BottomBanner
-                      isMobileDevice={isMobileDevice}
-                    />
+                    <BottomBanner isMobileDevice={isMobileDevice} />
                   )}
                 </>,
               ],

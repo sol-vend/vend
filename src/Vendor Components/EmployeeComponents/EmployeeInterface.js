@@ -188,20 +188,34 @@ const EmployeeInterface = ({ isMobile = true }) => {
   };
 
   useEffect(() => {
-    Object.keys(selectedItems).map((itemId) => {
-      const groupIndex = Number(itemId.split("-")[0]);
-      const itemIndex = Number(itemId.split("-")[1]);
-      const pageName = pageDatas.interfaceSetup[groupIndex].groupName;
-      const itemName =
-        pageDatas.interfaceSetup[groupIndex].items[itemIndex].name;
-      const itemPrice =
-        pageDatas.interfaceSetup[groupIndex].items[itemIndex].price;
-      const itemQuantity = selectedItems[itemId];
-      setReceiptDetails((prev) => ({
-        ...prev,
-        [itemId]: `${pageName}: ${itemName} (${itemQuantity}) @ $${itemPrice}`,
-      }));
-    });
+    if (Object.keys(selectedItems).length === 0) {
+      setReceiptDetails({});
+    } else {
+      Object.keys(selectedItems).map((itemId) => {
+        const groupIndex = Number(itemId.split("-")[0]);
+        const itemIndex = Number(itemId.split("-")[1]);
+        const pageName = pageDatas.interfaceSetup[groupIndex].groupName;
+        const itemName =
+          pageDatas.interfaceSetup[groupIndex].items[itemIndex].name;
+        const itemPrice =
+          pageDatas.interfaceSetup[groupIndex].items[itemIndex].price;
+        const itemQuantity = selectedItems[itemId];
+        const filterKeys = Object.keys(receiptDetails).filter(
+          (rd) => !Object.keys(selectedItems).includes(rd)
+        );
+        console.log(filterKeys, filterKeys.length);
+        if (filterKeys.length > 0) {
+          let tempReceiptDetails = receiptDetails;
+          delete tempReceiptDetails[filterKeys[0]];
+          setReceiptDetails(tempReceiptDetails);
+        } else {
+          setReceiptDetails((prev) => ({
+            ...prev,
+            [itemId]: `${pageName}: ${itemName} (${itemQuantity}) @ $${itemPrice}`,
+          }));
+        }
+      });
+    }
   }, [selectedItems]);
 
   useEffect(() => {
@@ -211,17 +225,7 @@ const EmployeeInterface = ({ isMobile = true }) => {
     }));
   }, [receiptDetails]);
 
-  /*const handleAddToOrder = () => {
-    if (miscellaneousItem.name && miscellaneousItem.price) {
-      setOrderTotal(
-        (prevTotal) => prevTotal + parseFloat(miscellaneousItem.price)
-      );
-      setMiscellaneousItem({ name: "", price: "" }); // Reset input fields
-    }
-  };
-*/
   const handleOrderTotal = () => {
-    // Calculate the total price of selected items
     let total = 0;
     for (const itemId in selectedItems) {
       if (selectedItems.hasOwnProperty(itemId)) {
@@ -231,7 +235,6 @@ const EmployeeInterface = ({ isMobile = true }) => {
       }
     }
     setOrderTotal(total);
-    // Here you would typically send the order data to your backend
   };
 
   const handleSubmitOrder = () => {
@@ -295,7 +298,13 @@ const EmployeeInterface = ({ isMobile = true }) => {
         <>
           <div className={isMobile ? "user-interface" : "user-interface"}>
             <InterfaceHeader pageDatas={pageDatas} />
-            <div className="user-interface-page-container-wrapper">
+            <div
+              className={
+                !showCalculator
+                  ? "user-interface-page-container-wrapper"
+                  : "user-interface-page-container-wrapper calculator"
+              }
+            >
               <nav className="user-interface-page-container">
                 <div className="pages">
                   {console.log(pageDatas.interfaceSetup)}

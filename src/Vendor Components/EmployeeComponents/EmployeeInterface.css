@@ -26,7 +26,7 @@
   background-image: url("../../../public/apphome-4.png");
   background-size: cover;
   filter: opacity(0.95);
-  height: 94vh !important;
+  height: 100% !important;
   width: 60vw;
   margin-left: 10%;
   margin-top: 1%;
@@ -482,9 +482,12 @@
   text-align: center;
   font-size: 2em;
 }
-
 .user-interface-page-container-wrapper {
   height: 65vh;
+}
+
+.user-interface-page-container-wrapper.calculator {
+  height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -503,7 +506,7 @@
 
 .interface-order-summary-wrapper-fixed {
   width: 60vw;
-  position: fixed;
+  position: relative;
   bottom: 5vh;
   display: flex;
   flex-direction: row;
