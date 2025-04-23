@@ -120,7 +120,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
 
   const BottomBanner = ({ isMobileDevice }) => {
     console.log(setIsCustomizationSelected);
-
+    console.log('Home is re-rendering.')
     return (
       <div className={"home-home-bottom-banner"}>
         <div

@@ -13,6 +13,7 @@ import { fetchDataWithAuth } from "./Vendor Components/Shared";
 import PasswordResetFull from "./Vendor Components/EmployeeComponents/PasswordResetFull";
 import HeaderWrapper from "./Vendor Components/HeaderWrapper";
 import InitializePin from "./Vendor Components/EmployeeComponents/InitializePin";
+import ManageEmployees from "./Vendor Components/EmployeeComponents/ManageEmployees";
 
 const App = () => {
   const network = "mainnet-beta";
@@ -49,75 +50,95 @@ const App = () => {
     }
   });
 
+  useEffect(() => {
+    console.log(doPromptLogin);
+  }, [doPromptLogin]);
+
   console.log(doPromptLogin);
-//  if (doPromptLogin) {
-//    return { doPromptLogin };
-//  } else {
-    return (
-      <Router>
-        <ConnectionProvider endpoint={endpoint}>
-          <WalletProvider wallets={wallets} autoConnect>
-            <WalletModalProvider>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <>
-                      <AppHome />
-                    </>
-                  }
-                />
-                <Route
-                  path="/welcome/*"
-                  element={
-                    <>
-                      {console.log("autoroute")}
-                      <AppHome autoRoute={true} />
-                    </>
-                  }
-                />
-                <Route
-                  path="/complete_signup/*"
-                  element={
-                    <>
+  //  if (doPromptLogin) {
+  //    return { doPromptLogin };
+  //  } else {
+  return (
+    <Router>
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <AppHome />
+                  </>
+                }
+              />
+              <Route
+                path="/welcome/*"
+                element={
+                  <>
+                    <AppHome autoRoute={true} />
+                  </>
+                }
+              />
+              <Route
+                path="/complete_signup/*"
+                element={
+                  <>
                     <HeaderWrapper />
-                      <InitializePin hash={window.location.hash.split('#').slice(-1)[0]} isEmployerReset={false} />
-                    </>
-                  }
-                />
-                <Route
-                  path="/password_reset/*"
-                  element={
-                    <>
-                    <HeaderWrapper/>
-                      <PasswordResetFull hash={window.location.hash.split('#').slice(-1)[0]} isEmployerReset={true} />
-                    </>
-                  }
-                />
-                <Route
-                  path="/employee_password_reset/*"
-                  element={
-                    <>
-                    <HeaderWrapper/>
-                      <PasswordResetFull hash={window.location.hash.split('#').slice(-1)[0]} isEmployerReset={false} />
-                    </>
-                  }
-                />
-                <Route
-                  path="/payment/*"
-                  element={
-                    <>
-                      <div>work in progress...</div>
-                    </>
-                  }
-                />
-              </Routes>
-            </WalletModalProvider>
-          </WalletProvider>
-        </ConnectionProvider>
-      </Router>
-    );
-  }
+                    <InitializePin
+                      hash={window.location.hash.split("#").slice(-1)[0]}
+                      isEmployerReset={false}
+                    />
+                  </>
+                }
+              />
+              <Route
+                path="/password_reset/*"
+                element={
+                  <>
+                    <HeaderWrapper />
+                    <PasswordResetFull
+                      hash={window.location.hash.split("#").slice(-1)[0]}
+                      isEmployerReset={true}
+                    />
+                  </>
+                }
+              />
+              <Route
+                path="/employee_password_reset/*"
+                element={
+                  <>
+                    <HeaderWrapper />
+                    <PasswordResetFull
+                      hash={window.location.hash.split("#").slice(-1)[0]}
+                      isEmployerReset={false}
+                    />
+                  </>
+                }
+              />
+              <Route
+                path="/payment/*"
+                element={
+                  <>
+                    <div>work in progress...</div>
+                  </>
+                }
+              />
+              <Route
+                path="/employee"
+                element={
+                  <>
+                    <ManageEmployees />
+                  </>
+                }
+              />
+            </Routes>
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
+    </Router>
+  );
+};
 //};
 
 export default App;
