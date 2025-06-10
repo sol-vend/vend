@@ -21,15 +21,16 @@ const App = () => {
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
   const [checkAuthAfterLatent, setCheckAuthAfterLatent] = useState(true);
   const [doPromptLogin, setDoPromptLogin] = useState(false);
+  const [isError, setIsError] = useState(null);
 
   const handleVisibilityChange = () => {
     console.log("Visibility Listener Triggered in App.js");
-    setDoPromptLogin(fetchDataWithAuth(setCheckAuthAfterLatent));
+    setDoPromptLogin(fetchDataWithAuth(setCheckAuthAfterLatent), setIsError);
   };
 
   const handleFocus = () => {
     console.log("Focus Listener Triggered in App.js");
-    setDoPromptLogin(fetchDataWithAuth(setCheckAuthAfterLatent));
+    setDoPromptLogin(fetchDataWithAuth(setCheckAuthAfterLatent), setIsError);
   };
 
   useEffect(() => {
@@ -51,8 +52,14 @@ const App = () => {
   });
 
   useEffect(() => {
-    console.log(doPromptLogin);
+    console.log(doPromptLogin, 'login screen');
   }, [doPromptLogin]);
+
+  useEffect(() => {
+    if (!isError){
+      console.log(isError);
+    }
+  }, [isError])
 
   console.log(doPromptLogin);
   //  if (doPromptLogin) {

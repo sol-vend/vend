@@ -21,6 +21,8 @@ import EmployeeInterface from "../EmployeeComponents/EmployeeInterface";
 import AppHome from "../../Home/AppHome";
 import "./Home.css";
 import ManageEmployees from "../EmployeeComponents/ManageEmployees";
+import PaymentInfoForm from "../PaymentInfoForm";
+import EditPaymentMethod from "./EditPaymentMethod";
 
 const Home = ({ loginInfos, setSelectedRoute }) => {
   const [userSettingsDropdownClicked, setUserSettingsDropdownClicked] =
@@ -37,6 +39,14 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
   const [isLogout, setIsLogout] = useState(false);
   const elementRef = useRef(null);
   const navigate = useNavigate();
+  const [submitResponse, setSubmitResponse] = useState({
+    result: null,
+    doProceed: false,
+    isApproved: false,
+    error: null,
+    hasAttempted: false,
+  });
+  const [resetPasswordRequest, setResetPasswordRequest] = useState(false);
   const [selectedOptionCard, setSelectedOptionCard] = useState({
     name: "editPos",
     component: [
@@ -120,7 +130,7 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
 
   const BottomBanner = ({ isMobileDevice }) => {
     console.log(setIsCustomizationSelected);
-    console.log('Home is re-rendering.')
+    console.log("Home is re-rendering.");
     return (
       <div className={"home-home-bottom-banner"}>
         <div
@@ -222,12 +232,26 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
 
         <div
           className={
-            selectedOptionCard.name === "configurePayment"
+            selectedOptionCard.name === "managePayment"
               ? "option-card selected"
               : "option-card"
           }
-          name="configurePayment"
-          onClick={() => alert("Manage Payment Options")}
+          onClick={() =>
+            setSelectedOptionCard({
+              name: "managePayment",
+              component: [
+                <>
+                  <EditPaymentMethod />
+                  {isMobileDevice && (
+                    <BottomBanner isMobileDevice={isMobileDevice} />
+                  )}
+                </>,
+              ],
+              headerOpts: ["Payment Management"],
+              selectedIndex: 0,
+              isHeader: true,
+            })
+          }
         >
           <Tooltip message={"Configure available payment methods."}>
             <h3>
@@ -426,6 +450,24 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                             : "option-card"
                         }
                         name="manageEmployees"
+                        onClick={() =>
+                          setSelectedOptionCard({
+                            name: "manageEmployees",
+                            component: [
+                              <>
+                                <ManageEmployees isMobile={isMobileDevice} />
+                                {isMobileDevice && (
+                                  <BottomBanner
+                                    isMobileDevice={isMobileDevice}
+                                  />
+                                )}
+                              </>,
+                            ],
+                            headerOpts: ["Employee Management"],
+                            selectedIndex: 0,
+                            isHeader: true,
+                          })
+                        }
                       >
                         <Tooltip
                           message={
@@ -459,7 +501,29 @@ const Home = ({ loginInfos, setSelectedRoute }) => {
                             : "option-card"
                         }
                         name="configurePayment"
-                        onClick={() => alert("Manage Payment Options")}
+                        onClick={() =>
+                          setSelectedOptionCard({
+                            name: "configurePayment",
+                            component: [
+                              <>
+                                <PaymentInfoForm
+                                  submitResponse={submitResponse}
+                                  setSubmitResponse={setSubmitResponse}
+                                  formData={false}
+                                  setResetPasswordRequest={setResetPasswordRequest}
+                                />
+                                {isMobileDevice && (
+                                  <BottomBanner
+                                    isMobileDevice={isMobileDevice}
+                                  />
+                                )}
+                              </>,
+                            ],
+                            headerOpts: ["Employee Management"],
+                            selectedIndex: 0,
+                            isHeader: true,
+                          })
+                        }
                       >
                         <Tooltip
                           message={"Configure available payment methods."}

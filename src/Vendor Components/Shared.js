@@ -120,7 +120,8 @@ export const fetchDataWithAuth = async (setCallback, setSessionExpired) => {
     } else {
       // Handle case when there is no data (if necessary)
       console.log('No data returned from API');
-      setCallback({ error: 'No data returned', doContinue: false });
+      document.location.reload();
+      //setCallback({ error: 'No data returned', doContinue: false });
     }
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -129,6 +130,7 @@ export const fetchDataWithAuth = async (setCallback, setSessionExpired) => {
     //setSessionExpired(() => null); // This will trigger the modal
 
     // Set the callback state with error message after catching the error
+    //document.location.reload();
     setCallback({ error: error.message, doContinue: false });
   }
 };

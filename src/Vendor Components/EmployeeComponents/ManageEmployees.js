@@ -201,7 +201,7 @@ const ManageEmployees = () => {
       approvedReadOnlyEmployees: updatedEmployees
     });
     
-    updateExistingData({approvedReadOnlyEmployees: updatedEmployees});
+    updateExistingData({approvedReadOnlyEmployees: updatedEmployees, employeeUpdate: true});
     handleAddNewEmployee();
   };
 
