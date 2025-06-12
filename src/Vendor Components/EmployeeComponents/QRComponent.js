@@ -4,6 +4,7 @@ import { API_URL } from "../../Components/Shared";
 import { FaSyncAlt } from "react-icons/fa";
 import NumericKeypad from "./NumericKeypad";
 import CustomQRCode from "../EmployerComponents/CustomQRCode";
+import { nanoid } from "nanoid";
 
 const QRComponent = ({
   pageDatas,
@@ -21,6 +22,7 @@ const QRComponent = ({
   const [hasDetailsBeenClicked, setHasDetailsBeenClicked] = useState(false);
   const [isCustomTipOption, setIsCustomTipOption] = useState(false);
   const [finalQrData, setFinalQrData] = useState("");
+  const [qrPayload, setQrPayload] = useState("");
   const qrWrapperRef = useRef(null);
   const animationRef = useRef(null);
   const deeplinkBase = "https://phantom.app/ul/browse/";
@@ -127,10 +129,38 @@ const QRComponent = ({
   };
 
   useEffect(() => {
-    if (finalQrData) {
-      console.log(finalQrData);
-      setDoMakeQr(!doMakeQr);
-    }
+    if (!finalQrData) return;
+
+    const sendToMongo = async () => {
+      const generatedId = nanoid();
+
+      const payload = {
+        id: generatedId,
+        payload: `${deeplinkBase}${encodeURIComponent(
+          `https://solvend.fun/#/payment/#${finalQrData.hash}`
+        )}?ref=${encodeURIComponent("https://solvend.fun")}`,
+      };
+
+      try {
+        const res = await fetch(`${API_URL}/api/helper_link_initializor`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error("Failed to save QR data");
+
+        const result = await res.json();
+        console.log("Saved to MongoDB:", result);
+        setQrPayload(payload);
+        setDoMakeQr((prev) => !prev);
+      } catch (err) {
+        console.error("QR data post error:", err);
+      }
+    };
+    sendToMongo();
   }, [finalQrData]);
 
   return (
@@ -160,16 +190,9 @@ const QRComponent = ({
               ref={qrWrapperRef}
               style={doMakeQr ? { opacity: "1" } : { opacity: "0" }}
             >
-              {console.log(
-                `${deeplinkBase}${encodeURIComponent(
-                  `https://solvend.fun/#/payment/#${finalQrData.hash}`
-                )}?ref=${encodeURIComponent("https://solvend.fun")}`
-              )}
               {
                 <CustomQRCode
-                  data={`${deeplinkBase}${encodeURIComponent(
-                    `https://solvend.fun/#/payment/#${finalQrData.hash}`
-                  )}?ref=${encodeURIComponent("https://solvend.fun")}`}
+                  data={`${API_URL}/api/helper_link_finder/${qrPayload.id}`}
                   parentRef={qrWrapperRef}
                 />
               }
@@ -198,9 +221,10 @@ const QRComponent = ({
                     Object.keys(parentExpressions.receipt).map((key) => {
                       return <li>{parentExpressions.receipt[key]}</li>;
                     })}
-                  {parentExpressions.miscellaneous && parentExpressions.miscellaneous.length > 0 && (
-                    <span>Miscellaneous:</span>
-                  )}
+                  {parentExpressions.miscellaneous &&
+                    parentExpressions.miscellaneous.length > 0 && (
+                      <span>Miscellaneous:</span>
+                    )}
                   {parentExpressions.miscellaneous &&
                     Object.keys(parentExpressions.miscellaneous).map((key) => {
                       return <li>{parentExpressions.miscellaneous[key]}</li>;

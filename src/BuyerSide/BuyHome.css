@@ -1,0 +1,43 @@
+.opt-descr {
+  height: 25% !important;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+.opt-descr > svg {
+  width: 140vw !important;
+}
+
+.opt-descr p {
+    font-size: 1.25rem;
+}
+
+.opt-descr strong {
+  color: #9c27b0;
+}
+
+.sweep-text {
+    font-weight: bold;
+    font-size: 1.5rem;
+    background: linear-gradient(to right, #9c27b000 50%, #9c27b0 50%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: sweep 4s cubic-bezier(0.14, 0.79, 0.58, 1) forwards infinite;
+}
+  
+  @keyframes sweep {
+    0% {
+      background-position: 100% 0;
+      opacity:0.5;
+    }
+    100% {
+      background-position: 0 0;
+      opacity: 1;
+    }
+  }
+  
