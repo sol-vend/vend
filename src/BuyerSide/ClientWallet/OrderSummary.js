@@ -7,8 +7,9 @@ const OrderSummary = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const hash =
+  const windowHash =
     window.location.hash.split("#")[window.location.hash.split("#").length - 1];
+  let hash = windowHash.slice(12);
   console.log(hash);
   useEffect(() => {
     const fetchOrderData = async () => {
