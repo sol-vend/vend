@@ -8,6 +8,7 @@ const QRScanner = ({ onQRCodeScanned }) => {
   const [currentCameraIndex, setCurrentCameraIndex] = useState(0);
   const streamRef = useRef(null);
   const scannedRef = useRef(false);
+  const [manualScanActive, setManualScanActive] = useState(false); // 🔹 new state
 
   useEffect(() => {
     const loadCamerasAndStartStream = async () => {
@@ -80,21 +81,22 @@ const QRScanner = ({ onQRCodeScanned }) => {
         const code = jsQR(imageData.data, imageData.width, imageData.height);
 
         if (code?.data) {
-          const scannedText = code.data.trim();
-          scannedRef.current = true;
-          console.log("Scanned:", scannedText);
-
-          if (onQRCodeScanned) onQRCodeScanned(scannedText);
-          else window.location.href = scannedText;
-          stopStream();
+          handleScannedCode(code.data.trim());
           return;
         }
       }
-
       requestAnimationFrame(loop);
     };
 
     loop();
+  };
+
+  const handleScannedCode = (data) => {
+    scannedRef.current = true;
+    console.log("Scanned:", data);
+    if (onQRCodeScanned) onQRCodeScanned(data);
+    else window.location.href = data;
+    stopStream();
   };
 
   const handleToggleCamera = async () => {
@@ -102,6 +104,27 @@ const QRScanner = ({ onQRCodeScanned }) => {
       const nextIndex = (currentCameraIndex + 1) % cameras.length;
       setCurrentCameraIndex(nextIndex);
       await startStream(cameras[nextIndex].deviceId);
+    }
+  };
+
+  // 🔹 Manual still-frame scan
+  const handleTakePicture = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas || !video.videoWidth || !video.videoHeight) return;
+
+    const ctx = canvas.getContext("2d");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+    if (code?.data) {
+      handleScannedCode(code.data.trim());
+    } else {
+      alert("No QR code found in image. Try again.");
     }
   };
 
@@ -113,8 +136,10 @@ const QRScanner = ({ onQRCodeScanned }) => {
         maxWidth: "640px",
         margin: "auto",
         display: "flex",
+        flexDirection: "column", // 🔹 Stack buttons vertically
         justifyContent: "center",
-        alignItems: "flex-start",
+        alignItems: "center",
+        gap: "12px",
       }}
     >
       <video
@@ -132,27 +157,34 @@ const QRScanner = ({ onQRCodeScanned }) => {
       />
       <canvas ref={canvasRef} style={{ display: "none" }} />
 
-      {cameras.length > 1 && (
+      <div style={{ display: "flex", gap: "8px" }}>
+        {cameras.length > 1 && (
+          <button
+            onClick={handleToggleCamera}
+            style={buttonStyle}
+          >
+            Switch Camera
+          </button>
+        )}
+
         <button
-          onClick={handleToggleCamera}
-          style={{
-            position: "absolute",
-            bottom: "10px",
-            right: "10px",
-            zIndex: 5,
-            padding: "8px 12px",
-            backgroundColor: "#000",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
+          onClick={handleTakePicture}
+          style={buttonStyle}
         >
-          Switch Camera
+          Take Picture Instead
         </button>
-      )}
+      </div>
     </div>
   );
+};
+
+const buttonStyle = {
+  padding: "8px 12px",
+  backgroundColor: "#000",
+  color: "#fff",
+  border: "none",
+  borderRadius: "4px",
+  cursor: "pointer",
 };
 
 export default QRScanner;

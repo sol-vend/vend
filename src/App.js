@@ -14,6 +14,7 @@ import PasswordResetFull from "./Vendor Components/EmployeeComponents/PasswordRe
 import HeaderWrapper from "./Vendor Components/HeaderWrapper";
 import InitializePin from "./Vendor Components/EmployeeComponents/InitializePin";
 import ManageEmployees from "./Vendor Components/EmployeeComponents/ManageEmployees";
+import ClientHome from "./BuyerSide/ClientWallet/ClientHome";
 
 const App = () => {
   const network = "mainnet-beta";
@@ -127,7 +128,7 @@ const App = () => {
                 path="/payment/*"
                 element={
                   <>
-                    <div>work in progress...</div>
+                    <ClientHome />
                   </>
                 }
               />
