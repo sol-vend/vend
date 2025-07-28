@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.40ce4911.css",
-    "main.js": "/static/js/main.a7f4005b.js",
+    "main.css": "/static/css/main.986e8659.css",
+    "main.js": "/static/js/main.cb592935.js",
     "static/js/453.d0babaf8.chunk.js": "/static/js/453.d0babaf8.chunk.js",
     "static/media/apphome-1.png": "/static/media/apphome-1.d17e913d77f9c0d24b97.png",
     "static/media/apphome-4.png": "/static/media/apphome-4.e7a9290066bd29fe8897.png",
@@ -15,13 +15,14 @@
     "static/media/step7.jpeg": "/static/media/step7.97ad5e90597ce88659e9.jpeg",
     "static/media/step5.jpeg": "/static/media/step5.19b8460f14aa2b3d127a.jpeg",
     "static/media/apphome-3.jpg": "/static/media/apphome-3.4de4381bec6cc54fcd0a.jpg",
+    "static/media/walletbackground.svg": "/static/media/walletbackground.0a16f02ad401f11cf2c7be55786e7dd0.svg",
     "index.html": "/index.html",
-    "main.40ce4911.css.map": "/static/css/main.40ce4911.css.map",
-    "main.a7f4005b.js.map": "/static/js/main.a7f4005b.js.map",
+    "main.986e8659.css.map": "/static/css/main.986e8659.css.map",
+    "main.cb592935.js.map": "/static/js/main.cb592935.js.map",
     "453.d0babaf8.chunk.js.map": "/static/js/453.d0babaf8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.40ce4911.css",
-    "static/js/main.a7f4005b.js"
+    "static/css/main.986e8659.css",
+    "static/js/main.cb592935.js"
   ]
 }
