@@ -35,24 +35,27 @@ const SolanaWalletConnector = () => {
   React.useEffect(() => {
     const checkEnvironment = () => {
       const userAgent = navigator.userAgent.toLowerCase();
-      const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+      const mobileRegex =
+        /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
       const isMobileDevice = mobileRegex.test(userAgent);
-      
+
       // Check if we're in a mobile wallet's browser
-      const isPhantomMobile = userAgent.includes('phantom') || window.phantom?.solana;
-      const isSolflareMobile = userAgent.includes('solflare') || window.solflare;
-      const isTrustMobile = userAgent.includes('trust') || window.trustwallet;
-      
+      const isPhantomMobile =
+        userAgent.includes("phantom") || window.phantom?.solana;
+      const isSolflareMobile =
+        userAgent.includes("solflare") || window.solflare;
+      const isTrustMobile = userAgent.includes("trust") || window.trustwallet;
+
       setIsMobile(isMobileDevice);
       setIsInMobileWallet(isPhantomMobile || isSolflareMobile || isTrustMobile);
-      
-      if (isPhantomMobile) setMobileWalletType('phantom');
-      else if (isSolflareMobile) setMobileWalletType('solflare');
-      else if (isTrustMobile) setMobileWalletType('trust');
+
+      if (isPhantomMobile) setMobileWalletType("phantom");
+      else if (isSolflareMobile) setMobileWalletType("solflare");
+      else if (isTrustMobile) setMobileWalletType("trust");
     };
-    
+
     checkEnvironment();
-    
+
     // Also check after a short delay in case providers load asynchronously
     const timer = setTimeout(checkEnvironment, 1000);
     return () => clearTimeout(timer);
@@ -60,11 +63,14 @@ const SolanaWalletConnector = () => {
 
   React.useEffect(() => {
     if (publicKey && connected) {
-      connection.getBalance(publicKey).then((lamports) => {
-        setBalance(lamports / LAMPORTS_PER_SOL);
-      }).catch((error) => {
-        console.error("Failed to fetch balance:", error);
-      });
+      connection
+        .getBalance(publicKey)
+        .then((lamports) => {
+          setBalance(lamports / LAMPORTS_PER_SOL);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch balance:", error);
+        });
     }
   }, [publicKey, connection, connected]);
 
@@ -72,48 +78,48 @@ const SolanaWalletConnector = () => {
   const connectMobileWallet = async () => {
     try {
       let provider = null;
-      
+
       // Get the appropriate mobile wallet provider
       if (window.phantom?.solana) {
         provider = window.phantom.solana;
-        console.log('Using Phantom mobile provider');
+        console.log("Using Phantom mobile provider");
       } else if (window.solflare) {
         provider = window.solflare;
-        console.log('Using Solflare mobile provider');
+        console.log("Using Solflare mobile provider");
       } else if (window.trustwallet?.solana) {
         provider = window.trustwallet.solana;
-        console.log('Using Trust Wallet mobile provider');
+        console.log("Using Trust Wallet mobile provider");
       } else if (window.solana) {
         // Generic solana provider
         provider = window.solana;
-        console.log('Using generic Solana provider');
+        console.log("Using generic Solana provider");
       }
 
       if (!provider) {
-        throw new Error('No mobile wallet provider found');
+        throw new Error("No mobile wallet provider found");
       }
 
       // Connect using the mobile provider
       const response = await provider.connect();
-      console.log('Mobile wallet connected:', response.publicKey.toString());
-      
-      // If the wallet adapter isn't automatically picking this up, 
+      console.log("Mobile wallet connected:", response.publicKey.toString());
+
+      // If the wallet adapter isn't automatically picking this up,
       // we might need to manually trigger the connection
       if (!connected) {
         // Try to find and select the corresponding wallet adapter
-        const mobileWallet = wallets.find(w => 
-          w.adapter.name.toLowerCase().includes(mobileWalletType || 'phantom')
+        const mobileWallet = wallets.find((w) =>
+          w.adapter.name.toLowerCase().includes(mobileWalletType || "phantom")
         );
-        
+
         if (mobileWallet) {
           select(mobileWallet.adapter.name);
           setTimeout(() => connect(), 500);
         }
       }
-      
+
       return response;
     } catch (error) {
-      console.error('Mobile wallet connection failed:', error);
+      console.error("Mobile wallet connection failed:", error);
       throw error;
     }
   };
@@ -124,16 +130,16 @@ const SolanaWalletConnector = () => {
       // If no wallet is selected, try to select the first available wallet
       if (!wallet && wallets.length > 0) {
         select(wallets[0].adapter.name);
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
-      
+
       if (!connect) {
         throw new Error("Connect function not available");
       }
-      
+
       await connect();
     } catch (error) {
-      if (error.name === 'WalletNotSelectedError' && wallets.length > 0) {
+      if (error.name === "WalletNotSelectedError" && wallets.length > 0) {
         try {
           select(wallets[0].adapter.name);
           setTimeout(() => connect(), 100);
@@ -155,29 +161,34 @@ const SolanaWalletConnector = () => {
         return;
       }
 
-      console.log('Environment:', {
+      console.log("Environment:", {
         isMobile,
         isInMobileWallet,
         mobileWalletType,
         hasPhantom: !!window.phantom?.solana,
         hasSolflare: !!window.solflare,
         hasGenericSolana: !!window.solana,
-        userAgent: navigator.userAgent
+        userAgent: navigator.userAgent,
       });
 
       if (isMobile && isInMobileWallet) {
-        console.log('Attempting mobile wallet connection...');
+        console.log("Attempting mobile wallet connection...");
         await connectMobileWallet();
       } else {
-        console.log('Attempting desktop wallet connection...');
+        console.log("Attempting desktop wallet connection...");
         await connectDesktopWallet();
       }
     } catch (error) {
       console.error("Wallet connection failed:", error);
-      
+
       // Additional error handling for mobile
-      if (isMobile && error.message.includes('No mobile wallet provider found')) {
-        alert('Please make sure you\'re opening this page within your wallet app (Phantom, Solflare, etc.)');
+      if (
+        isMobile &&
+        error.message.includes("No mobile wallet provider found")
+      ) {
+        alert(
+          "Please make sure you're opening this page within your wallet app (Phantom, Solflare, etc.)"
+        );
       }
     }
   };
@@ -199,20 +210,24 @@ const SolanaWalletConnector = () => {
       );
 
       let signature;
-      
+
       // For mobile wallets, we might need to use the injected provider directly
       if (isInMobileWallet && window.phantom?.solana) {
         const { blockhash } = await connection.getRecentBlockhash();
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = publicKey;
-        
-        const signedTransaction = await window.phantom.solana.signTransaction(transaction);
-        signature = await connection.sendRawTransaction(signedTransaction.serialize());
+
+        const signedTransaction = await window.phantom.solana.signTransaction(
+          transaction
+        );
+        signature = await connection.sendRawTransaction(
+          signedTransaction.serialize()
+        );
       } else {
         // Use standard wallet adapter method
         signature = await sendTransaction(transaction, connection);
       }
-      
+
       console.log("Transaction signature:", signature);
       await connection.confirmTransaction(signature, "confirmed");
       console.log("Transaction confirmed");
@@ -231,9 +246,9 @@ const SolanaWalletConnector = () => {
     try {
       const message = `Hello from ${publicKey.toString()}!`;
       const encodedMessage = new TextEncoder().encode(message);
-      
+
       let signature;
-      
+
       // For mobile wallets, use injected provider if available
       if (isInMobileWallet && window.phantom?.solana?.signMessage) {
         signature = await window.phantom.solana.signMessage(encodedMessage);
@@ -242,7 +257,7 @@ const SolanaWalletConnector = () => {
       } else {
         throw new Error("Sign message not supported");
       }
-      
+
       console.log("Message signature:", signature);
     } catch (error) {
       console.error("Message signing failed:", error);
@@ -251,59 +266,55 @@ const SolanaWalletConnector = () => {
 
   if (!connected) {
     return (
-      <div className="wallet-info">
-        <p>Please connect your wallet to continue</p>
-        {isMobile && !isInMobileWallet && (
-          <p style={{fontSize: '12px', color: '#666', marginBottom: '10px'}}>
-            On mobile, please scan the QR code with your wallet app to open this page within the wallet browser.
-          </p>
-        )}
-        {isInMobileWallet && (
-          <p style={{fontSize: '12px', color: '#28a745', marginBottom: '10px'}}>
-            ✓ Detected {mobileWalletType} mobile wallet browser
-          </p>
-        )}
-        <button
-          className="button connect-button"
-          onClick={handleWalletAction}
-          disabled={connecting}
-        >
-          {connecting ? "Connecting..." : "Connect Wallet"}
-        </button>
+      <div className="disconnected-wallet">
+        <div className="wallet-info disconnected">
+          <p>Please connect your wallet to continue</p>
+          {isMobile && !isInMobileWallet && (
+            <p
+              style={{ fontSize: "12px", color: "#666", marginBottom: "10px" }}
+            >
+              On mobile, please scan the QR code with your wallet app to open
+              this page within the wallet browser.
+            </p>
+          )}
+          {isInMobileWallet && (
+            <p
+              style={{
+                fontSize: "12px",
+                color: "#28a745",
+                marginBottom: "10px",
+              }}
+            >
+              ✓ Detected {mobileWalletType} mobile wallet browser
+            </p>
+          )}
+          <button
+            className="button connect-button"
+            onClick={handleWalletAction}
+            disabled={connecting}
+          >
+            {connecting ? "Connecting..." : "Connect Wallet"}
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div>
+      <ClientHome />
       <div className="wallet-info">
-        <p>Connected: {publicKey?.toString()}</p>
+        <p>Connected: {`${publicKey?.toString().substring(0, 4)}...${publicKey?.toString().substring(publicKey?.toString().length - 5, publicKey?.toString().length - 1)}`}</p>
         <p>Balance: {balance.toFixed(4)} SOL</p>
         {isInMobileWallet && (
-          <p style={{fontSize: '12px', color: '#28a745'}}>
+          <p style={{ fontSize: "12px", color: "#28a745" }}>
             Connected via {mobileWalletType} mobile
           </p>
         )}
-        <button
-          className="button"
-          onClick={handleWalletAction}
-        >
+        <button className="button" onClick={handleWalletAction}>
           Disconnect
         </button>
-        <button
-          className="button"
-          onClick={sendSol}
-        >
-          Send 0.01 SOL
-        </button>
-        <button
-          className="button"
-          onClick={handleSignMessage}
-        >
-          Sign Message
-        </button>
       </div>
-      <ClientHome />
     </div>
   );
 };
@@ -337,7 +348,7 @@ export const useWalletOperations = () => {
     if (!publicKey || !connected) {
       throw new Error("Wallet not connected");
     }
-    
+
     try {
       const transaction = new Transaction().add(
         SystemProgram.transfer({
@@ -348,15 +359,20 @@ export const useWalletOperations = () => {
       );
 
       // Check if we're in mobile wallet and use appropriate method
-      const isMobileWallet = window.phantom?.solana && /mobile/i.test(navigator.userAgent);
-      
+      const isMobileWallet =
+        window.phantom?.solana && /mobile/i.test(navigator.userAgent);
+
       if (isMobileWallet) {
         const { blockhash } = await connection.getRecentBlockhash();
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = publicKey;
-        
-        const signedTransaction = await window.phantom.solana.signTransaction(transaction);
-        return await connection.sendRawTransaction(signedTransaction.serialize());
+
+        const signedTransaction = await window.phantom.solana.signTransaction(
+          transaction
+        );
+        return await connection.sendRawTransaction(
+          signedTransaction.serialize()
+        );
       } else {
         if (!sendTransaction) {
           throw new Error("sendTransaction method not available");

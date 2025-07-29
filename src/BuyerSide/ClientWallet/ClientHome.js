@@ -33,7 +33,8 @@ const ClientHome = () => {
   useEffect(() => {
     const fetchOrderData = async () => {
       const windowHash = window.location.hash;
-      const hash = fixBase64Padding(windowHash.slice(11)); // `#order=` is 7 chars + 4 for safety?
+      let sliceInt = windowHash.split('payment')[1].substring(0,5).includes('#') ? 11 : 13
+      const hash = fixBase64Padding(windowHash.slice(sliceInt)); // `#order=` is 7 chars + 4 for safety?
       if (!hash) {
         setError("Missing order information.");
         setLoading(false);
@@ -97,6 +98,7 @@ const ClientHome = () => {
           <TokenList
             orderInfo={orderInfo}
             destinationTokenMint={orderInfo?.paymentMint}
+            destination
           />
         </div>
       </div>
