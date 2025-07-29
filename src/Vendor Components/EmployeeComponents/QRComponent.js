@@ -36,7 +36,7 @@ const QRComponent = ({
       setTipValue(orderTotal * map[index]);
     }
   };
-
+  console.log(pageDatas);
   useEffect(() => {
     if (!hasAnimationRanOnce) {
       if (animationRef.current) {
@@ -71,6 +71,7 @@ const QRComponent = ({
       businessName: pageDatas.businessName,
       businessId: pageDatas.businessId,
       saleInformation: parentExpressions || "",
+      paymentMint: pageDatas.selectedPaymentMethod,
     };
     try {
       const response = await axios.post(

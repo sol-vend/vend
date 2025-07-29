@@ -44,6 +44,7 @@ const EmployeeInterface = ({ isMobile = true }) => {
     "approvedReadOnlyEmployees",
     "emailAddress",
     "logo",
+    "selectedPaymentMethod"
   ];
   const [generateQr, setGenerateQr] = useState(false);
   const [isOrderDetailsShow, setIsOrderDetailsShow] = useState(false);

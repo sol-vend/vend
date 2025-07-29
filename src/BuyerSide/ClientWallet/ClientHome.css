@@ -1,0 +1,51 @@
+.client-main-payment-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.wallet-dark {
+  background-image: url("./walletbackground.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wallet-inner {
+  background: rgb(0, 0, 0, 50%);
+}
+
+.wallet-inner-text {
+  color: white;
+}
+
+.order-summary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.order-summary.sub-header > p > span {
+  font-style: italic;
+}
+
+.order-summary.top-header > p:last-child {
+  font-size: 60%;
+}
+
+.order-summary.top-header > p:first-child {
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 125%;
+}
+.client-home-buy-button{
+    background: rgb(0 229 151 / 90%);
+    padding: 0.75rem;
+    border-radius: 10px;
+}
+
+.client-home-buy-wrapper{
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+}

@@ -15,10 +15,16 @@ import HeaderWrapper from "./Vendor Components/HeaderWrapper";
 import InitializePin from "./Vendor Components/EmployeeComponents/InitializePin";
 import ManageEmployees from "./Vendor Components/EmployeeComponents/ManageEmployees";
 import ClientHome from "./BuyerSide/ClientWallet/ClientHome";
+import {
+  WalletDisconnectButton,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
+import SolanaWalletConnector from "./BuyerSide/ClientWallet/SolanaWalletConnector";
+import { RPC_API_URL } from "./Components/Shared";
 
 const App = () => {
   const network = "mainnet-beta";
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const endpoint = useMemo(() => RPC_API_URL, []);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
   const [checkAuthAfterLatent, setCheckAuthAfterLatent] = useState(true);
   const [doPromptLogin, setDoPromptLogin] = useState(false);
@@ -53,24 +59,24 @@ const App = () => {
   });
 
   useEffect(() => {
-    console.log(doPromptLogin, 'login screen');
+    console.log(doPromptLogin, "login screen");
   }, [doPromptLogin]);
 
   useEffect(() => {
-    if (!isError){
+    if (!isError) {
       console.log(isError);
     }
-  }, [isError])
+  }, [isError]);
 
   console.log(doPromptLogin);
   //  if (doPromptLogin) {
   //    return { doPromptLogin };
   //  } else {
   return (
-    <Router>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider>
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets}>
+        <WalletModalProvider>
+          <Router>
             <Routes>
               <Route
                 path="/"
@@ -128,7 +134,11 @@ const App = () => {
                 path="/payment/*"
                 element={
                   <>
-                    <ClientHome />
+                    <div className="wallet-buttons" style={{ height: "0px" }}>
+                      <WalletMultiButton />
+                      <WalletDisconnectButton />
+                    </div>
+                    <SolanaWalletConnector />
                   </>
                 }
               />
@@ -141,10 +151,10 @@ const App = () => {
                 }
               />
             </Routes>
-          </WalletModalProvider>
-        </WalletProvider>
-      </ConnectionProvider>
-    </Router>
+          </Router>
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
   );
 };
 //};

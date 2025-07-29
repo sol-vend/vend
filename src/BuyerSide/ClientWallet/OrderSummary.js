@@ -2,74 +2,56 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { API_URL } from "../../Components/Shared";
 
-const OrderSummary = () => {
-  const [orderInfo, setOrderInfo] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+function getTimestampedDate() {
+  const now = new Date();
 
-  const windowHash =
-    window.location.hash.split("#")[window.location.hash.split("#").length - 1];
-  let hash = windowHash.slice(12);
-  console.log(hash);
-  useEffect(() => {
-    const fetchOrderData = async () => {
-      if (!hash) {
-        setError("Missing order information.");
-        setLoading(false);
-        return;
-      }
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
+  const day = String(now.getDate()).padStart(2, "0");
 
-      try {
-        const response = await fetch(`${API_URL}/api/decode_url`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ hash }),
-        });
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
 
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status}`);
-        }
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
 
-        const data = await response.json();
-        setOrderInfo(data);
-      } catch (err) {
-        setError(err.message || "Failed to load order details.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderData();
-  }, [hash]);
-
+const OrderSummary = ({ orderInfo, loading, error }) => {
   if (loading) return <p className="text-gray-500">Loading order...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
-  const { businessName, destinationPublicKey, saleInformation, totalPrice } =
-    orderInfo || {};
+  const {
+    businessName = "Unknown",
+    destinationPublicKey = "",
+    saleInformation = {},
+    totalPrice = 0,
+    finalPrice = 0,
+  } = orderInfo || {};
 
   return (
     <div className="max-w-md mt-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <div className="mb-3 text-gray-700 dark:text-gray-300">
-        <p>Receipt:</p>
-        <p>Business: {businessName}</p>
-        <p>
-          Wallet:{" "}
-          {`${destinationPublicKey.slice(0, 4)}...${destinationPublicKey.slice(
-            destinationPublicKey.length - 5,
-            destinationPublicKey.length - 1
-          )}`}
-        </p>
+        <div className="order-summary top-header">
+          <p>Receipt</p>
+          <p>{getTimestampedDate()}</p>
+        </div>
+        <div className="order-summary sub-header">
+          <p>
+            <span> To: </span>
+            {businessName}
+          </p>
+          <p>
+            <span>Via: </span>
+            {`${destinationPublicKey.slice(0, 4)}...${destinationPublicKey.slice(Math.max(destinationPublicKey.length - 5, 0))}`}
+          </p>
+        </div>
       </div>
 
       <div className="mb-4">
         <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-1">
-          Items:
+          Your Purchase:
         </h3>
         <ul className="list-disc pl-5 text-sm text-gray-600 dark:text-gray-300">
-          {saleInformation?.receipt &&
+          {saleInformation.receipt &&
             Object.values(saleInformation.receipt).map((line, index) => (
               <li key={index}>{line}</li>
             ))}
@@ -77,7 +59,10 @@ const OrderSummary = () => {
       </div>
 
       <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-        Total: ${parseFloat(totalPrice).toFixed(2)}
+        <p>Merchant Price: ${parseFloat(totalPrice).toFixed(2)}</p>
+        <p>Transaction Total: ${parseFloat(finalPrice).toFixed(2)}</p>
+        
+        <p style={{fontSize: '50%', fontStyle:'italic'}}>VEND charges a scaling tranaction fee. Some of these funds will be used to reward our vendors and users in the future. Want to learn more?</p>
       </div>
     </div>
   );

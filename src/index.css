@@ -283,6 +283,10 @@ h1 {
   font-size: 24px;
 }
 
+.wallet-buttons{
+  height: 0px !important;
+}
+
 .connect-button {
   background-color: #ab9ff2;
   border: none;
