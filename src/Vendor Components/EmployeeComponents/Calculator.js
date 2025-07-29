@@ -53,7 +53,7 @@ const Calculator = ({
 
   const calculateResult = () => {
     try {
-      const result = eval(expression); // Eval to calculate the expression
+      const result = Math.round(eval(expression) * 1000) / 1000; // Eval to calculate the expression
       setDisplay(result);
       setExpression(result.toString());
       setOrderTotal(result); // Save to the parent state as the total

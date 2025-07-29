@@ -44,7 +44,7 @@ const EmployeeInterface = ({ isMobile = true }) => {
     "approvedReadOnlyEmployees",
     "emailAddress",
     "logo",
-    "selectedPaymentMethod"
+    "selectedPaymentMethod",
   ];
   const [generateQr, setGenerateQr] = useState(false);
   const [isOrderDetailsShow, setIsOrderDetailsShow] = useState(false);
@@ -85,11 +85,11 @@ const EmployeeInterface = ({ isMobile = true }) => {
         <div className="order-total-wrapper">
           <div className={orderTotal !== "$0.00" ? "space-between" : "center"}>
             {!isChild && <h2></h2>}
-            <h2>
+            <p>
               {!isChild
                 ? `Total Price: ${orderTotal}`
                 : `Misc. Items: $${childCalculatorOrderTotal.toFixed(2)}`}
-            </h2>
+            </p>
             {!isChild ? (
               <button
                 onClick={() => setGenerateQr(true)}
@@ -103,7 +103,6 @@ const EmployeeInterface = ({ isMobile = true }) => {
                 onClick={addMiscToTotal}
                 className={childCalculatorOrderTotal !== 0 ? "show-button" : ""}
               >
-                <span>Add to Price Total</span>
                 <FaCheckCircle />
               </button>
             )}
@@ -417,15 +416,14 @@ const EmployeeInterface = ({ isMobile = true }) => {
                             )}
                           </div>
                         ) : (
-                          <div className="user-interface">
+                          <>
                             <Calculator
                               setOrderTotal={setChildCalculatorOrderTotal}
                               setParentExpressions={setParentExpressions}
                               startOrderTotal={childCalculatorOrderTotal}
                               isChild={true}
                             />
-                            <DisplayTotal orderTotal={0} isChild={true} />{" "}
-                          </div>
+                          </>
                         )}
                       </div>
                     </>
@@ -433,28 +431,31 @@ const EmployeeInterface = ({ isMobile = true }) => {
                 </div>
               </nav>
             </div>
-            <div className="interface-order-summary-wrapper-fixed">
-              <div className="interface-order-summary-wrapper">
-                <button className="submit-order" onClick={handleSubmitOrder}>
-                  Submit Order
-                </button>
-                <div className="order-summary">
-                  <h3>Order Total: ${orderTotal.toFixed(2)}</h3>
+            <div className="calculator-toolbox-wrapper">
+              {showCalculator && <DisplayTotal orderTotal={0} isChild={true} />}
+              <div className="interface-order-summary-wrapper-fixed">
+                <div className="interface-order-summary-wrapper">
+                  <button className="submit-order" onClick={handleSubmitOrder}>
+                    Submit
+                  </button>
+                  <div className="order-summary">
+                    <h3>Total: ${orderTotal.toFixed(2)}</h3>
+                  </div>
+                  <button
+                    onClick={handleOrderRestart}
+                    className="submit-order clear"
+                  >
+                    Restart
+                  </button>
                 </div>
-                <button
-                  onClick={handleOrderRestart}
-                  className="submit-order clear"
-                >
-                  Restart Order
-                </button>
+                {Object.keys(receiptDetails).length > 0 && (
+                  <div className="interface-order-summary-wrapper receipt">
+                    {Object.keys(receiptDetails).map((itemAddress) => {
+                      return <p>{receiptDetails[itemAddress]}</p>;
+                    })}
+                  </div>
+                )}
               </div>
-              {Object.keys(receiptDetails).length > 0 && (
-                <div className="interface-order-summary-wrapper receipt">
-                  {Object.keys(receiptDetails).map((itemAddress) => {
-                    return <p>{receiptDetails[itemAddress]}</p>;
-                  })}
-                </div>
-              )}
             </div>
           </div>
         </>
